@@ -3142,7 +3142,7 @@ int n;
                  break;
     case MATLAB_LANG: Use_MATLAB( rootFileName );
                  break;
-    default: printf("\n Language no '%s' unknown\n",useLang );
+    default: printf("\n Language no '%d' unknown\n",useLang );
   }
   printf("\nKPP is initializing the code generation.");
   InitGen();
