@@ -888,8 +888,14 @@ void GenerateJacReactantProd()
 int i, j, k, l, m, JVRP_NZ, newrow;
 int used;
 int F_STOIC;
-int crow_JVRP[MAX_EQN], icol_JVRP[MAX_EQN*MAX_SPECIES];
-int irow_JVRP[MAX_EQN*MAX_SPECIES];
+
+/* jjb_01072016 start */
+/*int crow_JVRP[MAX_EQN], icol_JVRP[MAX_EQN*MAX_SPECIES];
+  int irow_JVRP[MAX_EQN*MAX_SPECIES];*/
+int *crow_JVRP;
+int *icol_JVRP;
+int *irow_JVRP;
+/* jjb_01072016 end */
 
   if( VarNr == 0 ) return;
 
@@ -900,6 +906,13 @@ int irow_JVRP[MAX_EQN*MAX_SPECIES];
          if ( Stoich_Left[j][i] != 0 ) JVRP_NZ++;
     varTable[ NJVRP ]  -> value  = JVRP_NZ + 1;
   }
+
+/* jjb_01072016 start */
+/* Allocate temporary index arrays */
+  crow_JVRP = AllocIntegerVector(EqnNr + 1, "crow_JVRP in GenerateJacReactantProd");
+  icol_JVRP = AllocIntegerVector(JVRP_NZ + 1, "icol_JVRP in GenerateJacReactantProd");
+  irow_JVRP = AllocIntegerVector(JVRP_NZ + 1, "irow_JVRP in GenerateJacReactantProd");
+/* jjb_01072016 end */
 
   UseFile( stoichiomFile );
 
