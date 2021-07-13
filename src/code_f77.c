@@ -391,7 +391,7 @@ char dsbuf[55];
                  }
                  max ++;
                }
-               WriteVecData( var, min, max-1, split );
+               if( min < max ) WriteVecData( var, min, max-1, split );
                break;
 
     case ELM:  bprintf( "%6sDATA %s / ", " ", var->name );
