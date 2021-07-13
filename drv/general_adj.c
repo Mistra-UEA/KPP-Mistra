@@ -8,10 +8,10 @@ int  SaveData();
 int  CloseSaveData();
 int  GenerateMatlab( char * prefix );
 void GetMass( KPP_REAL CL[], KPP_REAL Mass[] );
-void INTEGRATE_ADJ( int NADJ, KPP_REAL Y[], KPP_REAL Lambda[][NVAR], 
-		    KPP_REAL TIN, KPP_REAL TOUT, KPP_REAL ATOL_adj[][NVAR], 
-		    KPP_REAL RTOL_adj[][NVAR], int ICNTRL_U[], 
-		    KPP_REAL RCNTRL_U[], int ISTATUS_U[], 
+void INTEGRATE_ADJ( int NADJ, KPP_REAL Y[], KPP_REAL Lambda[][NVAR],
+		    KPP_REAL TIN, KPP_REAL TOUT, KPP_REAL ATOL_adj[][NVAR],
+		    KPP_REAL RTOL_adj[][NVAR], int ICNTRL_U[],
+		    KPP_REAL RCNTRL_U[], int ISTATUS_U[],
 		    KPP_REAL RSTATUS_U[] );
 
 int main() {
@@ -28,30 +28,30 @@ int main() {
 /*~~>  Control (in) and status (out) arguments for the integration */
   KPP_REAL RCNTRL[20], RSTATUS[20];
   int ICNTRL[20], ISTATUS[20];
-  
+
   STEPMIN = (double)0.0;
   STEPMAX = (double)0.0;
 
-/*~~~> Tolerances for calculating concentrations */       
+/*~~~> Tolerances for calculating concentrations */
   for( i=0; i<NVAR; i++) {
     RTOL[i] = 1.0e-4;
     ATOL[i] = 1.0e-3;
   }
-      
-/*~~~> Tolerances for calculating adjoints 
+
+/*~~~> Tolerances for calculating adjoints
        are used for controlling adjoint truncation error
-       and for solving the linear adjoint equations by iterations  
+       and for solving the linear adjoint equations by iterations
        Note: Adjoints typically span many orders of magnitude
-       and a careful tuning of ATOL_adj may be necessary */    
+       and a careful tuning of ATOL_adj may be necessary */
   for(i=0; i<NADJ; i++) {
     for(j=0; j<NVAR; j++) {
       RTOL_adj[i][j] = 1.0e-4;
       ATOL_adj[i][j] = 1.0e-10;
     }
   }
-     
+
   Initialize();
-      
+
 /*~~~>  The adjoint values at the final time */
   for(i=0; i<NADJ; i++) {
     for(j=0; j<NVAR; j++)
@@ -66,7 +66,7 @@ int main() {
     RCNTRL[i] = (double)0.0;
     ISTATUS[i] = 0;
     RSTATUS[i] = (double)0.0;
-  }     
+  }
 
 /*~~~> Begin time loop */
 
@@ -77,23 +77,23 @@ int main() {
 
   GetMass( C, DVAL );
   printf("\n%6.1f%% %7.2f   ", (TIME-TSTART)/(TEND-TSTART)*100, TIME/3600 );
-  for( i = 0; i < NMONITOR; i++ ) 
+  for( i = 0; i < NMONITOR; i++ )
     printf( "%9.3e  ", C[ MONITOR[i] ]/CFACTOR );
-  for( i = 0; i < NMASS; i++ ) 
+  for( i = 0; i < NMASS; i++ )
     printf( "%9.3e  ", DVAL[i]/CFACTOR );
 
   TIME = T;
   SaveData();
 
-  INTEGRATE_ADJ( NADJ, VAR, Y_adj, T, TEND, ATOL_adj, RTOL_adj, ICNTRL, 
+  INTEGRATE_ADJ( NADJ, VAR, Y_adj, T, TEND, ATOL_adj, RTOL_adj, ICNTRL,
 		 RCNTRL, ISTATUS, RSTATUS );
 
   GetMass( C, DVAL );
 
   printf("\n%6.1f%% %7.2f   ", (TEND-TSTART)/(TEND-TSTART)*100, TIME/3600 );
-  for( i = 0; i < NMONITOR; i++ ) 
+  for( i = 0; i < NMONITOR; i++ )
     printf( "%9.3e  ", C[ MONITOR[i] ]/CFACTOR );
-  for( i = 0; i < NMASS; i++ ) 
+  for( i = 0; i < NMASS; i++ )
     printf( "%9.3e   ", DVAL[i]/CFACTOR );
 
   TIME = T;
@@ -121,17 +121,17 @@ int main() {
 
   fclose(out);
 
-  printf( "\nADJ: d[%s](tf)/d[%s](t0) = %7.6e\n", SPC_NAMES[ind_1], 
+  printf( "\nADJ: d[%s](tf)/d[%s](t0) = %7.6e\n", SPC_NAMES[ind_1],
 	  SPC_NAMES[ind_1], Y_adj[ind_1][ind_1] );
-  printf( "ADJ: d[%s](tf)/d[%s](t0) = %7.6e\n", SPC_NAMES[ind_2], 
+  printf( "ADJ: d[%s](tf)/d[%s](t0) = %7.6e\n", SPC_NAMES[ind_2],
 	  SPC_NAMES[ind_2], Y_adj[ind_2][ind_2] );
-  printf( "ADJ: d[%s](tf)/d[%s](t0) = %7.6e\n", SPC_NAMES[ind_2], 
+  printf( "ADJ: d[%s](tf)/d[%s](t0) = %7.6e\n", SPC_NAMES[ind_2],
 	  SPC_NAMES[ind_1], Y_adj[ind_2][ind_1] );
-  printf( "ADJ: d[%s](tf)/d[%s](t0) =  %7.6e\n\n", SPC_NAMES[ind_1], 
+  printf( "ADJ: d[%s](tf)/d[%s](t0) =  %7.6e\n\n", SPC_NAMES[ind_1],
 	  SPC_NAMES[ind_2], Y_adj[ind_1][ind_2] );
 
   CloseSaveData();
- 
+
 /*~~~> The entire matrix of sensitivities */
   printf("   ");
   for(i=0; i<NVAR; i++)

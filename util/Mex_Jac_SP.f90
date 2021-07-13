@@ -17,21 +17,21 @@
       IF ( nrhs .ne. 3 ) THEN
          CALL mexErrMsgTxt('Jac_SP requires 3 input vectors: &
      &V(KPP_NVAR), F(KPP_NFIX), RCT(KPP_NREACT)')
-      END IF 
+      END IF
 ! Check for the right number of output arguments
       IF ( nlhs .ne. 1 ) THEN
          CALL mexErrMsgTxt('Jac_SP requires 1 output vector: &
      &JVS(KPP_LU_NONZERO)')
-      END IF 
+      END IF
 
       plhs(1) = mxCreateDoubleMatrix(KPP_LU_NONZERO,1,0)
 
       VPtr = mxGetPr(prhs(1))
       CALL mxCopyPtrToReal8(VPtr,V,KPP_NVAR)
-      
+
       FPtr = mxGetPr(prhs(2))
       CALL mxCopyPtrToReal8(FPtr,F,KPP_NFIX)
-      
+
       RPtr = mxGetPr(prhs(3))
       CALL mxCopyPtrToReal8(RPtr,RCT,KPP_NREACT)
 

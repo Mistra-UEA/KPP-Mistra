@@ -14,7 +14,7 @@ TF = ignore; {complex}
 TFp= ignore; {complex}
 C1 = ignore; {complex}
 C2 = ignore; {complex}
-mas= ignore; {mass of the cell} 
+mas= ignore; {mass of the cell}
 
 
 #EQUATIONS
@@ -51,19 +51,19 @@ C2      = C2 + A    : (3);   {k11}
 
 #INITVALUES
 CFACTOR = 1;
-mas=0.1046E+01; 
-TF=0.8979E+01; 
-XY=0.5458E-02; 
-XYX=0.8918E-02; 
-YX=0.2989E-02; 
-X=0.1275E+00; 
-Y=0.1714E-02; 
-Yp=0.9605E+00; 
-AYp=0.2046E-01; 
-A=0.8577E-03; 
-C2=0.1692E-02; 
-C1=0.1769E-04; 
-TFp=0.1731E-01; 
+mas=0.1046E+01;
+TF=0.8979E+01;
+XY=0.5458E-02;
+XYX=0.8918E-02;
+YX=0.2989E-02;
+X=0.1275E+00;
+Y=0.1714E-02;
+Yp=0.9605E+00;
+AYp=0.2046E-01;
+A=0.8577E-03;
+C2=0.1692E-02;
+C1=0.1769E-04;
+TFp=0.1731E-01;
 G=0.9983E+00;
 
 #INLINE F77_INIT

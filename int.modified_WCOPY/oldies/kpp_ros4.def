@@ -1,8 +1,8 @@
- 
+
 #FUNCTION AGGREGATE
 #JACOBIAN SPARSE_LU_ROW
 
-#DOUBLE ON 
+#DOUBLE ON
 #INTFILE kpp_ros4
 
 #INLINE F77_DECL_INT
@@ -15,7 +15,7 @@
 #INLINE F77_INIT_INT
         STEPMIN=0.0001
         STEPMAX=3600.
-        Autonomous = 1 
+        Autonomous = 1
         STEPSTART=STEPMIN
 #ENDINLINE
 

@@ -14,7 +14,7 @@
   ALL_SPEC= 1.0E-10;
 {Variable species}
   NO2        = 0.5 ;
-  NO         = 0.2 ; 
+  NO         = 0.2 ;
   O3         = 60.0 ;
   HNO3       = 1.6594E-06 ;
   HNO2       = 8.4898E-03 ;

@@ -13,23 +13,23 @@ C~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 C Check for the right number of input arguments
       IF ( nrhs .ne. 3 ) THEN
-         CALL mexErrMsgTxt('Hessian requires 3 input vectors: 
+         CALL mexErrMsgTxt('Hessian requires 3 input vectors:
      &V(KPP_NVAR), F(KPP_NFIX), RCT(KPP_NREACT)')
-      END IF 
+      END IF
 C Check for the right number of output arguments
       IF ( nlhs .ne. 1 ) THEN
-         CALL mexErrMsgTxt('Hessian requires 1 output vector: 
+         CALL mexErrMsgTxt('Hessian requires 1 output vector:
      &HESS(KPP_NHESS)')
-      END IF 
+      END IF
 
       plhs(1) = mxCreateDoubleMatrix(KPP_NHESS,1,0)
 
       VPtr = mxGetPr(prhs(1))
       CALL mxCopyPtrToReal8(VPtr,V,KPP_NVAR)
-      
+
       FPtr = mxGetPr(prhs(2))
       CALL mxCopyPtrToReal8(FPtr,F,KPP_NFIX)
-      
+
       RPtr = mxGetPr(prhs(3))
       CALL mxCopyPtrToReal8(RPtr,RCT,KPP_NREACT)
 
@@ -39,5 +39,5 @@ C Check for the right number of output arguments
 
       CALL mxCopyReal8ToPtr(HESS, HESSPtr, KPP_NHESS)
 
-      RETURN 
+      RETURN
       END

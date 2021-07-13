@@ -5,7 +5,7 @@
 #
 #  Copyright (C) 1995-1996 Valeriu Damian and Adrian Sandu
 #  Copyright (C) 1997-2005 Adrian Sandu
-#      with contributions from: Mirela Damian, Rolf Sander 
+#      with contributions from: Mirela Damian, Rolf Sander
 #
 #  KPP is free software; you can redistribute it and/or modify it under the
 #  terms of the GNU General Public License as published by the Free Software
@@ -32,7 +32,7 @@
 
 include ../Makefile.defs
 
-BISON=bison -d 
+BISON=bison -d
 CFLAGS=`cat ../cflags`
 
 all: kpp
@@ -60,15 +60,15 @@ kpp:    $(OBJS)
 	@$(CC) $(CC_FLAGS) $(CFLAGS) $(OBJS) -L$(FLEX_LIB_DIR) -lfl -o kpp
 	@mv kpp ../bin
 
-clean:  
-	@rm -f *~ *.o cflags 
+clean:
+	@rm -f *~ *.o cflags
 
 maintainer-clean: clean
 	@rm -f lex.yy.c y.tab.c y.tab.h
 
 lex.yy.c: scan.l scan.h
 	@echo "  "$(FLEX) scan.l
-	@$(FLEX) -olex.yy.c scan.l 
+	@$(FLEX) -olex.yy.c scan.l
 
 y.tab.c: scan.y scan.h
 	@echo "  "$(BISON) scan.y

@@ -17,8 +17,8 @@ PROGRAM KPP_ROOT_ADJ_Driver
       PARAMETER (NADJ = 2)
       KPP_REAL  Y_ADJ(NVAR,NADJ)
       REAL(kind=dble_p)  R1(NVAR), R2(NVAR), V1, V2
-  
-! ---- TIME VARIABLES ------------------      
+
+! ---- TIME VARIABLES ------------------
 
       STEPMIN = 0.0d0
       STEPMAX = 0.0d0
@@ -31,7 +31,7 @@ PROGRAM KPP_ROOT_ADJ_Driver
         R1(i) = 10*(RAND()-0.5d0)
         R2(i) = 10*(RAND()-0.5d0)
       END DO
-     
+
       CALL Initialize()
 ! ---  Note: the initial values below are adjoint values at the final time
      Y_ADJ(1:NVAR,1) = R1(1:NVAR)
@@ -54,7 +54,7 @@ PROGRAM KPP_ROOT_ADJ_Driver
 
         CALL SaveData()
 
-        CALL Update_SUN() 
+        CALL Update_SUN()
         CALL Update_RCONST()
 
         CALL INTEGRATE_ADJ( NADJ, Y_ADJ, T, TEND )
@@ -89,7 +89,7 @@ PROGRAM KPP_ROOT_ADJ_Driver
       WRITE(6,*) ' were written in the file KPP_ROOT_ADJ_results.m'
       WRITE(6,*) '**************************************************'
       DO j=1,NADJ
-        WRITE(20,993) ( Y_ADJ(i,j), i=1,NVAR )          
+        WRITE(20,993) ( Y_ADJ(i,j), i=1,NVAR )
       END DO
  993  FORMAT(1000(E24.16,2X))
 
@@ -106,7 +106,7 @@ PROGRAM KPP_ROOT_ADJ_Driver
       PRINT*,'TLM: d[ O3](tf) / d[ O3](t0)= -4.447774183920545E-003'
       PRINT*,'TLM: d[NO2](tf) / d[ O3](t0)=  0.897512294491540'
       PRINT*,'TLM: d[ O3](tf) / d[NO2](t0)= -5.543729901774693E-005'
- 
+
 
       CALL CloseSaveData()
 

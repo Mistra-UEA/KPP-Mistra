@@ -9,12 +9,12 @@ C ---  Note: this value is set for sensitivities w.r.t. all initial values
 C ---       it may have to be changed for other applications
       INTEGER NSENSIT
       PARAMETER (NSENSIT = NVAR)
-      
+
       KPP_REAL  DVAL(NSPEC)
       KPP_REAL  Y(NVAR*(NSENSIT+1))
 C ---  Note: Y contains: (1:NVAR) concentrations, followed by
 C ---                   (1:NVAR) sensitivities w.r.t. first parameter, followed by
-C ---                   etc.,  followed by          
+C ---                   etc.,  followed by
 C ---                   (1:NVAR) sensitivities w.r.t. NSENSIT's parameter
 
       INTEGER i
@@ -23,8 +23,8 @@ C --- The type of sensitivity coefficients to compute
 C --- DDMTYPE = 0 : sensitivities w.r.t. initial values
 C --- DDMTYPE = 1 : sensitivities w.r.t. parameters
       DDMTYPE = 0
-   
-C ---- TIME VARIABLES ------------------      
+
+C ---- TIME VARIABLES ------------------
 
       TSTART = 0
       TEND = TSTART + 600
@@ -40,7 +40,7 @@ C ---- TIME VARIABLES ------------------
         RTOL(i) = RTOLS
         ATOL(i) = ATOLS
       end do
-    
+
 C ********** TIME LOOP *************************
 
       CALL Initialize()
@@ -49,7 +49,7 @@ C -- Initialize Concentrations and Sensitivities
       DO i=1,NVAR
          Y(i) = VAR(i)
       END DO
-	
+
 C ---  Note: the initial values below are for sensitivities w.r.t. initial values;
 C ---       they may have to be changed for other applications
       DO j=1,NSENSIT
@@ -61,7 +61,7 @@ C ---       they may have to be changed for other applications
 
       CALL InitSaveData()
 
-      WRITE(6,990) (SPC_NAMES(MONITOR(i)), i=1,NMONITOR), 
+      WRITE(6,990) (SPC_NAMES(MONITOR(i)), i=1,NMONITOR),
      *             (SMASS(i), i=1,NMASS )
 990   FORMAT('done[%] Time[h] ',20(4X,A6))
 
@@ -76,15 +76,15 @@ C ---       they may have to be changed for other applications
 
         CALL SaveData()
 
-        CALL Update_SUN() 
+        CALL Update_SUN()
         CALL Update_RCONST()
-	
+
         CALL INTEGRATE( NSENSIT, Y, TIME, TIME+DT )
 
         DO i=1,NVAR
            VAR(i) = Y(i)
         END DO
-	
+
       END DO
 
       CALL GetMass( C, DVAL )
@@ -93,7 +93,7 @@ C ---       they may have to be changed for other applications
      *               (DVAL(i)/CFACTOR, i=1,NMASS)
 
 C      DO i=1,NSENSIT
-C        WRITE(6,992) i, ( Y(NVAR*i+j), j=1,NVAR )          
+C        WRITE(6,992) i, ( Y(NVAR*i+j), j=1,NVAR )
 C      END DO
 C 992  FORMAT('SEN(',I3,') = ',1000(E10.4,2X))
 
@@ -106,7 +106,7 @@ C *********** END TIME LOOP ********
       WRITE(6,*) '*  were written in the file KPP_ROOT_results.m  *'
       WRITE(6,*) '**************************************************'
       DO i=0,NSENSIT
-        WRITE(20,993) ( Y(NVAR*i+j), j=1,NVAR )          
+        WRITE(20,993) ( Y(NVAR*i+j), j=1,NVAR )
       END DO
  993  FORMAT(1000(E24.16,2X))
 

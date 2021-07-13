@@ -27,7 +27,7 @@ S2 	  = S3	 	: (0.04); {c4}
       DO i=1,NVAR
         RTOL(i) = 1.0e-4
         ATOL(i) = 1.0e-8
-      END DO 
+      END DO
       Volume = 1.0d0
 #ENDINLINE
 
@@ -57,6 +57,6 @@ S2 	  = S3	 	: (0.04); {c4}
   for(i=0; i<NVAR; i++) {
       RTOL[i] = 1.0e-4;
       ATOL[i] = 1.0e-8;
-  } 
+  }
   Volume = 1.0;
 #ENDINLINE

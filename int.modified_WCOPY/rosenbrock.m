@@ -2,16 +2,16 @@ function [T, Y, RCNTRL, ICNTRL, RSTAT, ISTAT] = ...
     Rosenbrock(Function, Tspan, Y0, Options, RCNTRL, ICNTRL)
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 %  Rosenbrock - Implementation of several Rosenbrock methods:
-%               * Ros2                                                
-%               * Ros3                                                
-%               * Ros4                                                
-%               * Rodas3                                              
-%               * Rodas4                                              
-%                                                                     
+%               * Ros2
+%               * Ros3
+%               * Ros4
+%               * Rodas3
+%               * Rodas4
+%
 %    Solves the system y'=F(t,y) using a Rosenbrock method defined by:
-%                                                                     
-%     G = 1/(H*gamma(1)) - Jac(t0,Y0)                                 
-%     T_i = t0 + Alpha(i)*H                                           
+%
+%     G = 1/(H*gamma(1)) - Jac(t0,Y0)
+%     T_i = t0 + Alpha(i)*H
 %     Y_i = Y0 + \sum_{j=1}^{i-1} A(i,j)*K_j
 %     G * K_i = Fun( T_i, Y_i ) + \sum_{j=1}^S C(i,j)/H * K_j +
 %         gamma(i)*dF/dT(t0, Y0)
@@ -23,9 +23,9 @@ function [T, Y, RCNTRL, ICNTRL, RSTAT, ISTAT] = ...
 %      Springer series in computational mathematics, Springer-Verlag, 1996.
 %    The codes contained in the book inspired this implementation.
 %
-%    MATLAB implementation (C) John C. Linford (jlinford@vt.edu).      
-%    Virginia Polytechnic Institute and State University             
-%    November, 2009    
+%    MATLAB implementation (C) John C. Linford (jlinford@vt.edu).
+%    Virginia Polytechnic Institute and State University
+%    November, 2009
 %
 %    Based on the Fortran90 implementation (C) Adrian Sandu, August 2004
 %    and revised by Philipp Miehe and Adrian Sandu, May 2006.
@@ -34,15 +34,15 @@ function [T, Y, RCNTRL, ICNTRL, RSTAT, ISTAT] = ...
 %
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 %  Input Arguments :
-%  The first four arguments are similar to the input arguments of 
+%  The first four arguments are similar to the input arguments of
 %  MATLAB's ODE solvers
 %      Function  - A function handle for the ODE function
 %      Tspan     - The time space to integrate
 %      Y0        - Initial value
-%      Options   - ODE solver options created by odeset():           
+%      Options   - ODE solver options created by odeset():
 %                  AbsTol, InitialStep, Jacobian, MaxStep, and RelTol
-%                  are considered.  Other options are ignored.       
-%                  'Jacobian' must be set.                           
+%                  are considered.  Other options are ignored.
+%                  'Jacobian' must be set.
 %      RCNTRL    - real value input parameters (explained below)
 %      ICNTRL    - integer input parameters (explained below)
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -409,7 +409,7 @@ while ( (Direction > 0) && ((T-Tend)+Roundoff <= ZERO) || ...
         [H, Ghimj, Pivot, Singular] = ...
             ros_PrepareMatrix(N, H, Direction, ros_Gamma(1), Jac0);
 
-        % Not calculating LU decomposition in ros_PrepareMatrix anymore 
+        % Not calculating LU decomposition in ros_PrepareMatrix anymore
         % so don't need to check if the matrix is singular
         %
         %if Singular % More than 5 consecutive failed decompositions
@@ -425,7 +425,7 @@ while ( (Direction > 0) && ((T-Tend)+Roundoff <= ZERO) || ...
             K(:,1) = K(:,1) + HG * dFdT;
         end
         K(:,1) = ros_Solve(Ghimj, Pivot, K(:,1));
-        
+
         %~~~>   Compute the remaining stages
         for istage=2:ros_S
 
@@ -615,7 +615,7 @@ return
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 function [X] = ros_Solve(JVS, Pivot, X)
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-%  Template for the forward/backward substitution 
+%  Template for the forward/backward substitution
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 global Nsol ISTATUS

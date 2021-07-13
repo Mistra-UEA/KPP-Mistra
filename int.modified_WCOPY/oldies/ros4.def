@@ -1,8 +1,8 @@
- 
+
 #FUNCTION AGGREGATE
 #JACOBIAN SPARSE_LU_ROW
 
-#DOUBLE ON 
+#DOUBLE ON
 #INTFILE ros4
 
 #INLINE F_DECL_INT
@@ -42,7 +42,7 @@
     extern int Autonomous;
     extern double STEPSTART;
 #ENDINLINE
- 
+
 #INLINE C_DATA_INT
 int Autonomous;
 double STEPSTART;
@@ -53,11 +53,11 @@ double STEPSTART;
         STEPMAX = 3600.0;
         Autonomous = 0;
         STEPSTART = STEPMIN;
-#ENDINLINE                                                                     
+#ENDINLINE
 
 #INLINE MATLAB_INIT_INT
         STEPMIN = 0.0001;
         STEPMAX = 3600.0;
         Autonomous = 0;
         STEPSTART = STEPMIN;
-#ENDINLINE                                                                     
+#ENDINLINE

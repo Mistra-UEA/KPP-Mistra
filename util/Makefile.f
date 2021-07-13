@@ -12,11 +12,11 @@ FC_HPUX    = f90
 FOPT_HPUX  = -O
 
 FC   = $(FC_$(COMPILER))
-FOPT = $(FOPT_$(COMPILER)) 
+FOPT = $(FOPT_$(COMPILER))
 
 # Mathematical libraries: blas and lapack
 # MATHLIB   = -L/usr/local/lib  -llapack_g77  -L/usr/lib -lblas_g77
-MATHLIB   = -llapack  -lblas 
+MATHLIB   = -llapack  -lblas
 
 # To create Matlab mex gateway routines
 # Note: use $(FC) as the mex Fortran compiler
@@ -38,7 +38,7 @@ SRC =   KPP_ROOT_Main.f      KPP_ROOT_Integrator.f   \
 	KPP_ROOT_Jacobian.f  KPP_ROOT_LinearAlgebra.f\
 	KPP_ROOT_Rates.f     KPP_ROOT_Hessian.f      \
 	KPP_ROOT_Stoichiom.f KPP_ROOT_Util.f         \
-	KPP_ROOT_Monitor.f   
+	KPP_ROOT_Monitor.f
 
 OBJ =   KPP_ROOT_Main.o      KPP_ROOT_Integrator.o   \
         KPP_ROOT_Function.o  KPP_ROOT_Initialize.o   \
@@ -56,14 +56,14 @@ mex:    $(HEADERS) $(SPOBJ) $(OBJ)
 	$(MEX) FC#$(FC) -fortran -O KPP_ROOT_mex_Fun.f     $(SPOBJ) $(OBJ)
 	$(MEX) FC#$(FC) -fortran -O KPP_ROOT_mex_Jac_SP.f  $(SPOBJ) $(OBJ)
 	$(MEX) FC#$(FC) -fortran -O KPP_ROOT_mex_Hessian.f $(SPOBJ) $(OBJ)
-	
+
 clean:
 	rm -f $(SPOBJ) $(OBJ) KPP_ROOT.exe KPP_ROOT.map  \
-	KPP_ROOT.dat 
+	KPP_ROOT.dat
 
 distclean:
 	rm -f $(SPOBJ) $(OBJ) KPP_ROOT.exe KPP_ROOT.map  \
-	KPP_ROOT.dat KPP_ROOT*.f  KPP_ROOT*.h 
+	KPP_ROOT.dat KPP_ROOT*.f  KPP_ROOT*.h
 
 KPP_ROOT_Monitor.o: KPP_ROOT_Monitor.f $(HEADERS)
 	$(FC) $(FOPT) -c $<

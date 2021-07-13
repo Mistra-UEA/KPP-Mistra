@@ -1,5 +1,5 @@
       SUBROUTINE INTEGRATE( TIN, TOUT )
- 
+
       INCLUDE 'KPP_ROOT_params.h'
       INCLUDE 'KPP_ROOT_global.h'
 
@@ -13,22 +13,22 @@ C TOUT - End Time
       EXTERNAL FUNC_CHEM, JAC_CHEM
 
       INFO(1) = Autonomous
- 
+
       CALL ROS1(NVAR,TIN,TOUT,STEPMIN,VAR,
      +                   Info,FUNC_CHEM,JAC_CHEM)
- 
+
 
       RETURN
       END
-  
 
- 
- 
+
+
+
       SUBROUTINE ROS1(N,T,Tnext,Hstart,
      +                   y,Info,FUNC_CHEM,JAC_CHEM)
-     
+
       INCLUDE 'KPP_ROOT_params.h'
-      INCLUDE 'KPP_ROOT_sparse.h'                                                                                                  
+      INCLUDE 'KPP_ROOT_sparse.h'
 C
 C  Linearly Implicit Euler
 C  A method of theoretical interest but of no practical value
@@ -58,76 +58,76 @@ C     Info(3) = # of JAC_CHEM CALLs.
 C     Info(4) = # of accepted steps.
 C     Info(5) = # of rejected steps.
 C     Hstart = The last accepted stepsize
-C 
+C
 C    Adrian Sandu, December 2001
-C 
+C
       KPP_REAL Fv(NVAR)
       KPP_REAL JAC(LU_NONZERO)
       KPP_REAL H, Hstart
       KPP_REAL y(NVAR)
       KPP_REAL T, Tnext, Tplus
       KPP_REAL elo,ghinv,uround
-      
+
       INTEGER    n,nfcn,njac,Naccept,Nreject,i,j
       INTEGER    Info(5)
       LOGICAL    IsReject, Autonomous
-      EXTERNAL    FUNC_CHEM, JAC_CHEM                                                                                                
+      EXTERNAL    FUNC_CHEM, JAC_CHEM
 
 
       H     = Hstart
       Tplus = T
       Nfcn  = 0
       Njac  = 0
-  
+
 C === Starting the time loop ===
  10    CONTINUE
-  
+
        Tplus = T + H
        IF ( Tplus .gt. Tnext ) THEN
           H = Tnext - T
           Tplus = Tnext
        END IF
- 
-C              Initial Function and Jacobian values                                                                                                                            
+
+C              Initial Function and Jacobian values
        CALL FUNC_CHEM(NVAR, T, y, Fv)
        Nfcn = Nfcn+1
        CALL JAC_CHEM(NVAR, T, y, JAC)
        Njac = Njac+1
- 
-C              Form the Prediction matrix and compute its LU factorization                                                                                                                           
+
+C              Form the Prediction matrix and compute its LU factorization
        DO 40 j=1,NVAR
          JAC(LU_DIAG(j)) = JAC(LU_DIAG(j)) - 1.0d0/H
  40    CONTINUE
        CALL KppDecomp (JAC, ier)
-C 
+C
        IF (ier.ne.0) THEN
           PRINT *,'ROS1: Singular factorization at T=',T,'; H=',H
           STOP
        END IF
- 
+
 C ------------ STAGE 1-------------------------
        CALL KppSolve (JAC, Fv)
- 
+
 C ---- The Solution ---
        DO 160 j = 1,NVAR
-         y(j) = y(j) - Fv(j) 
+         y(j) = y(j) - Fv(j)
  160   CONTINUE
        T = T + H
- 
+
 C ======= End of the time loop ===============================
       IF ( T .lt. Tnext ) GO TO 10
- 
+
 C ======= Output Information =================================
       Info(2) = Nfcn
       Info(3) = Njac
       Info(4) = Njac
       Info(5) = 0
       Hstart  = H
- 
+
       RETURN
       END
- 
- 
+
+
       SUBROUTINE FUNC_CHEM(N, T, Y, P)
       INCLUDE 'KPP_ROOT_params.h'
       INCLUDE 'KPP_ROOT_global.h'
@@ -143,7 +143,7 @@ C ======= Output Information =================================
       RETURN
       END
 
- 
+
       SUBROUTINE JAC_CHEM(N, T, Y, J)
       INCLUDE 'KPP_ROOT_params.h'
       INCLUDE 'KPP_ROOT_global.h'
@@ -157,10 +157,10 @@ C ======= Output Information =================================
       CALL Jac_SP( Y,  FIX, RCONST, J )
       TIME = Told
       RETURN
-      END                                                                                                                 
+      END
 
 
 
 
 
-                                                                                                                            
+

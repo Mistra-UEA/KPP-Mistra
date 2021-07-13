@@ -383,7 +383,7 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
       JA = LU_ICOL
 #endif   
       !Njac=Njac+1
-   
+
    END SUBROUTINE JAC_CHEM 
 
 !   MODULE DVODE

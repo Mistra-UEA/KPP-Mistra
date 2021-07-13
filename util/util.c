@@ -46,7 +46,7 @@ int GenerateMatlab( char * prefix )
 {
 int i;
 FILE *fpMatlab;
-  
+
   fpMatlab = fopen("KPP_ROOT.m", "w");
   if( fpMatlab == 0 ) {
     printf("\n Can't create file : KPP_ROOT.m");
@@ -58,12 +58,12 @@ FILE *fpMatlab;
   fprintf(fpMatlab, "clear KPP_ROOT;\n");
   fprintf(fpMatlab, "%st=%sc(:,1);\n", prefix, prefix);
   fprintf(fpMatlab, "%sc(:,1)=[];\n", prefix);
-  
+
   for( i = 0; i < NLOOKAT; i++ )
-    fprintf( fpMatlab, "%s%s = %sc(:,%d);\n", 
-            prefix, SPC_NAMES[LOOKAT[i]], 
+    fprintf( fpMatlab, "%s%s = %sc(:,%d);\n",
+            prefix, SPC_NAMES[LOOKAT[i]],
             prefix, i+1 );
-  
+
   fclose( fpMatlab );
   return 0;
 }

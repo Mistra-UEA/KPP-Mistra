@@ -1,7 +1,7 @@
 C ****************************************************************
-C                            
+C
 C InitSaveData - Opens the data file for writing
-C   Parameters :                                                  
+C   Parameters :
 C
 C ****************************************************************
 
@@ -18,9 +18,9 @@ C End of InitSaveData function
 C ****************************************************************
 
 C ****************************************************************
-C                            
-C SaveData - Write LOOKAT species in the data file 
-C   Parameters :                                                  
+C
+C SaveData - Write LOOKAT species in the data file
+C   Parameters :
 C
 C ****************************************************************
 
@@ -42,9 +42,9 @@ C End of SaveData function
 C ****************************************************************
 
 C ****************************************************************
-C                            
-C CloseSaveData - Close the data file 
-C   Parameters :                                                  
+C
+C CloseSaveData - Close the data file
+C   Parameters :
 C
 C ****************************************************************
 
@@ -61,11 +61,11 @@ C End of CloseSaveData function
 C ****************************************************************
 
 C ****************************************************************
-C                            
-C GenerateMatlab - Generates MATLAB file to load the data file 
-C   Parameters : 
-C                It will have a character string to prefix each 
-C                species name with.                                                 
+C
+C GenerateMatlab - Generates MATLAB file to load the data file
+C   Parameters :
+C                It will have a character string to prefix each
+C                species name with.
 C
 C ****************************************************************
 
@@ -73,8 +73,8 @@ C ****************************************************************
 
       INCLUDE 'KPP_ROOT_Parameters.h'
       INCLUDE 'KPP_ROOT_Global.h'
-      
-      CHARACTER*8 PREFIX 
+
+      CHARACTER*8 PREFIX
       INTEGER i
 
       open(20, file='KPP_ROOT.m')
@@ -91,7 +91,7 @@ C ****************************************************************
         write(20,993) PREFIX, SPC_NAMES(LOOKAT(i)), PREFIX, i
 993     FORMAT(A1,A6,' = ',A1,'c(:,',I2,');')
       end do
-      
+
       CLOSE(20)
 
       RETURN

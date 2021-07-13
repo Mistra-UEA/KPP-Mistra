@@ -1,9 +1,9 @@
 #include atoms
 
 #DEFVAR
-O   = O;    	    { Atomic oxygen }	
+O   = O;    	    { Atomic oxygen }
 O3  = O + O + O;    { Ozone }
-NO  = N + O;	    { Nitric oxide }	     
+NO  = N + O;	    { Nitric oxide }
 NO2 = N + O + O;    { Nitrogen dioxide }
 
 #DEFFIX

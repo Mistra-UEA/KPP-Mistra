@@ -74,7 +74,7 @@ CONTAINS
 
     KPP_REAL, INTENT(IN) :: Tstart, Tend
 
-    KPP_REAL :: dt ! time step                                          
+    KPP_REAL :: dt ! time step
     KPP_REAL :: k1(NVAR), k2(NVAR), w1(NVAR), g, jvs(LU_NONZERO)
     INTEGER ising, i
 

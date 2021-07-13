@@ -1,6 +1,6 @@
 # Set here the desired C compiler and its optimization options
 CC   = gcc
-COPT = -O -Wall  
+COPT = -O -Wall
 
 # To create Matlab gateway routines
 # Note: use $(CC) as the mex C compiler
@@ -31,17 +31,17 @@ OBJ =   KPP_ROOT_Main.o      KPP_ROOT_Integrator.o   \
 	KPP_ROOT_Stoichiom.o KPP_ROOT_Util.o         \
 	KPP_ROOT_Monitor.o
 
-STOCHSRC = KPP_ROOT_Stochastic.c 
-STOCHOBJ = KPP_ROOT_Stochastic.o 
+STOCHSRC = KPP_ROOT_Stochastic.c
+STOCHOBJ = KPP_ROOT_Stochastic.o
 
 all:    exe
 
 exe:	$(HEADERS) $(SPOBJ) $(OBJ)
-	$(CC) $(COPT) $(SPOBJ) $(OBJ) -lm -o KPP_ROOT.exe	
+	$(CC) $(COPT) $(SPOBJ) $(OBJ) -lm -o KPP_ROOT.exe
 
 stochastic:$(HEADERS) $(SPOBJ) $(OBJ) $(STOCHOBJ)
 	$(CC) $(COPT) $(SPOBJ) $(OBJ) $(STOCHOBJ) -lm \
-	-o KPP_ROOT_stochastic.exe	
+	-o KPP_ROOT_stochastic.exe
 
 mex:    $(HEADERS) $(SPOBJ) $(OBJ)
 	$(MEX) CC#$(CC) -O KPP_ROOT_mex_Fun.c     -lm $(SPOBJ) $(OBJ)

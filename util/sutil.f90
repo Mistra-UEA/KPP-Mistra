@@ -36,7 +36,7 @@ SUBROUTINE KppDecomp( JVS, IER )
             JVS(kk) = W( LU_ICOL(kk) )
          END DO
       END DO
-      
+
 END SUBROUTINE KppDecomp
 
 
@@ -75,7 +75,7 @@ SUBROUTINE KppDecompCmplx( JVS, IER )
             JVS(kk) = W( LU_ICOL(kk) )
          END DO
       END DO
-      
+
 END SUBROUTINE KppDecompCmplx
 
 
@@ -83,14 +83,14 @@ END SUBROUTINE KppDecompCmplx
 SUBROUTINE KppDecompCmplxR( JVSR, JVSI, IER )
 ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !    Sparse LU factorization, complex
-!   (Real and Imaginary parts are used instead of complex data type)     
+!   (Real and Imaginary parts are used instead of complex data type)
 ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   USE KPP_ROOT_Parameters
   USE KPP_ROOT_JacobianSP
 
       INTEGER       :: IER
-      KPP_REAL :: JVSR(LU_NONZERO), JVSI(LU_NONZERO) 
+      KPP_REAL :: JVSR(LU_NONZERO), JVSI(LU_NONZERO)
       KPP_REAL :: WR(NVAR), WI(NVAR), ar, ai, den
       INTEGER       :: k, kk, j, jj
 
@@ -140,9 +140,9 @@ SUBROUTINE KppSolveIndirect( JVS, X )
       KPP_REAL :: JVS(LU_NONZERO), X(NVAR), sum
 
       DO i=1,NVAR
-         DO j = LU_CROW(i), LU_DIAG(i)-1 
+         DO j = LU_CROW(i), LU_DIAG(i)-1
              X(i) = X(i) - JVS(j)*X(LU_ICOL(j));
-         END DO  
+         END DO
       END DO
 
       DO i=NVAR,1,-1
@@ -152,7 +152,7 @@ SUBROUTINE KppSolveIndirect( JVS, X )
         END DO
         X(i) = sum/JVS(LU_DIAG(i));
       END DO
-      
+
 END SUBROUTINE KppSolveIndirect
 
 
@@ -182,7 +182,7 @@ SUBROUTINE KppSolveTRIndirect( JVS, X )
 	  X(LU_ICOL(j)) = X(LU_ICOL(j))-JVS(j)*X(i)
 	END DO
       END DO
-      
+
 END SUBROUTINE KppSolveTRIndirect
 
 
@@ -199,9 +199,9 @@ SUBROUTINE KppSolveCmplx( JVS, X )
       DOUBLE COMPLEX :: JVS(LU_NONZERO), X(NVAR), sum
 
       DO i=1,NVAR
-         DO j = LU_CROW(i), LU_DIAG(i)-1 
+         DO j = LU_CROW(i), LU_DIAG(i)-1
              X(i) = X(i) - JVS(j)*X(LU_ICOL(j));
-         END DO  
+         END DO
       END DO
 
       DO i=NVAR,1,-1
@@ -211,14 +211,14 @@ SUBROUTINE KppSolveCmplx( JVS, X )
         END DO
         X(i) = sum/JVS(LU_DIAG(i));
       END DO
-      
+
 END SUBROUTINE KppSolveCmplx
 
 ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 SUBROUTINE KppSolveCmplxR( JVSR, JVSI, XR, XI )
 ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !   Complex sparse solve subroutine using indirect addressing
-!   (Real and Imaginary parts are used instead of complex data type)     
+!   (Real and Imaginary parts are used instead of complex data type)
 ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   USE KPP_ROOT_Parameters
@@ -228,10 +228,10 @@ SUBROUTINE KppSolveCmplxR( JVSR, JVSI, XR, XI )
       KPP_REAL ::  JVSR(LU_NONZERO), JVSI(LU_NONZERO), XR(NVAR), XI(NVAR), sumr, sumi, den
 
       DO i=1,NVAR
-         DO j = LU_CROW(i), LU_DIAG(i)-1 
+         DO j = LU_CROW(i), LU_DIAG(i)-1
              XR(i) = XR(i) - (JVSR(j)*XR(LU_ICOL(j)) - JVSI(j)*XI(LU_ICOL(j)))
              XI(i) = XI(i) - (JVSR(j)*XI(LU_ICOL(j)) + JVSI(j)*XR(LU_ICOL(j)))
-         END DO  
+         END DO
       END DO
 
       DO i=NVAR,1,-1
@@ -244,7 +244,7 @@ SUBROUTINE KppSolveCmplxR( JVSR, JVSI, XR, XI )
         XR(i) = (sumr*JVSR(LU_DIAG(i)) + sumi*JVSI(LU_DIAG(i)))/den
         XI(i) = (sumi*JVSR(LU_DIAG(i)) - sumr*JVSI(LU_DIAG(i)))/den
       END DO
-      
+
 END SUBROUTINE KppSolveCmplxR
 
 
@@ -274,7 +274,7 @@ SUBROUTINE KppSolveTRCmplx( JVS, X )
 	  X(LU_ICOL(j)) = X(LU_ICOL(j))-JVS(j)*X(i)
 	END DO
       END DO
-      
+
 END SUBROUTINE KppSolveTRCmplx
 
 
@@ -282,7 +282,7 @@ END SUBROUTINE KppSolveTRCmplx
 SUBROUTINE KppSolveTRCmplxR( JVSR, JVSI, XR, XI )
 ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !   Complex sparse solve transpose subroutine using indirect addressing
-!   (Real and Imaginary parts are used instead of complex data type)     
+!   (Real and Imaginary parts are used instead of complex data type)
 ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   USE KPP_ROOT_Parameters
@@ -309,7 +309,7 @@ SUBROUTINE KppSolveTRCmplxR( JVSR, JVSI, XR, XI )
 	  XI(LU_ICOL(j)) = XI(LU_ICOL(j))-(JVSI(j)*XR(i) + JVSR(j)*XI(i))
 	END DO
       END DO
-      
+
 END SUBROUTINE KppSolveTRCmplxR
 
 
@@ -339,12 +339,12 @@ END SUBROUTINE KppSolveTRCmplxR
 !        DO kk = LU_CROW(k), LU_DIAG(k)-1
 !            j = LU_ICOL(kk)
 !            E(1:3,1:3) = JVS( 1:3,1:3,LU_DIAG(j) )
-!            ! CALL DGETRF(3,3,E,3,IP3,IER) 
+!            ! CALL DGETRF(3,3,E,3,IP3,IER)
 !            CALL FAC3(E,IP3,IER)
 !            IF ( IER /= 0 )  RETURN
 !            ! a = W(j) / JVS( LU_DIAG(j) )
 !            a(1:3,1:3) = W( 1:3,1:3,j )
-!            ! CALL DGETRS ('N',3,3,E,3,IP3,a,3,IER) 
+!            ! CALL DGETRS ('N',3,3,E,3,IP3,a,3,IER)
 !            CALL SOL3('N',E,IP3,a(1,1))
 !            CALL SOL3('N',E,IP3,a(1,2))
 !            CALL SOL3('N',E,IP3,a(1,3))
@@ -364,8 +364,8 @@ END SUBROUTINE KppSolveTRCmplxR
 !         ! CALL DGETRF(3,3,JVS(1,1,LU_DIAG(k)),3,IP(1,k),IER)
 !         CALL FAC3(JVS(1,1,LU_DIAG(k)),IP(1,k),IER)
 !         IF ( IER /= 0 )  RETURN
-!      END DO 
-!      
+!      END DO
+!
 !END SUBROUTINE KppDecompBig
 !
 !
@@ -383,14 +383,14 @@ END SUBROUTINE KppSolveTRCmplxR
 !      KPP_REAL :: JVS(3,3,LU_NONZERO), X(3,NVAR), sum(3)
 !
 !      DO i=1,NVAR
-!        DO j = LU_CROW(i), LU_DIAG(i)-1 
+!        DO j = LU_CROW(i), LU_DIAG(i)-1
 !          !X(1:3,i) = X(1:3,i) - MATMUL(JVS(1:3,1:3,j),X(1:3,LU_ICOL(j)));
 !          DO k=1,3
 !            DO m=1,3
 !	       X(k,i) = X(k,i) - JVS(k,m,j)*X(m,LU_ICOL(j))
 !            END DO
 !          END DO
-!        END DO  
+!        END DO
 !      END DO
 !
 !      DO i=NVAR,1,-1
@@ -404,12 +404,12 @@ END SUBROUTINE KppSolveTRCmplxR
 !          END DO
 !        END DO
 !        ! X(i) = sum/JVS(LU_DIAG(i));
-!        ! CALL DGETRS ('N',3,1,JVS(1:3,1:3,LU_DIAG(i)),3,IP(1,i),sum,3,0) 
+!        ! CALL DGETRS ('N',3,1,JVS(1:3,1:3,LU_DIAG(i)),3,IP(1,i),sum,3,0)
 !        ! CALL WGESL('N',JVS(1,1,LU_DIAG(i)),3,3,IP(1,i),sum)
 !        CALL SOL3('N',JVS(1,1,LU_DIAG(i)),IP(1,i),sum)
 !        X(1:3,i) = sum(1:3)
 !      END DO
-!      
+!
 !END SUBROUTINE KppSolveBig
 !
 !
@@ -450,7 +450,7 @@ END SUBROUTINE KppSolveTRCmplxR
 !          END DO
 !	END DO
 !      END DO
-!      
+!
 !END SUBROUTINE KppSolveBigTR
 !
 !
@@ -460,7 +460,7 @@ END SUBROUTINE KppSolveTRCmplxR
 !! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!     FAC3 FACTORS THE MATRIX A (3,3) BY
 !!           GAUSS ELIMINATION WITH PARTIAL PIVOTING
-!!     LINPACK - LIKE 
+!!     LINPACK - LIKE
 !!
 !!     Remove comments to perform pivoting
 !! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -473,14 +473,14 @@ END SUBROUTINE KppSolveTRCmplxR
 !
 !      info = 0
 !!      t = TINY(da)
-!!      
+!!
 !!      da = ABS(A(1,1)); L = 1
 !!      IF ( ABS(A(2,1))>da ) THEN
 !!        da = ABS(A(2,1)); L = 2
 !!        IF ( ABS(A(3,1))>da ) THEN
 !!          L = 3
-!!        END IF  
-!!      END IF  
+!!        END IF
+!!      END IF
 !!      IPVT(1)  = L
 !!      IF (L /=1 ) THEN
 !!         TMP(1:3) = A(L,1:3)
@@ -490,7 +490,7 @@ END SUBROUTINE KppSolveTRCmplxR
 !!      IF (ABS(A(1,1)) < t) THEN
 !!         info = 1
 !!         return
-!!      END IF   
+!!      END IF
 !!
 !      A(2,1) = A(2,1)/A(1,1)
 !      A(2,2) = A(2,2) - A(2,1)*A(1,2)
@@ -498,7 +498,7 @@ END SUBROUTINE KppSolveTRCmplxR
 !      A(3,1) = A(3,1)/A(1,1)
 !      A(3,2) = A(3,2) - A(3,1)*A(1,2)
 !      A(3,3) = A(3,3) - A(3,1)*A(1,3)
-!      
+!
 !!      IPVT(2)  = 2
 !!      IF (ABS(A(3,2))>ABS(A(2,2))) THEN
 !!         IPVT(2)  = 3
@@ -509,12 +509,12 @@ END SUBROUTINE KppSolveTRCmplxR
 !!      IF (ABS(A(2,2)) < t) THEN
 !!         info = 1
 !!         return
-!!      END IF   
-!!      
+!!      END IF
+!!
 !      A(3,2)   = A(3,2)/A(2,2)
 !      A(3,3)   = A(3,3) - A(3,2)*A(2,3)
 !      IPVT(3)  = 3
-!      
+!
 !END SUBROUTINE FAC3
 !
 !
@@ -527,7 +527,7 @@ END SUBROUTINE KppSolveTRCmplxR
 !!
 !!     Trans      = 'N'   to solve  A*x = b ,
 !!                = 'T'   to solve  transpose(A)*x = b
-!!     LINPACK - LIKE 
+!!     LINPACK - LIKE
 !!
 !!     Remove comments to use pivoting
 !! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -537,7 +537,7 @@ END SUBROUTINE KppSolveTRCmplxR
 !      INTEGER       :: IPVT(3)
 !!      INTEGER       :: L
 !!      KPP_REAL :: TMP
-!      
+!
 !      SELECT CASE (Trans)
 !
 !      CASE ('n','N')  !  Solve  A * x = b
@@ -549,7 +549,7 @@ END SUBROUTINE KppSolveTRCmplxR
 !!         END IF
 !         b(2) = b(2)-A(2,1)*b(1)
 !         b(3) = b(3)-A(3,1)*b(1)
-!         
+!
 !!         L = IPVT(2)
 !!         IF (L /= 2) THEN
 !!            TMP = B(2); B(2) = B(L); B(L) = TMP
@@ -560,8 +560,8 @@ END SUBROUTINE KppSolveTRCmplxR
 !         b(3) = b(3)/A(3,3)
 !         b(2) = (b(2)-A(2,3)*b(3))/A(2,2)
 !         b(1) = (b(1)-A(1,3)*b(3)-A(1,2)*b(2))/A(1,1)
-!      
-!      
+!
+!
 !      CASE ('t','T')  !  Solve transpose(A) * x = b
 !
 !!      Solve transpose(U)*y = b
@@ -580,7 +580,7 @@ END SUBROUTINE KppSolveTRCmplxR
 !!         IF (L /= 1) THEN
 !!            TMP = B(1); B(1) = B(L); B(L) = TMP
 !!         END IF
-!   
+!
 !      END SELECT
 !
 !END SUBROUTINE SOL3

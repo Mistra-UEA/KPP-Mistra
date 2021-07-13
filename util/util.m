@@ -1,5 +1,5 @@
 % ****************************************************************
-%                            
+%
 % InitSaveData - Opens the data file for writing
 %
 % ****************************************************************
@@ -16,8 +16,8 @@ return %  InitSaveData
 % ****************************************************************
 
 % ****************************************************************
-%                            
-% SaveData - Write LOOKAT species in the data file 
+%
+% SaveData - Write LOOKAT species in the data file
 %
 % ****************************************************************
 
@@ -27,7 +27,7 @@ global VAR FIX CFACTOR LOOKAT NLOOKAT KPP_ROOT_FID
 
       C(1:KPP_NVAR) = VAR(1:KPP_NVAR);
       C(KPP_NVAR+1:KPP_NSPEC) = FIX(1:KPP_NFIX);
-      
+
       fprintf(KPP_ROOT_FID,'%12.5e,',C(LOOKAT(1:NLOOKAT)));
 
 return %  SaveData
@@ -36,8 +36,8 @@ return %  SaveData
 % ****************************************************************
 
 % ****************************************************************
-%                            
-% CloseSaveData - Close the data file 
+%
+% CloseSaveData - Close the data file
 %
 % ****************************************************************
 

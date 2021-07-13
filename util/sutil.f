@@ -11,7 +11,7 @@ C ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       INTEGER  IER
       KPP_REAL JVS(KPP_LU_NONZERO), W(KPP_NVAR)
       INTEGER  k, kk, j, jj
-      KPP_REAL a 
+      KPP_REAL a
 
       IER = 0
       DO k=1,NVAR
@@ -86,9 +86,9 @@ C ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       KPP_REAL JVS(KPP_LU_NONZERO), X(KPP_NVAR), sum
 
       DO i=1,NVAR
-         DO j = LU_CROW(i), LU_DIAG(i)-1 
+         DO j = LU_CROW(i), LU_DIAG(i)-1
              X(i) = X(i) - JVS(j)*X(LU_ICOL(j));
-	 END DO  
+	 END DO
       END DO
 
       DO i=NVAR,1,-1
@@ -98,7 +98,7 @@ C ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	END DO
         X(i) = sum/JVS(LU_DIAG(i));
       END DO
-      
+
       RETURN
       END
 
@@ -114,9 +114,9 @@ C ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       DOUBLE COMPLEX JVS(KPP_LU_NONZERO), X(KPP_NVAR), sum
 
       DO i=1,NVAR
-         DO j = LU_CROW(i), LU_DIAG(i)-1 
+         DO j = LU_CROW(i), LU_DIAG(i)-1
              X(i) = X(i) - JVS(j)*X(LU_ICOL(j));
-	 END DO  
+	 END DO
       END DO
 
       DO i=NVAR,1,-1
@@ -126,6 +126,6 @@ C ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	END DO
         X(i) = sum/JVS(LU_DIAG(i));
       END DO
-      
+
       RETURN
       END

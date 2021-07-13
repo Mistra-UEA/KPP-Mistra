@@ -22,9 +22,9 @@ To install KPP:
 
 2. Note down the exact path name where the FLEX library is installed. The
    library is called:
-	libfl.a or libfl.sh 
+	libfl.a or libfl.sh
 
-3. Define the KPP_HOME environment variable to point to the complete 
+3. Define the KPP_HOME environment variable to point to the complete
    path location of KPP. If, for example, KPP is installed in $HOME/kpp:
 
    - with C shell (or tcsh) edit the file .cshrc (or .tcshrc) in your
@@ -38,17 +38,17 @@ To install KPP:
 	export KPP_HOME=$HOME/kpp
 	export PATH=$PATH:$HOME/kpp/bin
 
-3. In KPP_HOME directory edit: 
-	Makefile.defs 
-   and follow the instructions included to specify the compiler, 
+3. In KPP_HOME directory edit:
+	Makefile.defs
+   and follow the instructions included to specify the compiler,
    the location of the FLEX library, etc.
- 
+
 4. In KPP_HOME directory build the sources using:
 	make
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To clean the KPP installation: 
+To clean the KPP installation:
 ------------------------------
 
 1. Delete the KPP object files with:

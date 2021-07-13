@@ -23,8 +23,8 @@
   GHNO4 = 1E-8;
   GO2   = 2.E+8;
   GCO2  = 5.E+7;
-  GH2   = 500;  
-  GC05000 = 35;  
+  GH2   = 500;
+  GC05000 = 35;
 
 #INLINE F77_INIT
 	TSTART = 12.*3600.

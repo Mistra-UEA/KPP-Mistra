@@ -1,5 +1,5 @@
 #INCLUDE atoms
- 
+
 #DEFVAR
   GH      = H;             {H                                                                                                               }
   GH2O2   = 2H+2O;         {H2O2                                                                                                            }
@@ -12492,7 +12492,7 @@
   NOTHING =             IGNORE;
   M      =              IGNORE;
   OXYGEN  = 2O ;
-  
+
 #DEFFIX
   GH2     = 2H;            {H2                  }
   GH2O    = 2H+O;          {H2O                 }

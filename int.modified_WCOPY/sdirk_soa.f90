@@ -23,16 +23,16 @@ MODULE KPP_ROOT_Integrator
                KppSolveTR, Set2zero, WLAMCH, WCOPY, WAXPY, WSCAL, WADD
   USE KPP_ROOT_Hessian
   USE KPP_ROOT_Util
-  
+
   IMPLICIT NONE
   PUBLIC
   SAVE
-  
+
 !~~~>  Statistics on the work performed by the SDIRK method
   INTEGER, PARAMETER :: Nfun=1, Njac=2, Nstp=3, Nacc=4,  &
            Nrej=5, Ndec=6, Nsol=7, Nsng=8,               &
            Ntexit=1, Nhexit=2, Nhnew=3
-                 
+
 CONTAINS
 
 SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
@@ -46,12 +46,12 @@ SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
 !~~~> Y - Concentrations
    KPP_REAL :: Y(NVAR)
 !~~~> NSOA - No. of vectors U_j for which
-!            Hessian*U_j is computed     
+!            Hessian*U_j is computed
    INTEGER :: NSOA
 !~~~> Y_tlm - Forward sensitivities
 !             Initially Y_tlm(1:NVAR,j) = U_j
    KPP_REAL :: Y_tlm(NVAR,NSOA)
-!~~~> ADJ - No. of cost functionals (always 1)     
+!~~~> ADJ - No. of cost functionals (always 1)
    INTEGER, PARAMETER :: NADJ = 1
 !~~~> Lambda - Sensitivities w.r.t. concentrations
 !     Note: Lambda (1:NVAR,j) contains sensitivities of
@@ -62,7 +62,7 @@ SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
    KPP_REAL  :: Sigma(NVAR,NSOA)
 !~~~> Tolerances for adjoint calculations
 !     (used for full continuous adjoint, and for controlling
-!      iterations when used to solve the discrete adjoint)   
+!      iterations when used to solve the discrete adjoint)
    KPP_REAL, INTENT(IN)  :: ATOL_adj(NVAR,NADJ), RTOL_adj(NVAR,NADJ)
    KPP_REAL, INTENT(IN) :: TIN  ! Start Time
    KPP_REAL, INTENT(IN) :: TOUT ! End Time
@@ -87,16 +87,16 @@ SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
    ICNTRL(7) = 1    ! Adjoint solution by: 0=Newton, 1=direct
    ICNTRL(8) = 1    ! Save fwd LU factorization: 0 = do *not* save, 1 = save
 
-   ! If optional parameters are given, and if they are >0, 
-   ! then they overwrite default settings. 
+   ! If optional parameters are given, and if they are >0,
+   ! then they overwrite default settings.
    IF (PRESENT(ICNTRL_U)) THEN
      WHERE(ICNTRL_U(:) > 0) ICNTRL(:) = ICNTRL_U(:)
    END IF
    IF (PRESENT(RCNTRL_U)) THEN
      WHERE(RCNTRL_U(:) > 0) RCNTRL(:) = RCNTRL_U(:)
    END IF
-   
-   
+
+
    T1 = TIN; T2 = TOUT
    CALL SDIRK_SOA(NVAR, NSOA, T1, T2, Y, Y_tlm, Lambda, Sigma,  &
                   RTOL, ATOL, ATOL_adj, RTOL_adj,               &
@@ -105,12 +105,12 @@ SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
    !~~~> Debug option: number of steps
    ! Ntotal = Ntotal + ISTATUS(Nstp)
    ! WRITE(6,777) ISTATUS(Nstp),Ntotal,VAR(ind_O3),VAR(ind_NO2)
-   ! 777 FORMAT('NSTEPS=',I5,' (',I5,')  O3=',E24.14,'  NO2=',E24.14)    
+   ! 777 FORMAT('NSTEPS=',I5,' (',I5,')  O3=',E24.14,'  NO2=',E24.14)
 
    IF (Ierr < 0) THEN
         PRINT *,'SDIRK: Unsuccessful exit at T=',TIN,' (Ierr=',Ierr,')'
    ENDIF
-   
+
    ! if optional parameters are given for output they to return information
    IF (PRESENT(ISTATUS_U)) ISTATUS_U(:) = ISTATUS(:)
    IF (PRESENT(RSTATUS_U)) RSTATUS_U(:) = RSTATUS(:)
@@ -140,14 +140,14 @@ SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
 !    This code is based on the SDIRK4 routine in the above book.
 !
 !    Methods:
-!            * Sdirk 2a, 2b: L-stable, 2 stages, order 2                  
-!            * Sdirk 3a:     L-stable, 3 stages, order 2, adjoint-invariant   
-!            * Sdirk 4a, 4b: L-stable, 5 stages, order 4                  
+!            * Sdirk 2a, 2b: L-stable, 2 stages, order 2
+!            * Sdirk 3a:     L-stable, 3 stages, order 2, adjoint-invariant
+!            * Sdirk 4a, 4b: L-stable, 5 stages, order 4
 !
 !    (C)  Adrian Sandu, July 2005
 !    Virginia Polytechnic Institute and State University
 !    Contact: sandu@cs.vt.edu
-!    Revised by Philipp Miehe and Adrian Sandu, May 2006                  
+!    Revised by Philipp Miehe and Adrian Sandu, May 2006
 !    This implementation is part of KPP - the Kinetic PreProcessor
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !
@@ -182,7 +182,7 @@ SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
 !
 !    Note: For input parameters equal to zero the default values of the
 !          corresponding variables are used.
-!~~~>  
+!~~~>
 !    ICNTRL(1) = not used
 !
 !    ICNTRL(2) = 0: AbsTol, RelTol are NVAR-dimensional vectors
@@ -264,7 +264,7 @@ SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
       IMPLICIT NONE
 
 
-! Arguments      
+! Arguments
       INTEGER, PARAMETER           :: NADJ = 1
       INTEGER, INTENT(IN)          :: N, NSOA
       KPP_REAL, INTENT(INOUT) :: Y(NVAR), Y_tlm(NVAR,NSOA)
@@ -275,9 +275,9 @@ SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
                     RelTol(N), AbsTol(N), RCNTRL(20), &
 		    RelTol_adj(N,NSOA), AbsTol_adj(N,NSOA)
       INTEGER, INTENT(OUT)         :: Ierr
-      INTEGER, INTENT(INOUT)       :: ISTATUS(20) 
+      INTEGER, INTENT(INOUT)       :: ISTATUS(20)
       KPP_REAL, INTENT(OUT)        :: RSTATUS(20)
-       
+
 !~~~>  SDIRK method coefficients, up to 5 stages
       INTEGER, PARAMETER :: Smax = 5
       INTEGER, PARAMETER :: S2A=1, S2B=2, S3A=3, S4A=4, S4B=5
@@ -300,16 +300,16 @@ SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
       KPP_REAL, DIMENSION(:,:),   POINTER :: chk_J
 #endif
 
-!~~~>   Local variables      
+!~~~>   Local variables
       KPP_REAL :: Hmin, Hmax, Hstart, Roundoff,    &
                        FacMin, Facmax, FacSafe, FacRej, &
                        ThetaMin, NewtonTol, Qmin, Qmax
-      LOGICAL       :: SaveLU, DirectADJ                 
+      LOGICAL       :: SaveLU, DirectADJ
       INTEGER       :: ITOL, NewtonMaxit, Max_no_steps, i
       LOGICAL       :: StartNewton, DirectTLM, TLMNewtonEst, TLMtruncErr
       KPP_REAL, PARAMETER :: ZERO = 0.0d0, ONE = 1.0d0
 
-       
+
       Ierr = 0
       ISTATUS(1:20) = 0
       RSTATUS(1:20) = ZERO
@@ -322,7 +322,7 @@ SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
          ITOL = 0
       END IF
 
-!~~~> ICNTRL(3) - method selection       
+!~~~> ICNTRL(3) - method selection
       SELECT CASE (ICNTRL(3))
       CASE (0,1)
          CALL Sdirk2a
@@ -337,7 +337,7 @@ SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
       CASE DEFAULT
          CALL Sdirk2a
       END SELECT
-      
+
 !~~~>   The maximum number of time steps admitted
       IF (ICNTRL(4) == 0) THEN
          Max_no_steps = 200000
@@ -362,27 +362,27 @@ SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
          StartNewton = .TRUE.
       ELSE
          StartNewton = .FALSE.
-      END IF      
+      END IF
 
-!~~~> Solve ADJ equations directly or by Newton iterations 
+!~~~> Solve ADJ equations directly or by Newton iterations
       DirectADJ = (ICNTRL(7) == 1)
- 
+
 !~~~> Save or not the forward LU factorization
       SaveLU = (ICNTRL(8) /= 0) .AND. (.NOT.DirectADJ)
 
-!~~~> Newton iteration error control selection  
-      IF (ICNTRL(9) == 0) THEN 
+!~~~> Newton iteration error control selection
+      IF (ICNTRL(9) == 0) THEN
          TLMNewtonEst = .FALSE.
       ELSE
          TLMNewtonEst = .TRUE.
-      END IF      
-!~~~> TLM truncation error control selection  
-      IF (ICNTRL(12) == 0) THEN 
+      END IF
+!~~~> TLM truncation error control selection
+      IF (ICNTRL(12) == 0) THEN
          TLMtruncErr = .FALSE.
       ELSE
          TLMtruncErr = .TRUE.
-      END IF      
-           
+      END IF
+
 !~~~>  Unit roundoff (1+Roundoff>1)
       Roundoff = WLAMCH('E')
 
@@ -395,7 +395,7 @@ SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
          PRINT * , 'User-selected RCNTRL(1)=', RCNTRL(1)
          CALL SDIRK_ErrorMsg(-3,Tinitial,ZERO,Ierr)
       END IF
-   
+
 !~~~>  Upper bound on the step size: (positive value)
       IF (RCNTRL(2) == ZERO) THEN
          Hmax = ABS(Tfinal-Tinitial)
@@ -405,7 +405,7 @@ SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
          PRINT * , 'User-selected RCNTRL(2)=', RCNTRL(2)
          CALL SDIRK_ErrorMsg(-3,Tinitial,ZERO,Ierr)
       END IF
-   
+
 !~~~>  Starting step size: (positive value)
       IF (RCNTRL(3) == ZERO) THEN
          Hstart = MAX(Hmin,Roundoff)
@@ -415,7 +415,7 @@ SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
          PRINT * , 'User-selected Hstart: RCNTRL(3)=', RCNTRL(3)
          CALL SDIRK_ErrorMsg(-3,Tinitial,ZERO,Ierr)
       END IF
-   
+
 !~~~>  Step size can be changed s.t.  FacMin < Hnew/Hexit < FacMax
       IF (RCNTRL(4) == ZERO) THEN
          FacMin = 0.2_dp
@@ -494,19 +494,19 @@ SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
             END IF
          END DO
       END IF
-    
+
      IF (Ierr < 0) RETURN
-    
-!~~~>  Allocate memory buffers    
+
+!~~~>  Allocate memory buffers
     CALL SDIRK_AllocBuffers
 
-!~~~>  Call forward integration    
+!~~~>  Call forward integration
     CALL SDIRK_FwdTlmInt( N, NSOA, Tinitial, Tfinal, Y, Y_tlm, Ierr )
 
-!~~~>  Call adjoint integration    
+!~~~>  Call adjoint integration
     CALL SDIRK_SoaInt( N, NSOA, Lambda, Sigma, Ierr )
 
-!~~~>  Free memory buffers    
+!~~~>  Free memory buffers
     CALL SDIRK_FreeBuffers
 
 
@@ -522,14 +522,14 @@ SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
       USE KPP_ROOT_Parameters
       IMPLICIT NONE
 
-!~~~> Arguments:      
+!~~~> Arguments:
       INTEGER, INTENT(IN) :: N, NTLM
       KPP_REAL, INTENT(INOUT) :: Y(N), Y_tlm(N,NTLM)
       KPP_REAL, INTENT(IN) :: Tinitial, Tfinal
       INTEGER, INTENT(OUT) :: Ierr
-      
-!~~~> Local variables:      
-      KPP_REAL :: Z(NVAR,rkS), G(NVAR), TMP(NVAR),         &   
+
+!~~~> Local variables:
+      KPP_REAL :: Z(NVAR,rkS), G(NVAR), TMP(NVAR),         &
                        NewtonRate, SCAL(NVAR), DZ(NVAR),        &
                        T, H, Theta, Hratio, NewtonPredictedErr, &
                        Qnewton, Err, Fac, Hnew, Tdirection,     &
@@ -539,12 +539,12 @@ SUBROUTINE INTEGRATE_SOA( NSOA, Y, Y_tlm, Lambda, Sigma, &
       INTEGER :: itlm, j, IER, istage, NewtonIter, saveNiter, NewtonIterTLM
       INTEGER :: IP(NVAR), IP_tlm(NVAR)
       LOGICAL :: Reject, FirstStep, SkipJac, SkipLU, NewtonDone
-      
-#ifdef FULL_ALGEBRA      
+
+#ifdef FULL_ALGEBRA
       KPP_REAL, DIMENSION(NVAR,NVAR)  :: FJAC, E, Jac, E_tlm
-#else      
+#else
       KPP_REAL, DIMENSION(LU_NONZERO) :: FJAC, E, Jac, E_tlm
-#endif      
+#endif
       KPP_REAL, PARAMETER :: ZERO = 0.0d0, ONE = 1.0d0
 
 
@@ -578,14 +578,14 @@ Tloop: DO WHILE ( (Tfinal-T)*Tdirection - Roundoff > ZERO )
          IF (IER /= 0) THEN
              CALL SDIRK_ErrorMsg(-8,T,H,Ierr); RETURN
          END IF
-      END IF      
+      END IF
 
       IF (ISTATUS(Nstp) > Max_no_steps) THEN
              CALL SDIRK_ErrorMsg(-6,T,H,Ierr); RETURN
-      END IF   
+      END IF
       IF ( (T+0.1d0*H == T) .OR. (ABS(H) <= Roundoff) ) THEN
              CALL SDIRK_ErrorMsg(-7,T,H,Ierr); RETURN
-      END IF   
+      END IF
 
 stages:DO istage = 1, rkS
 
@@ -595,7 +595,7 @@ stages:DO istage = 1, rkS
 
 !~~~>  Starting values for Newton iterations
        CALL Set2zero(N,Z(1,istage))
-       
+
 !~~~>   Prepare the loop-independent part of the right-hand side
        CALL Set2zero(N,G)
        IF (istage > 1) THEN
@@ -612,7 +612,7 @@ stages:DO istage = 1, rkS
        !~~~>  Initializations for Newton iteration
        NewtonDone = .FALSE.
        Fac = 0.5d0 ! Step reduction factor if too many iterations
-            
+
 NewtonLoop:DO NewtonIter = 1, NewtonMaxit
 
 !~~~>   Prepare the loop-dependent part of the right-hand side
@@ -626,17 +626,17 @@ NewtonLoop:DO NewtonIter = 1, NewtonMaxit
 
 !~~~>   Solve the linear system
             CALL SDIRK_Solve ( 'N', H, N, E, IP, IER, DZ )
-            
+
 !~~~>   Check convergence of Newton iterations
             CALL SDIRK_ErrorNorm(N, DZ, SCAL, NewtonIncrement)
             IF ( NewtonIter == 1 ) THEN
                 Theta      = ABS(ThetaMin)
-                NewtonRate = 2.0d0 
+                NewtonRate = 2.0d0
             ELSE
                 Theta = NewtonIncrement/NewtonIncrementOld
                 IF (Theta < 0.99d0) THEN
                     NewtonRate = Theta/(ONE-Theta)
-                    ! Predict error at the end of Newton process 
+                    ! Predict error at the end of Newton process
                     NewtonPredictedErr = NewtonIncrement &
                                *Theta**(NewtonMaxit-NewtonIter)/(ONE-Theta)
                     IF (NewtonPredictedErr >= NewtonTol) THEN
@@ -651,8 +651,8 @@ NewtonLoop:DO NewtonIter = 1, NewtonMaxit
             END IF
             NewtonIncrementOld = NewtonIncrement
             ! Update solution: Z(:) <-- Z(:)+DZ(:)
-            CALL WAXPY(N,ONE,DZ,1,Z(1,istage),1) 
-            
+            CALL WAXPY(N,ONE,DZ,1,Z(1,istage),1)
+
             ! Check error in Newton iterations
             NewtonDone = (NewtonRate*NewtonIncrement <= NewtonTol)
             IF (NewtonDone) THEN
@@ -660,9 +660,9 @@ NewtonLoop:DO NewtonIter = 1, NewtonMaxit
 	       saveNiter = NewtonIter+1
 	       EXIT NewtonLoop
 	    END IF
-            
+
             END DO NewtonLoop
-            
+
             IF (.NOT.NewtonDone) THEN
                  !CALL RK_ErrorMsg(-12,T,H,Ierr);
                  H = Fac*H; Reject=.TRUE.
@@ -685,7 +685,7 @@ NewtonLoop:DO NewtonIter = 1, NewtonMaxit
 TlmL:    DO itlm = 1, NTLM
             G(1:N) = Y_tlm(1:N,itlm)
             IF (istage > 1) THEN
-              ! Gj(:) = sum_j Theta(i,j)*Zj_tlm(:) 
+              ! Gj(:) = sum_j Theta(i,j)*Zj_tlm(:)
               !       = H * sum_j A(i,j)*Jac(Zj(:))*(Yj_tlm+Zj_tlm)
               DO j = 1, istage-1
                   CALL WAXPY(N,rkTheta(istage,j),Z_tlm(1,j,itlm),1,G,1)
@@ -699,13 +699,13 @@ TlmL:    DO itlm = 1, NTLM
    END DO stages
 
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!~~~>  Error estimation 
+!~~~>  Error estimation
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       ISTATUS(Nstp) = ISTATUS(Nstp) + 1
       CALL Set2zero(N,Yerr)
       DO i = 1,rkS
          IF (rkE(i)/=ZERO) CALL WAXPY(N,rkE(i),Z(1,i),1,Yerr,1)
-      END DO  
+      END DO
 
       CALL SDIRK_Solve ( 'N', H, N, E, IP, IER, Yerr )
       CALL SDIRK_ErrorNorm(N, Yerr, SCAL, Err)
@@ -729,15 +729,15 @@ accept: IF ( Err < ONE ) THEN !~~~> Step is accepted
 !~~~> Update time and solution
          T  =  T + H
          ! Y(:) <-- Y(:) + Sum_j rkD(j)*Z_j(:)
-         DO i = 1,rkS 
+         DO i = 1,rkS
             IF (rkD(i)/=ZERO) THEN
                  CALL WAXPY(N,rkD(i),Z(1,i),1,Y,1)
                  DO itlm = 1, NTLM
                    CALL WAXPY(N,rkD(i),Z_tlm(1,i,itlm),1,Y_tlm(1,itlm),1)
-                 END DO  
-            END IF     
-         END DO  
-       
+                 END DO
+            END IF
+         END DO
+
 !~~~> Update scaling coefficients
          CALL SDIRK_ErrorScale(N, ITOL, AbsTol, RelTol, Y, SCAL)
 
@@ -774,16 +774,16 @@ accept: IF ( Err < ONE ) THEN !~~~> Step is accepted
          END IF
          Reject = .TRUE.
          SkipJac = .TRUE.
-         SkipLU  = .FALSE. 
+         SkipLU  = .FALSE.
          IF (ISTATUS(Nacc) >= 1) ISTATUS(Nrej) = ISTATUS(Nrej) + 1
-         
+
       END IF accept
-      
+
       END DO Tloop
 
       ! Successful return
       Ierr  = 1
-  
+
       END SUBROUTINE SDIRK_FwdTlmInt
 
 
@@ -796,38 +796,38 @@ accept: IF ( Err < ONE ) THEN !~~~> Step is accepted
       IMPLICIT NONE
 
       INTEGER, PARAMETER  :: NADJ = 1
-!~~~> Arguments:      
+!~~~> Arguments:
       INTEGER, INTENT(IN) :: N, NSOA
       KPP_REAL, INTENT(INOUT) :: Lambda(NVAR,NADJ)
       KPP_REAL, INTENT(INOUT) :: Sigma(NVAR,NSOA)
       INTEGER, INTENT(OUT) :: Ierr
-      
-!~~~> Local variables:      
+
+!~~~> Local variables:
       KPP_REAL :: Y(NVAR)
       KPP_REAL :: Z(NVAR,Smax), U(NVAR,Smax),        &
-                       TMP(NVAR), G1(NVAR),               &   
+                       TMP(NVAR), G1(NVAR),               &
                        NewtonRate, SCAL(NVAR), DU(NVAR),  &
                        T, H, Theta, NewtonPredictedErr,   &
                        NewtonIncrement, NewtonIncrementOld
       KPP_REAL :: Y_tlm(NVAR,NSOA), Z_tlm(NVAR,Smax,NSOA), &
                        G2(NVAR,NSOA), Hess0(NHESS), TMP2(NVAR)
-      KPP_REAL :: W(NVAR,Smax,NSOA), TMP_tlm(NVAR) 
+      KPP_REAL :: W(NVAR,Smax,NSOA), TMP_tlm(NVAR)
       INTEGER :: j, IER, istage, iadj, isoa, NewtonIter, &
                  IP(NVAR), IP_adj(NVAR)
       LOGICAL :: Reject, SkipJac, SkipLU, NewtonDone
-      
-#ifdef FULL_ALGEBRA      
+
+#ifdef FULL_ALGEBRA
       KPP_REAL, DIMENSION(NVAR,NVAR) :: E, Jac, E_adj
-#else      
+#else
       KPP_REAL, DIMENSION(LU_NONZERO):: E, Jac, E_adj
-#endif      
+#endif
 
 
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !~~~>  Time loop begins
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Tloop: DO WHILE ( stack_ptr > 0 )
-        
+
    !~~~>  Recover checkpoints for stage values and vectors
       CALL SDIRK_Pop( T, H, Y, Z, Y_tlm, Z_tlm, E, IP )
 
@@ -839,7 +839,7 @@ Tloop: DO WHILE ( stack_ptr > 0 )
 !         IF (IER /= 0) THEN
 !             CALL SDIRK_ErrorMsg(-8,T,H,Ierr); RETURN
 !         END IF
-!      END IF      
+!      END IF
 
 stages:DO istage = rkS, 1, -1
 
@@ -847,10 +847,10 @@ stages:DO istage = rkS, 1, -1
        TMP(1:N) = Y(1:N) + Z(1:N,istage)
        CALL JAC_CHEM(T+rkC(istage)*H,TMP,Jac)
        ISTATUS(Njac) = ISTATUS(Njac) + 1
-            
+
 !~~~>  Hessian at the current stage solution
        CALL HESS_CHEM(T+rkC(istage)*H,TMP,Hess0)
-       
+
 #ifdef FULL_ALGEBRA
          E_adj(1:N,1:N) = -Jac(1:N,1:N)
          DO j=1,N
@@ -881,13 +881,13 @@ stages:DO istage = rkS, 1, -1
        END IF
        G1(1:N)   = H*G1(1:N)
        TMP2(1:N) = G1(1:N)
-       
+
 !       G1(:) = H*Jac^T*( B(i)*Lambda + sum_j A(j,i)*Uj(:) )
-#ifdef FULL_ALGEBRA  
+#ifdef FULL_ALGEBRA
        TMP = MATMUL(TRANSPOSE(Jac),G1)    ! DZ <- Jac(Y+Z)*Y_tlm
-#else      
-       CALL JacTR_SP_Vec ( Jac, G1, TMP )    
-#endif      
+#else
+       CALL JacTR_SP_Vec ( Jac, G1, TMP )
+#endif
        G1(1:N)   = TMP(1:N)
 
 !~~~>  Compute FOA stage
@@ -903,10 +903,10 @@ stages:DO istage = rkS, 1, -1
            CALL WAXPY(N,rkGamma,U(1,istage),1,G1,1)
        END IF
        G1(1:N)   = H*G1(1:N)
-       
+
 !~~~>    G2(:) = H*( B(i)*Sigma + sum_j A(j,i)*Wj(:) )
        DO isoa = 1, NSOA
-       
+
        G2(1:N,isoa) = rkB(istage)*Sigma(1:N,isoa)
        IF (istage < rkS) THEN
            DO j = istage+1, rkS
@@ -915,11 +915,11 @@ stages:DO istage = rkS, 1, -1
        END IF
        G2(1:N,isoa) = H*G2(1:N,isoa)
 
-#ifdef FULL_ALGEBRA  
+#ifdef FULL_ALGEBRA
        TMP = MATMUL(TRANSPOSE(Jac),G2(1,isoa))    ! DZ <- Jac(Y+Z)*Y_tlm
-#else      
-       CALL JacTR_SP_Vec ( Jac, G2(1,isoa), TMP )    
-#endif      
+#else
+       CALL JacTR_SP_Vec ( Jac, G2(1,isoa), TMP )
+#endif
        G2(1:N,isoa) = TMP(1:N)
 
 !~~~>   Add [ Hess0 x Y_tlm(istage) ]^T * G1
@@ -928,66 +928,66 @@ stages:DO istage = rkS, 1, -1
        G2(1:N,isoa) = G2(1:N,isoa) + TMP(1:N)
 
        END DO ! isoa = 1, NSOA
-       
+
 !~~~>  Compute SOA stage
        DO isoa = 1, NSOA
          TMP(1:N) = G2(1:N,isoa)
          CALL SDIRK_Solve ( 'T', H, N, E_adj, IP_adj, IER, TMP )
          W(1:N,istage,isoa) = TMP
        END DO ! isoa = 1, NSOA
- 
+
    END DO stages
 
 !~~~> Update first order adjoint solution
-         DO istage = 1,rkS 
+         DO istage = 1,rkS
              Lambda(1:N,1) = Lambda(1:N,1) + U(1:N,istage)
-         END DO  
+         END DO
 
 !~~~> Update second order adjoint solution
-         DO istage = 1,rkS 
+         DO istage = 1,rkS
              DO isoa = 1,NSOA
                  Sigma(1:N,isoa) = Sigma(1:N,isoa) + W(1:N,istage,isoa)
-             END DO  
-         END DO  
+             END DO
+         END DO
 
       END DO Tloop
 
       ! Successful return
       Ierr  = 1
-  
+
       END SUBROUTINE SDIRK_SoaInt
-      
+
 
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       SUBROUTINE SDIRK_AllocBuffers
 !~~~>  Allocate buffer space for checkpointing
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
        INTEGER :: i
-   
+
        ALLOCATE( chk_H(Max_no_steps), STAT=i )
        IF (i/=0) THEN
           PRINT*,'Failed allocation of buffer H'; STOP
-       END IF   
+       END IF
        ALLOCATE( chk_T(Max_no_steps), STAT=i )
        IF (i/=0) THEN
           PRINT*,'Failed allocation of buffer T'; STOP
-       END IF   
+       END IF
        ALLOCATE( chk_Y(NVAR,Max_no_steps), STAT=i )
        IF (i/=0) THEN
           PRINT*,'Failed allocation of buffer Y'; STOP
-       END IF   
+       END IF
        ALLOCATE( chk_Y_tlm(NVAR,NSOA,Max_no_steps), STAT=i )
        IF (i/=0) THEN
           PRINT*,'Failed allocation of buffer Y_tlm'; STOP
-       END IF   
+       END IF
        ALLOCATE( chk_Z(NVAR,rkS,Max_no_steps), STAT=i )
        IF (i/=0) THEN
           PRINT*,'Failed allocation of buffer Z'; STOP
-       END IF   
+       END IF
        ALLOCATE( chk_Z_tlm(NVAR,rkS,NSOA,Max_no_steps), STAT=i )
        IF (i/=0) THEN
           PRINT*,'Failed allocation of buffer Z_tlm'; STOP
-       END IF   
+       END IF
        IF (SaveLU) THEN
 #ifdef FULL_ALGEBRA
           ALLOCATE( chk_J(NVAR,NVAR,Max_no_steps),  STAT=i )
@@ -996,13 +996,13 @@ stages:DO istage = rkS, 1, -1
 #endif
           IF (i/=0) THEN
              PRINT*,'Failed allocation of buffer J'; STOP
-          END IF   
+          END IF
           ALLOCATE( chk_P(NVAR,Max_no_steps), STAT=i )
           IF (i/=0) THEN
              PRINT*,'Failed allocation of buffer P'; STOP
-          END IF   
-       END IF   
- 
+          END IF
+       END IF
+
      END SUBROUTINE SDIRK_AllocBuffers
 
 
@@ -1011,42 +1011,42 @@ stages:DO istage = rkS, 1, -1
 !~~~>  Dallocate buffer space for discrete adjoint
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
        INTEGER :: i
-   
+
        DEALLOCATE( chk_H, STAT=i )
        IF (i/=0) THEN
           PRINT*,'Failed deallocation of buffer H'; STOP
-       END IF   
+       END IF
        DEALLOCATE( chk_T, STAT=i )
        IF (i/=0) THEN
           PRINT*,'Failed deallocation of buffer T'; STOP
-       END IF   
+       END IF
        DEALLOCATE( chk_Y, STAT=i )
        IF (i/=0) THEN
           PRINT*,'Failed deallocation of buffer Y'; STOP
-       END IF   
+       END IF
        DEALLOCATE( chk_Y_tlm, STAT=i )
        IF (i/=0) THEN
           PRINT*,'Failed deallocation of buffer Y_tlm'; STOP
-       END IF   
+       END IF
        DEALLOCATE( chk_Z, STAT=i )
        IF (i/=0) THEN
           PRINT*,'Failed deallocation of buffer Z'; STOP
-       END IF   
+       END IF
        DEALLOCATE( chk_Z_tlm, STAT=i )
        IF (i/=0) THEN
           PRINT*,'Failed deallocation of buffer Z_tlm'; STOP
-       END IF   
+       END IF
        IF (SaveLU) THEN
           DEALLOCATE( chk_J, STAT=i )
           IF (i/=0) THEN
              PRINT*,'Failed deallocation of buffer J'; STOP
-          END IF   
+          END IF
           DEALLOCATE( chk_P, STAT=i )
           IF (i/=0) THEN
              PRINT*,'Failed deallocation of buffer P'; STOP
-          END IF   
-       END IF   
- 
+          END IF
+       END IF
+
      END SUBROUTINE SDIRK_FreeBuffers
 
 
@@ -1056,38 +1056,38 @@ stages:DO istage = rkS, 1, -1
 !~~~> Saves the next trajectory snapshot for discrete adjoints
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-       KPP_REAL :: T, H, Y(NVAR), Z(NVAR,rkS) 
+       KPP_REAL :: T, H, Y(NVAR), Z(NVAR,rkS)
        KPP_REAL :: Y_tlm(NVAR,NSOA), Z_tlm(NVAR,rkS,NSOA)
        INTEGER       :: P(NVAR)
 #ifdef FULL_ALGEBRA
        KPP_REAL :: E(NVAR,NVAR)
-#else       
+#else
        KPP_REAL :: E(LU_NONZERO)
 #endif
-   
+
        stack_ptr = stack_ptr + 1
        IF ( stack_ptr > Max_no_steps ) THEN
          PRINT*,'Push failed: buffer overflow'
          STOP
-       END IF  
+       END IF
        chk_H( stack_ptr ) = H
        chk_T( stack_ptr ) = T
        chk_Y(1:NVAR,stack_ptr) = Y(1:NVAR)
        chk_Z(1:NVAR,1:rkS,stack_ptr) = Z(1:NVAR,1:rkS)
        chk_Y_tlm(1:NVAR,1:NSOA,stack_ptr) = Y_tlm(1:NVAR,1:NSOA)
        chk_Z_tlm(1:NVAR,1:rkS,1:NSOA,stack_ptr) = Z_tlm(1:NVAR,1:rkS,1:NSOA)
-       IF (SaveLU) THEN 
+       IF (SaveLU) THEN
 #ifdef FULL_ALGEBRA
           chk_J(1:NVAR,1:NVAR,stack_ptr) = E(1:NVAR,1:NVAR)
           chk_P(1:NVAR,stack_ptr)        = P(1:NVAR)
-#else       
+#else
           chk_J(1:LU_NONZERO,stack_ptr)  = E(1:LU_NONZERO)
 #endif
        END IF
-  
+
       END SUBROUTINE SDIRK_Push
-  
-   
+
+
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       SUBROUTINE SDIRK_Pop( T, H, Y, Z, Y_tlm, Z_tlm, E, P )
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1099,14 +1099,14 @@ stages:DO istage = rkS, 1, -1
        INTEGER       :: P(NVAR)
 #ifdef FULL_ALGEBRA
        KPP_REAL :: E(NVAR,NVAR)
-#else       
+#else
        KPP_REAL :: E(LU_NONZERO)
 #endif
-   
+
        IF ( stack_ptr <= 0 ) THEN
          PRINT*,'Pop failed: empty buffer'
          STOP
-       END IF  
+       END IF
        H = chk_H( stack_ptr )
        T = chk_T( stack_ptr )
        Y(1:NVAR) = chk_Y(1:NVAR,stack_ptr)
@@ -1117,13 +1117,13 @@ stages:DO istage = rkS, 1, -1
 #ifdef FULL_ALGEBRA
           E(1:NVAR,1:NVAR) = chk_J(1:NVAR,1:NVAR,stack_ptr)
           P(1:NVAR)        = chk_P(1:NVAR,stack_ptr)
-#else       
+#else
           E(1:LU_NONZERO)  = chk_J(1:LU_NONZERO,stack_ptr)
 #endif
        END IF
 
        stack_ptr = stack_ptr - 1
-  
+
       END SUBROUTINE SDIRK_Pop
 
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1147,9 +1147,9 @@ stages:DO istage = rkS, 1, -1
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       SUBROUTINE SDIRK_ErrorNorm(N, Y, SCAL, Err)
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!      
+!
       INTEGER :: i, N
-      KPP_REAL :: Y(N), SCAL(N), Err      
+      KPP_REAL :: Y(N), SCAL(N), Err
       Err = ZERO
       DO i=1,N
            Err = Err+(Y(i)*SCAL(i))**2
@@ -1159,7 +1159,7 @@ stages:DO istage = rkS, 1, -1
       END SUBROUTINE SDIRK_ErrorNorm
 
 
-!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 SUBROUTINE SDIRK_ErrorMsg(Code,T,H,Ierr)
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !    Handles all error messages
@@ -1197,17 +1197,17 @@ SUBROUTINE SDIRK_ErrorMsg(Code,T,H,Ierr)
    PRINT *, "T=", T, "and H=", H
 
  END SUBROUTINE SDIRK_ErrorMsg
-      
-      
+
+
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       SUBROUTINE SDIRK_PrepareMatrix ( H, T, Y, FJAC, &
                    SkipJac, SkipLU, E, IP, Reject, ISING )
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !~~~>  Compute the matrix E = 1/(H*GAMMA)*Jac, and its decomposition
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     
+
       IMPLICIT NONE
-      
+
       KPP_REAL, INTENT(INOUT) :: H
       KPP_REAL, INTENT(IN)    :: T, Y(NVAR)
       LOGICAL, INTENT(INOUT)       :: SkipJac,SkipLU,Reject
@@ -1224,9 +1224,9 @@ SUBROUTINE SDIRK_ErrorMsg(Code,T,H,Ierr)
 
       ConsecutiveSng = 0
       ISING = 1
-      
+
 Hloop: DO WHILE (ISING /= 0)
-      
+
       HGammaInv = ONE/(H*rkGamma)
 
 !~~~>  Compute the Jacobian
@@ -1236,8 +1236,8 @@ Hloop: DO WHILE (ISING /= 0)
       IF (.NOT. SkipJac) THEN
           CALL JAC_CHEM( T, Y, FJAC )
           ISTATUS(Njac) = ISTATUS(Njac) + 1
-      END IF  
-      
+      END IF
+
 #ifdef FULL_ALGEBRA
       DO j=1,NVAR
          DO i=1,NVAR
@@ -1267,7 +1267,7 @@ Hloop: DO WHILE (ISING /= 0)
           SkipLU  = .FALSE.
           Reject  = .TRUE.
       END IF
-      
+
       END DO Hloop
 
       END SUBROUTINE SDIRK_PrepareMatrix
@@ -1289,18 +1289,18 @@ Hloop: DO WHILE (ISING /= 0)
 #endif
       KPP_REAL, INTENT(INOUT) :: RHS(N)
       KPP_REAL                :: HGammaInv
-      
+
       HGammaInv = ONE/(H*rkGamma)
       CALL WSCAL(N,HGammaInv,RHS,1)
       SELECT CASE (TRANSP)
       CASE ('N')
-#ifdef FULL_ALGEBRA  
+#ifdef FULL_ALGEBRA
          CALL DGETRS( 'N', N, 1, E, N, IP, RHS, N, ISING )
 #else
          CALL KppSolve(E, RHS)
 #endif
       CASE ('T')
-#ifdef FULL_ALGEBRA  
+#ifdef FULL_ALGEBRA
          CALL DGETRS( 'T', N, 1, E, N, IP, RHS, N, ISING )
 #else
          CALL KppSolveTR(E, RHS, RHS)
@@ -1310,7 +1310,7 @@ Hloop: DO WHILE (ISING /= 0)
          STOP
       END SELECT
       ISTATUS(Nsol) = ISTATUS(Nsol) + 1
- 
+
       END SUBROUTINE SDIRK_Solve
 
 
@@ -1398,7 +1398,7 @@ Hloop: DO WHILE (ISING /= 0)
       rkAlpha(5,2) = 6.559571569643355712998131800797873d0
       rkAlpha(5,3) = -15.90772144271326504260996815012482d0
       rkAlpha(5,4) = 25.34908987169226073668861694892683d0
-               
+
 !~~~> Coefficients for continuous solution
 !          rkD(1,1)= 24.74416644927758d0
 !          rkD(1,2)= -4.325375951824688d0
@@ -1427,9 +1427,9 @@ Hloop: DO WHILE (ISING /= 0)
 !             CALL WAXPY(N,rkD(i,j),Z(1,j),1,CONT(1,i),1)
 !           END DO
 !         END DO
-          
+
           rkELO = 4.0d0
-          
+
       END SUBROUTINE Sdirk4a
 
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1516,7 +1516,7 @@ Hloop: DO WHILE (ISING /= 0)
       rkAlpha(5,2) = 9.d0
       rkAlpha(5,3) = -56.81818181818181818181818181818182d0
       rkAlpha(5,4) = 54.d0
-      
+
       END SUBROUTINE Sdirk4b
 
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1558,7 +1558,7 @@ Hloop: DO WHILE (ISING /= 0)
 
 ! Starting value for Newton iterations: Z_i^0 = Sum_j {rkAlpha_ij*Z_j}
       rkAlpha(2,1) = 3.414213562373095048801688724209698d0
-          
+
       END SUBROUTINE Sdirk2a
 
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1600,7 +1600,7 @@ Hloop: DO WHILE (ISING /= 0)
 
 ! Starting value for Newton iterations: Z_i^0 = Sum_j {rkAlpha_ij*Z_j}
       rkAlpha(2,1) = .5857864376269049511983112757903019d0
-      
+
       END SUBROUTINE Sdirk2b
 
 
@@ -1674,16 +1674,16 @@ Hloop: DO WHILE (ISING /= 0)
 
       KPP_REAL :: T, Told
       KPP_REAL :: Y(NVAR), P(NVAR)
-      
+
 !    Told = TIME
       TIME = T
       CALL Update_SUN()
       CALL Update_RCONST()
-      
+
       CALL Fun( Y, FIX, RCONST, P )
-    
+
 !    TIME = Told
-      
+
       END SUBROUTINE FUN_CHEM
 
 
@@ -1695,7 +1695,7 @@ Hloop: DO WHILE (ISING /= 0)
       USE KPP_ROOT_Global, ONLY: TIME, FIX, RCONST
       USE KPP_ROOT_Jacobian, ONLY: Jac_SP,LU_IROW,LU_ICOL
       USE KPP_ROOT_Rates, ONLY: Update_SUN, Update_RCONST, Update_PHOTO
-  
+
       KPP_REAL ::  T, Told
       KPP_REAL ::  Y(NVAR)
 #ifdef FULL_ALGEBRA
@@ -1704,7 +1704,7 @@ Hloop: DO WHILE (ISING /= 0)
 #else
       KPP_REAL :: JV(LU_NONZERO)
 #endif
- 
+
 !    Told = TIME
       TIME = T
       CALL Update_SUN()
@@ -1723,35 +1723,35 @@ Hloop: DO WHILE (ISING /= 0)
 #else
       CALL Jac_SP(Y, FIX, RCONST, JV)
 #endif
-    
+
 !    TIME = Told
 
       END SUBROUTINE JAC_CHEM
 
 
-!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
+!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 SUBROUTINE HESS_CHEM( T, Y, Hes )
-!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
+!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     USE KPP_ROOT_Rates, ONLY: Update_SUN, Update_RCONST, Update_PHOTO
 
-!~~~> Input variables     
+!~~~> Input variables
     KPP_REAL, INTENT(IN)  :: T, Y(NVAR)
-!~~~> Output variables     
+!~~~> Output variables
     KPP_REAL, INTENT(OUT) :: Hes(NHESS)
 !~~~> Local variables
-    KPP_REAL :: Told     
+    KPP_REAL :: Told
 
 !    Told = TIME
-    TIME = T   
+    TIME = T
     CALL Update_SUN()
     CALL Update_RCONST()
-    
+
     CALL Hessian( Y, FIX, RCONST, Hes )
-    
+
 !    TIME = Told
 
-END SUBROUTINE HESS_CHEM                                      
+END SUBROUTINE HESS_CHEM
 
 END MODULE KPP_ROOT_Integrator
 

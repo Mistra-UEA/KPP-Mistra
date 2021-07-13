@@ -16,7 +16,7 @@ void Usage()
             "          [ c, m, f ] = KPP_ROOT( t, c0, k, p, fn, tfn );          \n"
             "                                                                    \n"
             "  input :                                                           \n"
-            "         t   - Time vector, contains the time at which results      \n" 
+            "         t   - Time vector, contains the time at which results      \n"
             "               should be reported;                                  \n"
             "         c0  - Vector with the initial concentrations for all       \n"
             "               species;                                             \n"
@@ -29,7 +29,7 @@ void Usage()
             "               If any of the above is zero the default value is     \n"
             "               used;                                                \n"
             "         fn  - (optional) Name of a matlab function to be called    \n"
-            "               to update the values of k's and concentrations       \n"                   
+            "               to update the values of k's and concentrations       \n"
             "               If not present no update is performed.               \n"
             "                                                                    \n"
             "         tfn - (optional) Time at which the fn function should      \n"
@@ -54,10 +54,10 @@ char errmsg[ MAX_BUF ];
   va_start( args, fmt );
   vsprintf( buf, fmt, args );
   va_end( args );
-  
+
   if( giveusage ) Usage();
-  
-  mexPrintf("Error: %s\n", buf);  
+
+  mexPrintf("Error: %s\n", buf);
   mexErrMsgTxt( 0 );
 }
 
@@ -89,7 +89,7 @@ int i;
     memmove( pga, val, len*sizeof(double) );
   } else {
     for( i = 0; i < len; i++ ) pga[i] = (double)val[i];
-  }   
+  }
   mxSetName(GA,name);
   return mexPutArray(GA,"global");
 }
@@ -138,7 +138,7 @@ void mexFunction(
                  int nrhs, const mxArray *prhs[]
 		 )
 {
-double *  tp; 
+double *  tp;
 double * c0p;
 double *  kp;
 double *  pp;
@@ -167,27 +167,27 @@ KPP_REAL prm[4];
 
     InitVal();
     Update_RCONST();
-    
-    prm[0] = 1e-4; 
+
+    prm[0] = 1e-4;
     prm[1] = 1.0E-18;
     prm[2] = 0.01;
     prm[3] = 900;
 
     sprintf(allvars,"global ");
-    
+
     CreateVec("PRM",4, prm);
-    
+
     CreateVar("NSPEC",NSPEC);
     CreateVar("NREACT",NREACT);
     CreateVar("NMASS",NMASS);
- 
+
     CreateVec("C0", NSPEC, C);
     CreateVec("K0", NREACT, RCONST);
 
-    for( i = 0; i < NLOOKAT; i++ )  
+    for( i = 0; i < NLOOKAT; i++ )
       CreateVar( SLOOKAT[i], (double)(i+1) );
-    
-    for( i = 0; i < NMASS; i++ )  
+
+    for( i = 0; i < NMASS; i++ )
       CreateVar( SMASS[i], (double)(i+1) );
 
     CreateStrVec("SSPEC", NSPEC, SLOOKAT);
@@ -195,73 +195,73 @@ KPP_REAL prm[4];
     CreateStrVec("SEQN", NREACT, SEQN);
 
     CreateStr("GLOBALCMD", allvars);
- 
+
     mexEvalString(allvars);
 /*
-    mexPrintf("The KPP_ROOT model parameters were sucessfully initialized.\n");    
+    mexPrintf("The KPP_ROOT model parameters were sucessfully initialized.\n");
 */
     return;
   }
 
-  if( nrhs < 4 ) 
+  if( nrhs < 4 )
     F9Error("First 4 parameters are REQUIRED only %d received.", nrhs);
-  if( nlhs < 1 ) 
+  if( nlhs < 1 )
     F9Error("At least one output parameter REQUIRED.");
 
   if(! mxIsDouble(T_PRM))   F9Error("<t> must be of type double.");
-  if(! mxIsDouble(C0_PRM))  F9Error("<c0> must be of type double."); 
+  if(! mxIsDouble(C0_PRM))  F9Error("<c0> must be of type double.");
   if(! mxIsDouble(K_PRM))   F9Error("<k> must be of type double.");
   if(! mxIsDouble(P_PRM))   F9Error("<p> must be of type double.");
-  if((nrhs > 4) && (! mxIsChar(FN_PRM))) F9Error("<fn> must be of type char.");     
-  if((nrhs > 5) && (! mxIsDouble(TFN_PRM))) F9Error("<tfn> must be of type double.");     
-      
+  if((nrhs > 4) && (! mxIsChar(FN_PRM))) F9Error("<fn> must be of type char.");
+  if((nrhs > 5) && (! mxIsDouble(TFN_PRM))) F9Error("<tfn> must be of type double.");
+
   nd = mxGetNumberOfDimensions( T_PRM );
-  m  =                  mxGetM( T_PRM ); 
-  n  =                  mxGetN( T_PRM );    
+  m  =                  mxGetM( T_PRM );
+  n  =                  mxGetN( T_PRM );
   if( !( (nd == 2) && ((m == 1) || (n == 1)) ) ) F9Error("<t> must be a column vector.");
   nsteps = (m == 1) ? n : m;
-  tp = mxGetPr( T_PRM );  
+  tp = mxGetPr( T_PRM );
 
   nd = mxGetNumberOfDimensions( C0_PRM );
-  m  =                  mxGetM( C0_PRM ); 
-  n  =                  mxGetN( C0_PRM );    
+  m  =                  mxGetM( C0_PRM );
+  n  =                  mxGetN( C0_PRM );
   if( !( (nd == 2) && ((m == 1) || (n == 1)) ) ) F9Error("<c0> must be a column vector.");
   nspc = (m == 1) ? n : m;
-  c0p = mxGetPr( C0_PRM );  
+  c0p = mxGetPr( C0_PRM );
 
   nd = mxGetNumberOfDimensions( K_PRM );
-  m  =                  mxGetM( K_PRM ); 
-  n  =                  mxGetN( K_PRM );    
+  m  =                  mxGetM( K_PRM );
+  n  =                  mxGetN( K_PRM );
   if( !( (nd == 2) && ((m == 1) || (n == 1)) ) ) F9Error("<k> must be a column vector.");
   nreact = (m == 1) ? n : m;
-  kp = mxGetPr( K_PRM );  
+  kp = mxGetPr( K_PRM );
 
   nd = mxGetNumberOfDimensions( P_PRM );
-  m  =                  mxGetM( P_PRM ); 
-  n  =                  mxGetN( P_PRM );    
-  if( !( (nd == 2) && ((m == 1) || (n == 1)) && (n*m == 4) ) ) 
+  m  =                  mxGetM( P_PRM );
+  n  =                  mxGetN( P_PRM );
+  if( !( (nd == 2) && ((m == 1) || (n == 1)) && (n*m == 4) ) )
     F9Error("<p> must be a column vectorof length 4.");
-  pp = mxGetPr( P_PRM );  
+  pp = mxGetPr( P_PRM );
 
   *fnp = 0;
   if( HAS_FN ) {
     nd = mxGetNumberOfDimensions( FN_PRM );
-    m  =                  mxGetM( FN_PRM ); 
-    n  =                  mxGetN( FN_PRM );    
+    m  =                  mxGetM( FN_PRM );
+    n  =                  mxGetN( FN_PRM );
     if( !( (nd == 2) && ((m == 1) || (n == 1)) ) ) F9Error("<fn> must be a character string.");
-    if( mxGetString( FN_PRM, fnp, MAX_BUF ) ) 
-      F9Error("Can not read function mane (too long?)");  
+    if( mxGetString( FN_PRM, fnp, MAX_BUF ) )
+      F9Error("Can not read function mane (too long?)");
 
     Carr = mxCreateDoubleMatrix(1,NSPEC,mxREAL);
     fcp = mxGetPr(Carr);
     mxSetName(Carr,"C");
     mexPutArray(Carr,"base");
-    
+
     Karr = mxCreateDoubleMatrix(1,NREACT,mxREAL);
     fkp = mxGetPr(Karr);
     mxSetName(Karr,"K");
     mexPutArray(Karr,"base");
-    
+
     Tarr = mxCreateDoubleMatrix(1,1,mxREAL);
     ftp = mxGetPr(Tarr);
     mxSetName(Tarr,"T");
@@ -271,10 +271,10 @@ KPP_REAL prm[4];
   tfnp = 0; ncb = 0;
   if( HAS_TFN ) {
     nd = mxGetNumberOfDimensions( TFN_PRM );
-    m  =                  mxGetM( TFN_PRM ); 
-    n  =                  mxGetN( TFN_PRM );    
+    m  =                  mxGetM( TFN_PRM );
+    n  =                  mxGetN( TFN_PRM );
     if( !( (nd == 2) && ((m == 1) || (n == 1)) ) ) F9Error("<tfn> must be a column vector.");
-    ncb = (m == 1) ? n : m; 
+    ncb = (m == 1) ? n : m;
     tfnp = mxGetPr( TFN_PRM );
   }
 
@@ -282,39 +282,39 @@ KPP_REAL prm[4];
 
   if( !((nspc == NSPEC) && (nreact == NREACT)) ) {
     F9Error("Size of parameters do not match the model:\n\n"
-            "  Number of species was %d and should be %d;\n"             
+            "  Number of species was %d and should be %d;\n"
             "  Number of rections (rate constants) was %d and should be %d;\n",
-            nspc, NSPEC, nreact, NREACT);    
+            nspc, NSPEC, nreact, NREACT);
   }
 
   if( DBL ) { memmove( C, c0p, sizeof(double)*NSPEC );
               memmove( RCONST, kp, sizeof(double)*NREACT ); }
        else { for( i = 0; i < NSPEC; i++ ) C[i] = (KPP_REAL)c0p[i];
               for( i = 0; i < NREACT; i++ ) RCONST[i] = (KPP_REAL)kp[i]; }
-  
+
   RTOLS = 1e-4;
   ATOLS = 1e-18;
   STEPMIN = 0.01;
   STEPMAX = 900.0;
-          
+
   if( pp[0] ) RTOLS = pp[0];
   if( pp[1] ) ATOLS = pp[1];
   if( pp[2] ) STEPMIN = pp[2];
   if( pp[3] ) STEPMAX = pp[3];
-  
+
   for( i = 0; i < NVAR; i++ ) {
     RTOL[i] = RTOLS;
     ATOL[i] = ATOLS;
   }
-  
-  C_PRM = mxCreateDoubleMatrix(NSPEC,nsteps,mxREAL); 
+
+  C_PRM = mxCreateDoubleMatrix(NSPEC,nsteps,mxREAL);
   cp = mxGetPr(C_PRM);
-  
+
   if( HAS_M ) {
     M_PRM = mxCreateDoubleMatrix(NMASS,nsteps,mxREAL);
     mp = mxGetPr(M_PRM);
   }
-  
+
   if( HAS_F ) {
     F_PRM = mxCreateDoubleMatrix(NSPEC,nsteps,mxREAL);
     fp = mxGetPr(F_PRM);
@@ -322,7 +322,7 @@ KPP_REAL prm[4];
 
   tcb = 0;
 
-  for( t = 0; t < nsteps; t++ ) {              
+  for( t = 0; t < nsteps; t++ ) {
     if( t ) {
       TIME = tp[t-1];
 
@@ -332,14 +332,14 @@ KPP_REAL prm[4];
           if( tfnp[tcb] <= TIME ) { CallBack = 1; tcb++; }
       } else {
         CallBack = HAS_FN;
-      } 
+      }
 
       if( CallBack ) {
-        if( DBL ) { memmove( fcp, C, sizeof(double)*NSPEC ); 
+        if( DBL ) { memmove( fcp, C, sizeof(double)*NSPEC );
                     memmove( fkp, RCONST, sizeof(double)*NREACT ); }
-             else { for( i = 0; i < NSPEC; i++ ) fcp[i] = (double)C[i]; 
+             else { for( i = 0; i < NSPEC; i++ ) fcp[i] = (double)C[i];
                     for( i = 0; i < NREACT; i++ ) fkp[i] = (double)RCONST[i]; }
-        *ftp = TIME; 
+        *ftp = TIME;
 
         mexPutArray(Carr,"base");
         mexPutArray(Karr,"base");
@@ -351,26 +351,26 @@ KPP_REAL prm[4];
         mxDestroyArray(Karr); Karr = mexGetArray("K","base"); fkp = mxGetPr(Karr);
         mxDestroyArray(Tarr); Tarr = mexGetArray("T","base"); ftp = mxGetPr(Tarr);
 
-        if( DBL ) { memmove( C, fcp, sizeof(double)*NSPEC ); 
+        if( DBL ) { memmove( C, fcp, sizeof(double)*NSPEC );
                     memmove( RCONST, fkp, sizeof(double)*NREACT ); }
-             else { for( i = 0; i < NSPEC; i++ ) C[i] = (KPP_REAL)fcp[i]; 
+             else { for( i = 0; i < NSPEC; i++ ) C[i] = (KPP_REAL)fcp[i];
                     for( i = 0; i < NREACT; i++ ) RCONST[i] = (KPP_REAL)fkp[i]; }
- 
+
       }
 
       INTEGRATE( tp[t-1], tp[t] );
     }
-    if( DBL ) { memmove( cp, C, sizeof(double)*NSPEC ); cp += NSPEC; } 
+    if( DBL ) { memmove( cp, C, sizeof(double)*NSPEC ); cp += NSPEC; }
          else { for( i = 0; i < NSPEC; i++ ) *cp++ = (double)C[i]; }
     if( HAS_M ) {
-      if( DBL ) { GetMass( mp ); mp += NMASS; } 
+      if( DBL ) { GetMass( mp ); mp += NMASS; }
            else { GetMass( dval );
                   for( i = 0; i < NMASS; i++ ) *mp++ = (double)dval[i]; }
     }
     if( HAS_F ) {
       if( DBL ) { FLUX( fp ); fp += NSPEC; }
            else { FLUX( dval );
-                  for( i = 0; i < NSPEC; i++ ) *fp++ = (double)dval[i]; }           
+                  for( i = 0; i < NSPEC; i++ ) *fp++ = (double)dval[i]; }
     }
   }
 }

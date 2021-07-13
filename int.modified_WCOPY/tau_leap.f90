@@ -1596,9 +1596,9 @@ END MODULE KPP_ROOT_Random
 
 MODULE KPP_ROOT_Integrator
   USE KPP_ROOT_Random
-  USE KPP_ROOT_Parameters, ONLY : NVAR, NFIX, NREACT 
-  USE KPP_ROOT_Global, ONLY : TIME, RCONST, Volume 
-  USE KPP_ROOT_Stoichiom  
+  USE KPP_ROOT_Parameters, ONLY : NVAR, NFIX, NREACT
+  USE KPP_ROOT_Global, ONLY : TIME, RCONST, Volume
+  USE KPP_ROOT_Stoichiom
   USE KPP_ROOT_Stochastic
   USE KPP_ROOT_Rates
   USE KPP_ROOT_Random, ddp => dp
@@ -1620,32 +1620,32 @@ SUBROUTINE TauLeap(Nsteps, Tau, T, SCT, NmlcV, NmlcF)
 !   OUTPUT:
 !       T       = updated time (after Nsteps)
 !       NmlcV   = updated no. of molecules for variable species
-!      
+!
 !
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   IMPLICIT NONE
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
+
       KPP_REAL:: T, Tau
-      INTEGER :: Nsteps     
+      INTEGER :: Nsteps
       INTEGER :: NmlcV(NVAR), NmlcF(NFIX)
       INTEGER :: i, j, irct, id, istep, Nfirings(NREACT)
       REAL   :: mu
       KPP_REAL :: A(NREACT), SCT(NREACT), x
       LOGICAL, SAVE :: First = .TRUE.
-   
+
       DO istep = 1, Nsteps
 
           ! Propensity vector
           CALL  Propensity ( NmlcV, NmlcF, SCT, A )
-          
+
           ! Index of next reaction
           DO irct = 1, NREACT
             mu = A(irct)*Tau
             Nfirings(irct) = random_Poisson(mu, First)
             First = .TRUE.
           END DO
-          
+
           ! Update time with the leap interval
           T = T + Tau;
 
@@ -1656,16 +1656,16 @@ SUBROUTINE TauLeap(Nsteps, Tau, T, SCT, NmlcV, NmlcF)
                 NmlcV(id) = MAX(0, NmlcV(id) + Nfirings(irct)*INT(STOICM(i)))
              END DO
           END DO
-          
+
           ! Update state vector
           ! DO irct = 1, NREACT
           !   DO j = 1, Nfirings(irct)
           !    CALL MoleculeChange( irct, NmlcV )
-          !   END DO 
+          !   END DO
           ! END DO
-        
+
      END DO
-     
+
 CONTAINS
 
      SUBROUTINE PropensityTemplate( T, NmlcV, NmlcF, Prop )
@@ -1673,15 +1673,15 @@ CONTAINS
       INTEGER, INTENT(IN)   :: NmlcV(NVAR), NmlcF(NFIX)
       KPP_REAL, INTENT(OUT) :: Prop(NREACT)
       KPP_REAL :: Tsave
-! Update the stochastic reaction rates, which may be time dependent 
+! Update the stochastic reaction rates, which may be time dependent
       Tsave = TIME
       TIME = T
       CALL Update_RCONST()
-      CALL StochasticRates( RCONST, Volume, SCT )   
+      CALL StochasticRates( RCONST, Volume, SCT )
       CALL Propensity ( NmlcV, NmlcF, SCT, Prop )
       TIME = Tsave
-     END SUBROUTINE PropensityTemplate    
-    
+     END SUBROUTINE PropensityTemplate
+
 END SUBROUTINE TauLeap
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

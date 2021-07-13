@@ -2,10 +2,10 @@
 c
       integer          lwork, n
       parameter        (n = 100)
-      double complex   zwork(200 000), alpha(20), beta(20), 
+      double complex   zwork(200 000), alpha(20), beta(20),
      $                 eivec(n,20), tmp(n), residu(n)
 c
-      integer          kmax, jmax, jmin, maxstep, method, m, l, maxnmv, 
+      integer          kmax, jmax, jmin, maxstep, method, m, l, maxnmv,
      $                 order, testspace, j
       double precision tol, lock, dznrm2
       logical          wanted
@@ -47,7 +47,7 @@ c
       end if
       wanted = .true.
 c
-      call jdqz(alpha, beta, eivec, wanted, n, target, tol, 
+      call jdqz(alpha, beta, eivec, wanted, n, target, tol,
      $     kmax, jmax, jmin,
      $     method, m, l, maxnmv, maxstep,
      $     lock, order, testspace, zwork, lwork )

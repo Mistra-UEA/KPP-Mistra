@@ -1,6 +1,6 @@
       SUBROUTINE INTEGRATE( TIN, TOUT )
 
-      IMPLICIT KPP_REAL (A-H,O-Z)	 
+      IMPLICIT KPP_REAL (A-H,O-Z)
       INCLUDE 'KPP_ROOT_Parameters.h'
       INCLUDE 'KPP_ROOT_Global.h'
 
@@ -8,13 +8,13 @@ C TIN - Start Time
       KPP_REAL TIN
 C TOUT - End Time
       KPP_REAL TOUT
-      INTEGER i 
+      INTEGER i
 
       PARAMETER (LWORK=2*NVAR*NVAR+12*NVAR+7,LIWORK=2*NVAR+7)
       PARAMETER (LRCONT=5*NVAR+2)
 
       KPP_REAL WORK(LWORK)
-      INTEGER IWORK(LIWORK)   
+      INTEGER IWORK(LIWORK)
       COMMON /CONT/ ICONT(4),RCONT(LRCONT)
       EXTERNAL FUNC_CHEM,JAC_CHEM
 
@@ -26,13 +26,13 @@ C TOUT - End Time
         IWORK(i) = 0
         WORK(i) = 0.D0
       ENDDO
-      
+
       IWORK(3) = 8
 
-      CALL ATMSDIRK(NVAR,FUNC_CHEM,TIN,VAR,TOUT,STEPMIN,     
-     &                  RTOL,ATOL,ITOL,     
-     &                  JAC_CHEM ,IJAC, FUNC_CHEM ,IMAS,                   
-     &                  WORK,LWORK,IWORK,LIWORK,LRCONT,IDID)        
+      CALL ATMSDIRK(NVAR,FUNC_CHEM,TIN,VAR,TOUT,STEPMIN,
+     &                  RTOL,ATOL,ITOL,
+     &                  JAC_CHEM ,IJAC, FUNC_CHEM ,IMAS,
+     &                  WORK,LWORK,IWORK,LIWORK,LRCONT,IDID)
 
       IF (IDID.LT.0) THEN
         print *,'ATMSDIRK: Unsucessfull exit at T=',
@@ -49,8 +49,8 @@ C TOUT - End Time
      &                  WORK,LWORK,IWORK,LIWORK,LRCONT,IDID)
 C ----------------------------------------------------------
 C *** *** *** *** *** *** *** *** *** *** *** *** ***
-C          DECLARATIONS 
-C *** *** *** *** *** *** *** *** *** *** *** *** *** 
+C          DECLARATIONS
+C *** *** *** *** *** *** *** *** *** *** *** *** ***
       IMPLICIT KPP_REAL (A-H,O-Z)
       DIMENSION Y(N),AbsTol(1),RelTol(1),WORK(LWORK),IWORK(LIWORK)
       LOGICAL IMPLCT,JBAND,ARRET
@@ -58,7 +58,7 @@ C *** *** *** *** *** *** *** *** *** *** *** *** ***
       COMMON/STAT/NFCN,NJAC,NSTEP,NACCPT,NREJCT,NDEC,NSOL
 
 C *** *** *** *** *** *** ***
-C        SETTING THE PARAMETERS 
+C        SETTING THE PARAMETERS
 C *** *** *** *** *** *** ***
        NFCN=0
        NJAC=0
@@ -90,9 +90,9 @@ C -------- NIT    MAXIMAL NUMBER OF NEWTON ITERATIONS
             ARRET=.TRUE.
          END IF
       END IF
-C -------- METH    SWITCH FOR THE COEFFICIENTS OF THE METHOD 
+C -------- METH    SWITCH FOR THE COEFFICIENTS OF THE METHOD
       METH = 2
-C -------- UROUND   SMALLEST NUMBER SATISFYING 1.D0+UROUND>1.D0  
+C -------- UROUND   SMALLEST NUMBER SATISFYING 1.D0+UROUND>1.D0
       IF(WORK(1).EQ.0.D0)THEN
          UROUND=1.D-16
       ELSE
@@ -163,7 +163,7 @@ C ---- IMPLICIT, BANDED OR NOT ?
       IMPLCT=IMAS.NE.0
       ARRET=.FALSE.
 C -------- COMPUTATION OF THE ROW-DIMENSIONS OF THE 2-ARRAYS ---
-C -- JACOBIAN 
+C -- JACOBIAN
          LDJAC=N
 C -- MATRIX E FOR LINEAR ALGEBRA
          LDE=N
@@ -241,10 +241,10 @@ C
      &   YHAT,Z,Y0,Z1,Z2,Z3,Z4,Z5,SCAL,F1,G1,H1,FJAC,E,FMAS,IP,IPHES)
 C ----------------------------------------------------------
 C     CORE INTEGRATOR FOR SDIRK4
-C     PARAMETERS SAME AS IN SDIRK4 WITH WORKSPACE ADDED 
-C ---------------------------------------------------------- 
-C         DECLARATIONS 
-C ---------------------------------------------------------- 
+C     PARAMETERS SAME AS IN SDIRK4 WITH WORKSPACE ADDED
+C ----------------------------------------------------------
+C         DECLARATIONS
+C ----------------------------------------------------------
       IMPLICIT KPP_REAL (A-H,O-Z)
       INCLUDE 'KPP_ROOT_Parameters.h'
       INCLUDE 'KPP_ROOT_Sparse.h'
@@ -324,8 +324,8 @@ C ---------- METHOD WITH GAMMA = 4/15 ---------------
       POSNEG=SIGN(1.D0,XEND-X)
       HMAX1=MIN(ABS(HMAX),ABS(XEND-X))
       IF (ABS(H).LE.10.D0*UROUND) H=1.0D-6
-      H=MIN(ABS(H),HMAX1) 
-      H=SIGN(H,POSNEG) 
+      H=MIN(ABS(H),HMAX1)
+      H=SIGN(H,POSNEG)
       HOLD=H
       CFAC=SAFE*(1+2*NIT)
       NEWTRE=.FALSE.
@@ -346,7 +346,7 @@ C ---------- METHOD WITH GAMMA = 4/15 ---------------
    9      SCAL(I)=1.D0 / ( AbsTol(I)+RelTol(I)*DABS(Y(I)) )
       END IF
 
-C --- BASIC INTEGRATION STEP  
+C --- BASIC INTEGRATION STEP
   10  CONTINUE
 
 C *** *** *** *** *** *** ***
@@ -378,8 +378,8 @@ c         CALL DEC(N,LE,E,IP,IER)
              E(IDG) = E(IDG) + FAC1
           END DO
           CALL KppDecomp ( E, IER)
-          
-         IF (IER.NE.0) GOTO 79 
+
+         IF (IER.NE.0) GOTO 79
       END IF
       NDEC=NDEC+1
   30  CONTINUE
@@ -411,7 +411,7 @@ c  232          Z(I) = 0.D0
 
           END IF
           DO 31 I=1,N
-  31      G1(I)=0.D0 
+  31      G1(I)=0.D0
           FACCON=FACCO1
       END IF
       IF (ISTAGE.EQ.2) THEN
@@ -526,44 +526,44 @@ C --- END OF SIMPILFIED NEWTON
       IF (ISTAGE.EQ.1) THEN
           DO I=1,N
             Z1(I) = Z(I)
-          END DO  
+          END DO
           FACCO1=FACCON
       END IF
       IF (ISTAGE.EQ.2) THEN
           DO I=1,N
             Z2(I) = Z(I)
-          END DO  
+          END DO
           FACCO2=FACCON
       END IF
       IF (ISTAGE.EQ.3) THEN
           DO I=1,N
             Z3(I) = Z(I)
-          END DO  
+          END DO
           FACCO3=FACCON
       END IF
       IF (ISTAGE.EQ.4) THEN
           DO I=1,N
             Z4(I) = Z(I)
-          END DO  
+          END DO
           FACCO4=FACCON
       END IF
       IF (ISTAGE.EQ.5) THEN
           DO I=1,N
             Z5(I) = Z(I)
-          END DO  
+          END DO
           FACCO5=FACCON
       END IF
   59  CONTINUE
 
 
 C *** *** *** *** *** *** ***
-C  ERROR ESTIMATION  
+C  ERROR ESTIMATION
 C *** *** *** *** *** *** ***
       NSTEP=NSTEP+1
       IF (IMPLCT) THEN
           print *,'IMPLCT 3'
       ELSE
-          DO 461 I=1,N 
+          DO 461 I=1,N
  461      CONT(I)=FAC1*(Z5(I)-YHAT(I))
       END IF
 
@@ -589,20 +589,20 @@ C *** *** *** *** *** *** ***
 C  IS THE ERROR SMALL ENOUGH ?
 C *** *** *** *** *** *** ***
       IF (ERR.LT.1.D0) THEN
-C --- STEP IS ACCEPTED  
+C --- STEP IS ACCEPTED
          FIRST=.FALSE.
          NACCPT=NACCPT+1
          HOLD=H
          XOLD=X
 C --- COEFFICIENTS FOR CONTINUOUS SOLUTION
-         DO 74 I=1,N 
+         DO 74 I=1,N
           Z1I=Z1(I)
           Z2I=Z2(I)
           Z3I=Z3(I)
           Z4I=Z4(I)
           Z5I=Z5(I)
          CONT(I)=Y(I)
-         Y(I)=Y(I)+Z5I  
+         Y(I)=Y(I)+Z5I
          CONT(I+NN) =D11*Z1I+D12*Z2I+D13*Z3I+D14*Z4I+D15*Z5I
          CONT(I+NN2)=D21*Z1I+D22*Z2I+D23*Z3I+D24*Z4I+D25*Z5I
          CONT(I+NN3)=D31*Z1I+D32*Z2I+D33*Z3I+D34*Z4I+D35*Z5I
@@ -614,7 +614,7 @@ C --- COEFFICIENTS FOR CONTINUOUS SOLUTION
            SCAL(I)=1.D0/( AbsTol(I)+RelTol(I)*DABS(Y(I)) )
          END IF
   74     CONTINUE
-         X=XPH 
+         X=XPH
          CALJAC=.FALSE.
          IF ((X-XEND)*POSNEG+UROUND.GT.0.D0) THEN
             H=HOPT
@@ -625,7 +625,7 @@ C --- COEFFICIENTS FOR CONTINUOUS SOLUTION
          NFCN=NFCN+1
          HNEW=POSNEG*DMIN1(DABS(HNEW),HMAX1)
          HOPT=HNEW
-         IF (REJECT) HNEW=POSNEG*DMIN1(DABS(HNEW),DABS(H)) 
+         IF (REJECT) HNEW=POSNEG*DMIN1(DABS(HNEW),DABS(H))
          REJECT=.FALSE.
          NEWTRE=.FALSE.
          IF ((X+HNEW/QUOT1-XEND)*POSNEG.GT.0.D0) THEN
@@ -633,13 +633,13 @@ C --- COEFFICIENTS FOR CONTINUOUS SOLUTION
          ELSE
             QT=HNEW/H
             IF (THETA.LE.THET.AND.QT.GE.QUOT1.AND.QT.LE.QUOT2) GOTO 30
-            H = HNEW 
+            H = HNEW
          END IF
          IF (THETA.LE.THET) GOTO 20
          GOTO 10
 
       ELSE
-C --- STEP IS REJECTED  
+C --- STEP IS REJECTED
          REJECT=.TRUE.
          IF (FIRST) THEN
              H=H/10.D0
@@ -671,7 +671,7 @@ C --- FAIL EXIT
       END
 C
 
- 
+
       SUBROUTINE FUNC_CHEM(N, T, Y, P)
       INCLUDE 'KPP_ROOT_Parameters.h'
       INCLUDE 'KPP_ROOT_Global.h'
@@ -687,7 +687,7 @@ C
       RETURN
       END
 
- 
+
       SUBROUTINE JAC_CHEM(N, T, Y, J)
       INCLUDE 'KPP_ROOT_Parameters.h'
       INCLUDE 'KPP_ROOT_Global.h'
@@ -701,5 +701,5 @@ C
       CALL Jac_SP( Y,  FIX, RCONST, J )
       TIME = Told
       RETURN
-      END                                                                                                                 
+      END
 

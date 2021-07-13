@@ -1,6 +1,6 @@
       SUBROUTINE INTEGRATE( TIN, TOUT )
 
-      IMPLICIT KPP_REAL (A-H,O-Z)	 
+      IMPLICIT KPP_REAL (A-H,O-Z)
       INCLUDE 'KPP_ROOT_params.h'
       INCLUDE 'KPP_ROOT_global.h'
 
@@ -54,26 +54,26 @@ C TOUT - End Time
 C ----------------------------------------------------------
 C     NUMERICAL SOLUTION OF A STIFF (OR DIFFERENTIAL ALGEBRAIC)
 C     SYSTEM OF FIRST 0RDER ORDINARY DIFFERENTIAL EQUATIONS  MY'=F(X,Y).
-C     THIS IS AN EMBEDDED ROSENBROCK METHOD OF ORDER (3)4  
+C     THIS IS AN EMBEDDED ROSENBROCK METHOD OF ORDER (3)4
 C     (WITH STEP SIZE CONTROL).
 C     C.F. SECTION IV.7
 C
 C     AUTHORS: E. HAIRER AND G. WANNER
 C              UNIVERSITE DE GENEVE, DEPT. DE MATHEMATIQUES
-C              CH-1211 GENEVE 24, SWITZERLAND 
+C              CH-1211 GENEVE 24, SWITZERLAND
 C              E-MAIL:  HAIRER@CGEUGE51.BITNET,  WANNER@CGEUGE51.BITNET
-C     
+C
 C     THIS CODE IS PART OF THE BOOK:
 C         E. HAIRER AND G. WANNER, SOLVING ORDINARY DIFFERENTIAL
 C         EQUATIONS II. STIFF AND DIFFERENTIAL-ALGEBRAIC PROBLEMS.
 C         SPRINGER SERIES IN COMPUTATIONAL MATHEMATICS,
-C         SPRINGER-VERLAG (1990)               
-C      
+C         SPRINGER-VERLAG (1990)
+C
 C     VERSION OF NOVEMBER 17, 1992
 C
-C     INPUT PARAMETERS  
-C     ----------------  
-C     N           DIMENSION OF THE SYSTEM 
+C     INPUT PARAMETERS
+C     ----------------
+C     N           DIMENSION OF THE SYSTEM
 C
 C     FCN         NAME (EXTERNAL) OF SUBROUTINE COMPUTING THE
 C                 VALUE OF F(X,Y):
@@ -92,7 +92,7 @@ C
 C     XEND        FINAL X-VALUE (XEND-X MAY BE POSITIVE OR NEGATIVE)
 C
 C     H           INITIAL STEP SIZE GUESS;
-C                 FOR STIFF EQUATIONS WITH INITIAL TRANSIENT, 
+C                 FOR STIFF EQUATIONS WITH INITIAL TRANSIENT,
 C                 H=1.D0/(NORM OF F'), USUALLY 1.D-2 OR 1.D-3, IS GOOD.
 C                 THIS CHOICE IS NOT VERY IMPORTANT, THE CODE QUICKLY
 C                 ADAPTS ITS STEP SIZE. STUDY THE CHOSEN VALUES FOR A FEW
@@ -137,7 +137,7 @@ C
 C     MLJAC       SWITCH FOR THE BANDED STRUCTURE OF THE JACOBIAN:
 C                    MLJAC=N: JACOBIAN IS A FULL MATRIX. THE LINEAR
 C                       ALGEBRA IS DONE BY FULL-MATRIX GAUSS-ELIMINATION.
-C                    0<=MLJAC<N: MLJAC IS THE LOWER BANDWITH OF JACOBIAN 
+C                    0<=MLJAC<N: MLJAC IS THE LOWER BANDWITH OF JACOBIAN
 C                       MATRIX (>= NUMBER OF NON-ZERO DIAGONALS BELOW
 C                       THE MAIN DIAGONAL).
 C
@@ -153,7 +153,7 @@ C                 OTHERWISE, THIS SUBROUTINE MUST HAVE THE FORM
 C                    SUBROUTINE DFX(N,X,Y,FX)
 C                    KPP_REAL X,Y(N),FX(N)
 C                    FX(1)= ...
-C                
+C
 C     IDFX        SWITCH FOR THE COMPUTATION OF THE DF/DX:
 C                    IDFX=0: DF/DX IS COMPUTED INTERNALLY BY FINITE
 C                       DIFFERENCES, SUBROUTINE "DFX" IS NEVER CALLED.
@@ -197,19 +197,19 @@ C                 NEED NOT BE DEFINED IF MLMAS=N.
 C                 MUMAS IS SUPPOSED TO BE .LE. MUJAC.
 C
 C     SOLOUT      NAME (EXTERNAL) OF SUBROUTINE PROVIDING THE
-C                 NUMERICAL SOLUTION DURING INTEGRATION. 
+C                 NUMERICAL SOLUTION DURING INTEGRATION.
 C                 IF IOUT=1, IT IS CALLED AFTER EVERY SUCCESSFUL STEP.
-C                 SUPPLY A DUMMY SUBROUTINE IF IOUT=0. 
+C                 SUPPLY A DUMMY SUBROUTINE IF IOUT=0.
 C                 IT MUST HAVE THE FORM
 C                    SUBROUTINE SOLOUT (NR,XOLD,X,Y,N,IRTRN)
 C                    KPP_REAL X,Y(N)
-C                    ....  
+C                    ....
 C                 SOLOUT FURNISHES THE SOLUTION "Y" AT THE NR-TH
 C                    GRID-POINT "X" (THEREBY THE INITIAL VALUE IS
 C                    THE FIRST GRID-POINT).
 C                 "IRTRN" SERVES TO INTERRUPT THE INTEGRATION. IF IRTRN
 C                    IS SET <0, ROS4 RETURNS TO THE CALLING PROGRAM.
-C           
+C
 C     IOUT        GIVES INFORMATION ON THE SUBROUTINE SOLOUT:
 C                    IOUT=0: SUBROUTINE IS NEVER CALLED
 C                    IOUT=1: SUBROUTINE IS USED FOR OUTPUT
@@ -221,17 +221,17 @@ C                             N*(LJAC+LMAS+LE1+8)+5
 C                 WHERE
 C                    LJAC=N              IF MLJAC=N (FULL JACOBIAN)
 C                    LJAC=MLJAC+MUJAC+1  IF MLJAC<N (BANDED JAC.)
-C                 AND                  
+C                 AND
 C                    LMAS=0              IF IMAS=0
 C                    LMAS=N              IF IMAS=1 AND MLMAS=N (FULL)
 C                    LMAS=MLMAS+MUMAS+1  IF MLMAS<N (BANDED MASS-M.)
 C                 AND
 C                    LE1=N               IF MLJAC=N (FULL JACOBIAN)
-C                    LE1=2*MLJAC+MUJAC+1 IF MLJAC<N (BANDED JAC.). 
+C                    LE1=2*MLJAC+MUJAC+1 IF MLJAC<N (BANDED JAC.).
 c
 C                 IN THE USUAL CASE WHERE THE JACOBIAN IS FULL AND THE
 C                 MASS-MATRIX IS THE INDENTITY (IMAS=0), THE MINIMUM
-C                 STORAGE REQUIREMENT IS 
+C                 STORAGE REQUIREMENT IS
 C                             LWORK = 2*N*N+8*N+5.
 C
 C     LWORK       DECLARED LENGHT OF ARRAY "WORK".
@@ -242,10 +242,10 @@ C
 C     LIWORK      DECLARED LENGHT OF ARRAY "IWORK".
 C
 C ----------------------------------------------------------------------
-C 
+C
 C     SOPHISTICATED SETTING OF PARAMETERS
 C     -----------------------------------
-C              SEVERAL PARAMETERS OF THE CODE ARE TUNED TO MAKE IT WORK 
+C              SEVERAL PARAMETERS OF THE CODE ARE TUNED TO MAKE IT WORK
 C              WELL. THEY MAY BE DEFINED BY SETTING WORK(1),..,WORK(5)
 C              AS WELL AS IWORK(1),IWORK(2) DIFFERENT FROM ZERO.
 C              FOR ZERO INPUT, THE CODE CHOOSES DEFAULT VALUES:
@@ -277,22 +277,22 @@ C              DEFAULT VALUES: WORK(5)=0.1D0
 C
 C-----------------------------------------------------------------------
 C
-C     OUTPUT PARAMETERS 
-C     ----------------- 
+C     OUTPUT PARAMETERS
+C     -----------------
 C     X           X-VALUE WHERE THE SOLUTION IS COMPUTED
 C                 (AFTER SUCCESSFUL RETURN X=XEND)
 C
 C     Y(N)        SOLUTION AT X
-C  
+C
 C     H           PREDICTED STEP SIZE OF THE LAST ACCEPTED STEP
 C
 C     IDID        REPORTS ON SUCCESSFULNESS UPON RETURN:
 C                   IDID=1  COMPUTATION SUCCESSFUL,
 C                   IDID=-1 COMPUTATION UNSUCCESSFUL.
 C
-C --------------------------------------------------------- 
+C ---------------------------------------------------------
 C *** *** *** *** *** *** *** *** *** *** *** *** ***
-C          DECLARATIONS 
+C          DECLARATIONS
 C *** *** *** *** *** *** *** *** *** *** *** *** ***
       IMPLICIT KPP_REAL (A-H,O-Z)
       DIMENSION Y(N),AbsTol(1),RelTol(1),WORK(LWORK),IWORK(LIWORK)
@@ -302,7 +302,7 @@ C *** *** *** *** *** *** *** *** *** *** *** *** ***
 C -----------------------------------------------------
 C --- COMMON STAT CAN BE USED FOR STATISTICS
 C ---    NFCN      NUMBER OF FUNC_CHEMCTION EVALUATIONS (THOSE FOR NUMERICAL
-C                  EVALUATION OF THE JACOBIAN ARE NOT COUNTED)  
+C                  EVALUATION OF THE JACOBIAN ARE NOT COUNTED)
 C ---    NJAC      NUMBER OF JACOBIAN EVALUATIONS (EITHER ANALYTICALLY
 C                  OR NUMERICALLY)
 C ---    NSTEP     NUMBER OF COMPUTED STEPS
@@ -313,7 +313,7 @@ C ---    NDEC      NUMBER OF LU-DECOMPOSITIONS (N-DIMENSIONAL MATRIX)
 C ---    NSOL      NUMBER OF FORWARD-BACKWARD SUBSTITUTIONS
 C -----------------------------------------------------
 C *** *** *** *** *** *** ***
-C        SETTING THE PARAMETERS 
+C        SETTING THE PARAMETERS
 C *** *** *** *** *** *** ***
       NFCN=0
       NJAC=0
@@ -343,7 +343,7 @@ C -------- METH   COEFFICIENTS OF THE METHOD
             ARRET=.TRUE.
          END IF
       END IF
-C -------- UROUND   SMALLEST NUMBER SATISFYING 1.D0+UROUND>1.D0  
+C -------- UROUND   SMALLEST NUMBER SATISFYING 1.D0+UROUND>1.D0
       IF(WORK(1).EQ.0.D0)THEN
          UROUND=1.D-16
       ELSE
@@ -399,7 +399,7 @@ C ---- AUTONOMOUS, IMPLICIT, BANDED OR NOT ?
       JBAND=MLJAC.NE.N
       ARRET=.FALSE.
 C -------- COMPUTATION OF THE ROW-DIMENSIONS OF THE 2-ARRAYS ---
-C -- JACOBIAN 
+C -- JACOBIAN
       IF(JBAND)THEN
          LDJAC=MLJAC+MUJAC+1
       ELSE
@@ -480,11 +480,11 @@ C
      &  LFJAC,LE,LDMAS,YNEW,DY1,DY,AK1,AK2,AK3,AK4,FX,FJAC,E,FMAS,IP)
 C ----------------------------------------------------------
 C     CORE INTEGRATOR FOR ROS4
-C     PARAMETERS SAME AS IN ROS4 WITH WORKSPACE ADDED 
-C ---------------------------------------------------------- 
-C         DECLARATIONS 
-C ---------------------------------------------------------- 
-      IMPLICIT KPP_REAL (A-H,O-Z)	 
+C     PARAMETERS SAME AS IN ROS4 WITH WORKSPACE ADDED
+C ----------------------------------------------------------
+C         DECLARATIONS
+C ----------------------------------------------------------
+      IMPLICIT KPP_REAL (A-H,O-Z)
       INCLUDE 'KPP_ROOT_params.h'
       INCLUDE 'KPP_ROOT_sparse.h'
       KPP_REAL Y(N),YNEW(N),DY1(N),DY(N),AK1(N),
@@ -528,14 +528,14 @@ C --- INITIAL PREPARATIONS
       POSNEG=SIGN(1.D0,XEND-X)
       HMAXN=MIN(ABS(HMAX),ABS(XEND-X))
       IF (ABS(H).LE.10.D0*UROUND) H=1.0D-6
-      H=MIN(ABS(H),HMAXN) 
-      H=SIGN(H,POSNEG) 
+      H=MIN(ABS(H),HMAXN)
+      H=SIGN(H,POSNEG)
       REJECT=.FALSE.
       NSING=0
-      IRTRN=1 
+      IRTRN=1
       XXOLD=X
       IF (IRTRN.LT.0) GOTO 79
-C --- BASIC INTEGRATION STEP  
+C --- BASIC INTEGRATION STEP
    1  IF (NSTEP.GT.NMAX.OR.X+.1D0*H.EQ.X.OR.ABS(H).LE.UROUND) GOTO 79
       IF ((X-XEND)*POSNEG+UROUND.GT.0.D0) THEN
           H=HOPT
@@ -595,19 +595,19 @@ C ---   3) THE DIFFERENTIAL EQUATION IS AUTONOMOUS
   803             AK1(I)=DY1(I)
                   CALL KppSolve(E,AK1)
                   DO 810 I=1,N
-  810             YNEW(I)=Y(I)+A21*AK1(I) 
+  810             YNEW(I)=Y(I)+A21*AK1(I)
                   CALL FCN(N,X,YNEW,DY)
                   DO 811 I=1,N
   811             AK2(I)=DY(I)+HC21*AK1(I)
                   CALL KppSolve(E,AK2)
                   DO 820 I=1,N
-  820             YNEW(I)=Y(I)+A31*AK1(I)+A32*AK2(I)  
+  820             YNEW(I)=Y(I)+A31*AK1(I)+A32*AK2(I)
                   CALL FCN(N,X,YNEW,DY)
                   DO 821 I=1,N
   821             AK3(I)=DY(I)+HC31*AK1(I)+HC32*AK2(I)
                   CALL KppSolve(E,AK3)
                   DO 831 I=1,N
-  831             AK4(I)=DY(I)+HC41*AK1(I)+HC42*AK2(I)+HC43*AK3(I) 
+  831             AK4(I)=DY(I)+HC41*AK1(I)+HC42*AK2(I)+HC43*AK3(I)
                   CALL KppSolve(E,AK4)
               ELSE
 C --- THIS PART COMPUTES THE STAGES IN THE CASE WHERE
@@ -622,35 +622,35 @@ C ---   3) THE DIFFERENTIAL EQUATION IS NON-AUTONOMOUS
   903             AK1(I)=DY1(I)+HD1*FX(I)
                   CALL KppSolve(E,AK1)
                   DO 910 I=1,N
-  910             YNEW(I)=Y(I)+A21*AK1(I) 
+  910             YNEW(I)=Y(I)+A21*AK1(I)
                   CALL FCN(N,X+C2*H,YNEW,DY)
                   DO 911 I=1,N
   911             AK2(I)=DY(I)+HD2*FX(I)+HC21*AK1(I)
                   CALL KppSolve(E,AK2)
                   DO 920 I=1,N
-  920             YNEW(I)=Y(I)+A31*AK1(I)+A32*AK2(I)  
+  920             YNEW(I)=Y(I)+A31*AK1(I)+A32*AK2(I)
                   CALL FCN(N,X+C3*H,YNEW,DY)
                   DO 921 I=1,N
   921             AK3(I)=DY(I)+HD3*FX(I)+HC31*AK1(I)+HC32*AK2(I)
                   CALL KppSolve(E,AK3)
                   DO 931 I=1,N
   931             AK4(I)=DY(I)+HD4*FX(I)+HC41*AK1(I)+HC42*AK2(I)
-     &                  +HC43*AK3(I) 
+     &                  +HC43*AK3(I)
                   CALL KppSolve(E,AK4)
               END IF
       NSOL=NSOL+4
       NFCN=NFCN+2
 C *** *** *** *** *** *** ***
-C  ERROR ESTIMATION  
+C  ERROR ESTIMATION
 C *** *** *** *** *** *** ***
       NSTEP=NSTEP+1
 C ------------ NEW SOLUTION ---------------
       DO 240 I=1,N
-  240 YNEW(I)=Y(I)+B1*AK1(I)+B2*AK2(I)+B3*AK3(I)+B4*AK4(I)  
+  240 YNEW(I)=Y(I)+B1*AK1(I)+B2*AK2(I)+B3*AK3(I)+B4*AK4(I)
 C ------------ COMPUTE ERROR ESTIMATION ----------------
       ERR=0.D0
       DO 300 I=1,N
-      S=E1*AK1(I)+E2*AK2(I)+E3*AK3(I)+E4*AK4(I) 
+      S=E1*AK1(I)+E2*AK2(I)+E3*AK3(I)+E4*AK4(I)
       IF (ITOL.EQ.0) THEN
          SK=AbsTol(1)+RelTol(1)*DMAX1(DABS(Y(I)),DABS(YNEW(I)))
       ELSE
@@ -661,26 +661,26 @@ C ------------ COMPUTE ERROR ESTIMATION ----------------
 C --- COMPUTATION OF HNEW
 C --- WE REQUIRE .2<=HNEW/H<=6.
       FAC=DMAX1(FAC2,DMIN1(FAC1,(ERR)**.25D0/.9D0))
-      HNEW=H/FAC  
+      HNEW=H/FAC
 C *** *** *** *** *** *** ***
 C  IS THE ERROR SMALL ENOUGH ?
 C *** *** *** *** *** *** ***
       IF (ERR.LE.1.D0) THEN
-C --- STEP IS ACCEPTED  
+C --- STEP IS ACCEPTED
          NACCPT=NACCPT+1
-         DO 44 I=1,N 
-  44     Y(I)=YNEW(I) 
-         XXOLD=X 
+         DO 44 I=1,N
+  44     Y(I)=YNEW(I)
+         XXOLD=X
          X=X+H
          IF (IRTRN.LT.0) GOTO 79
          IF (DABS(HNEW).GT.HMAXN) HNEW=POSNEG*HMAXN
-         IF (REJECT) HNEW=POSNEG*DMIN1(DABS(HNEW),DABS(H)) 
+         IF (REJECT) HNEW=POSNEG*DMIN1(DABS(HNEW),DABS(H))
          REJECT=.FALSE.
          RJECT2=.FALSE.
          H=HNEW
          GOTO 1
       ELSE
-C --- STEP IS REJECTED  
+C --- STEP IS REJECTED
          IF (RJECT2) HNEW=H*FACREJ
          IF (REJECT) RJECT2=.TRUE.
          REJECT=.TRUE.
@@ -850,7 +850,7 @@ C --- METHOD GIVEN BY VAN VELDHUIZEN
        D3= 0.5177590504944076D+00
        D4=-0.3805623938054428D-01
       RETURN
-      END 
+      END
 C
       SUBROUTINE LSTAB (A21,A31,A32,C21,C31,C32,C41,C42,C43,
      &          B1,B2,B3,B4,E1,E2,E3,E4,GAMMA,C2,C3,D1,D2,D3,D4)
@@ -870,7 +870,7 @@ C  B_i = M_i
        B2= 0.2870493262186792D+00
        B3= 0.4353179431840180D+00
        B4= 0.1093502252409163D+01
-C E_i = error estimator       
+C E_i = error estimator
        E1=-0.2815431932141155D+00
        E2=-0.7276199124938920D-01
        E3=-0.1082196201495311D+00
@@ -880,13 +880,13 @@ C gamma = gamma
 C  C_i = alpha_i
        C2= 0.1145640000000000D+01
        C3= 0.6552168638155900D+00
-C D_i = gamma_i       
+C D_i = gamma_i
        D1= 0.5728200000000000D+00
        D2=-0.1769193891319233D+01
        D3= 0.7592633437920482D+00
        D4=-0.1049021087100450D+00
       RETURN
-      END 
+      END
 
         SUBROUTINE SOLOUT (NR,XOLD,X,Y,N,IRTRN)
 C --- PRINTS SOLUTION
@@ -940,7 +940,7 @@ C-----------------------------------------------------------------------
         KP1 = K + 1
         M = K
         DO 10 I = KP1,N
-          IF (DABS(A(I,K)) .GT. DABS(A(M,K))) M = I  
+          IF (DABS(A(I,K)) .GT. DABS(A(M,K))) M = I
  10     CONTINUE
         IP(K) = M
         T = A(M,K)
@@ -1015,8 +1015,8 @@ C----------------------- END OF SUBROUTINE SOL -------------------------
       END
 
 
- 
- 
+
+
       SUBROUTINE FUNC_CHEM(N, T, Y, P)
       INCLUDE 'KPP_ROOT_params.h'
       INCLUDE 'KPP_ROOT_global.h'
@@ -1032,7 +1032,7 @@ C----------------------- END OF SUBROUTINE SOL -------------------------
       RETURN
       END
 
- 
+
       SUBROUTINE JAC_CHEM(N, T, Y, J)
       INCLUDE 'KPP_ROOT_params.h'
       INCLUDE 'KPP_ROOT_global.h'
@@ -1046,7 +1046,7 @@ C----------------------- END OF SUBROUTINE SOL -------------------------
       CALL Jac_SP( Y,  FIX, RCONST, J )
       TIME = Told
       RETURN
-      END                                                                                                                 
+      END
 
 
 

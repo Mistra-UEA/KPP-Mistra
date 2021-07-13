@@ -1,4 +1,4 @@
-#MODEL      cell_cycle 
+#MODEL      cell_cycle
 #INTEGRATOR gillespie
 #LANGUAGE   Matlab
 #DRIVER     general_stochastic

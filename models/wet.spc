@@ -31,7 +31,7 @@
     MGLY        = 3C + 4H + 2O ; {CH3C(O)C(O)H methylglyoxal}
     ISOP        = IGNORE ;      {isoprene}
     XO2         = IGNORE ;      {NO-to-NO2 operation}
-    XO2N        = IGNORE ;      {NO-to-nitrate operation}          
+    XO2N        = IGNORE ;      {NO-to-nitrate operation}
     CO          = C + O ;       {carbon monoxide}
     HNO2        = H + N + 2O ;
     ROOH        = IGNORE ;
@@ -70,7 +70,7 @@ SO2aq  = IGNORE ;
 NH3aq = IGNORE ;
 NH4aq = IGNORE ;
 NO3MINaq = IGNORE ;
-HCO3MINaq = IGNORE ; 
+HCO3MINaq = IGNORE ;
 CO32MINUSaq = IGNORE ;
 H2CO3aq     = IGNORE ;
 

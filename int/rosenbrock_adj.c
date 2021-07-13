@@ -11,19 +11,19 @@
 enum boolean { FALSE=0, TRUE=1 };
 
 /*  Statistics on the work performed by the Rosenbrock method */
-enum statistics { Nfun=1, Njac=2, Nstp=3, Nacc=4, Nrej=5, Ndec=6, Nsol=7, 
+enum statistics { Nfun=1, Njac=2, Nstp=3, Nacc=4, Nrej=5, Ndec=6, Nsol=7,
 		  Nsng=8, Ntexit=1, Nhexit=2, Nhnew=3 };
 
 /*~~~>  Parameters of the Rosenbrock method, up to 6 stages */
 int ros_S, rosMethod;
 enum ros_Params { RS2=1, RS3=2, RS4=3, RD3=4, RD4=5 };
-KPP_REAL ros_A[15], ros_C[15], ros_M[6], ros_E[6], ros_Alpha[6], ros_Gamma[6], 
+KPP_REAL ros_A[15], ros_C[15], ros_M[6], ros_E[6], ros_Alpha[6], ros_Gamma[6],
        ros_ELO;
 int ros_NewF[6]; /* Holds Boolean values */
 char ros_Name[12]; /* Length 12 */
 
 /*~~~>  Types of Adjoints Implemented */
-enum adjoint { Adj_none=1, Adj_discrete=2, Adj_continuous=3, 
+enum adjoint { Adj_none=1, Adj_discrete=2, Adj_continuous=3,
 	       Adj_simple_continuous=4 };
 
 /*~~~>  Checkpoints in memory */
@@ -34,65 +34,65 @@ KPP_REAL **chk_Y, **chk_K, **chk_J; /* 2D arrays */
 KPP_REAL **chk_dY, **chk_d2Y; /* 2D arrays */
 
 /* Function Headers */
-void INTEGRATE_ADJ(int NADJ, KPP_REAL Y[], KPP_REAL Lambda[][NVAR], 
-		   KPP_REAL TIN, KPP_REAL TOUT, KPP_REAL ATOL_adj[][NVAR], 
-		   KPP_REAL RTOL_adj[][NVAR], int ICNTRL_U[], 
+void INTEGRATE_ADJ(int NADJ, KPP_REAL Y[], KPP_REAL Lambda[][NVAR],
+		   KPP_REAL TIN, KPP_REAL TOUT, KPP_REAL ATOL_adj[][NVAR],
+		   KPP_REAL RTOL_adj[][NVAR], int ICNTRL_U[],
 		   KPP_REAL RCNTRL_U[], int ISTATUS_U[], KPP_REAL RSTATUS_U[]);
 int RosenbrockADJ( KPP_REAL Y[], int NADJ, KPP_REAL Lambda[][NVAR],
-		   KPP_REAL Tstart, KPP_REAL Tend, KPP_REAL AbsTol[], 
-		   KPP_REAL RelTol[], KPP_REAL AbsTol_adj[][NVAR], 
-		   KPP_REAL RelTol_adj[][NVAR], KPP_REAL RCNTRL[], 
+		   KPP_REAL Tstart, KPP_REAL Tend, KPP_REAL AbsTol[],
+		   KPP_REAL RelTol[], KPP_REAL AbsTol_adj[][NVAR],
+		   KPP_REAL RelTol_adj[][NVAR], KPP_REAL RCNTRL[],
 		   int ICNTRL[], KPP_REAL RSTATUS[], int ISTATUS[] );
 void ros_AllocateDBuffers( int S, int SaveLU );
 void ros_FreeDBuffers( int SaveLU );
 void ros_AllocateCBuffers();
 void ros_FreeCBuffers();
-void ros_DPush( int S, KPP_REAL T, KPP_REAL H, KPP_REAL Ystage[], 
+void ros_DPush( int S, KPP_REAL T, KPP_REAL H, KPP_REAL Ystage[],
 		KPP_REAL K[], KPP_REAL E[], int P[], int SaveLU );
-void ros_DPop( int S, KPP_REAL* T, KPP_REAL* H, KPP_REAL* Ystage, 
+void ros_DPop( int S, KPP_REAL* T, KPP_REAL* H, KPP_REAL* Ystage,
 	       KPP_REAL* K, KPP_REAL* E, int* P, int SaveLU );
-void ros_CPush( KPP_REAL T, KPP_REAL H, KPP_REAL Y[], KPP_REAL dY[], 
+void ros_CPush( KPP_REAL T, KPP_REAL H, KPP_REAL Y[], KPP_REAL dY[],
 		KPP_REAL d2Y[] );
-void ros_CPop( KPP_REAL T, KPP_REAL H, KPP_REAL Y[], KPP_REAL dY[], 
+void ros_CPop( KPP_REAL T, KPP_REAL H, KPP_REAL Y[], KPP_REAL dY[],
 	       KPP_REAL d2Y[] );
 int ros_ErrorMsg( int Code, KPP_REAL T, KPP_REAL H);
-int ros_FwdInt (KPP_REAL Y[], KPP_REAL Tstart, KPP_REAL Tend, KPP_REAL T, 
-		KPP_REAL AbsTol[], KPP_REAL RelTol[], int AdjointType, 
-		KPP_REAL Hmin, KPP_REAL Hstart, KPP_REAL Hmax, 
-		KPP_REAL Roundoff, int ISTATUS[], int Max_no_steps, 
-		KPP_REAL RSTATUS[], int Autonomous, int VectorTol, 
-		KPP_REAL FacMax, KPP_REAL FacMin, KPP_REAL FacSafe, 
+int ros_FwdInt (KPP_REAL Y[], KPP_REAL Tstart, KPP_REAL Tend, KPP_REAL T,
+		KPP_REAL AbsTol[], KPP_REAL RelTol[], int AdjointType,
+		KPP_REAL Hmin, KPP_REAL Hstart, KPP_REAL Hmax,
+		KPP_REAL Roundoff, int ISTATUS[], int Max_no_steps,
+		KPP_REAL RSTATUS[], int Autonomous, int VectorTol,
+		KPP_REAL FacMax, KPP_REAL FacMin, KPP_REAL FacSafe,
 		KPP_REAL FacRej, int SaveLU);
-int ros_DadjInt ( int NADJ, KPP_REAL Lambda[][NVAR], KPP_REAL Tstart, 
-		  KPP_REAL Tend, KPP_REAL T, int SaveLU, int ISTATUS[], 
+int ros_DadjInt ( int NADJ, KPP_REAL Lambda[][NVAR], KPP_REAL Tstart,
+		  KPP_REAL Tend, KPP_REAL T, int SaveLU, int ISTATUS[],
 		  KPP_REAL Roundoff, int Autonomous);
 int ros_CadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart, KPP_REAL Tend,
-		  KPP_REAL T, KPP_REAL AbsTol_adj[][NVAR], 
-		  KPP_REAL RelTol_adj[][NVAR], KPP_REAL RSTATUS[], 
-		  KPP_REAL Hmin, KPP_REAL Hmax, KPP_REAL Hstart, 
-		  KPP_REAL Roundoff, int Max_no_steps, int Autonomous, 
-		  int VectorTol, KPP_REAL FacMax, KPP_REAL FacMin, 
+		  KPP_REAL T, KPP_REAL AbsTol_adj[][NVAR],
+		  KPP_REAL RelTol_adj[][NVAR], KPP_REAL RSTATUS[],
+		  KPP_REAL Hmin, KPP_REAL Hmax, KPP_REAL Hstart,
+		  KPP_REAL Roundoff, int Max_no_steps, int Autonomous,
+		  int VectorTol, KPP_REAL FacMax, KPP_REAL FacMin,
 		  KPP_REAL FacSafe, KPP_REAL FacRej, int ISTATUS[] );
-int ros_SimpleCadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart, 
-			KPP_REAL Tend, KPP_REAL T, int ISTATUS[], 
+int ros_SimpleCadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart,
+			KPP_REAL Tend, KPP_REAL T, int ISTATUS[],
 			int Autonomous,	KPP_REAL Roundoff );
-KPP_REAL ros_ErrorNorm ( KPP_REAL Y[], KPP_REAL Ynew[], KPP_REAL Yerr[], 
+KPP_REAL ros_ErrorNorm ( KPP_REAL Y[], KPP_REAL Ynew[], KPP_REAL Yerr[],
 		       KPP_REAL AbsTol[], KPP_REAL RelTol[], int VectorTol );
-void ros_FunTimeDerivative ( KPP_REAL T, KPP_REAL Roundoff, KPP_REAL Y[], 
+void ros_FunTimeDerivative ( KPP_REAL T, KPP_REAL Roundoff, KPP_REAL Y[],
 			     KPP_REAL Fcn0[], KPP_REAL dFdT[], int ISTATUS[] );
-void ros_JacTimeDerivative ( KPP_REAL T, KPP_REAL Roundoff, KPP_REAL Y[], 
+void ros_JacTimeDerivative ( KPP_REAL T, KPP_REAL Roundoff, KPP_REAL Y[],
 			     KPP_REAL Jac0[], KPP_REAL dJdT[], int ISTATUS[] );
-int ros_PrepareMatrix ( KPP_REAL H, int Direction, KPP_REAL gam, 
-			 KPP_REAL Jac0[], KPP_REAL Ghimj[], int Pivot[], 
+int ros_PrepareMatrix ( KPP_REAL H, int Direction, KPP_REAL gam,
+			 KPP_REAL Jac0[], KPP_REAL Ghimj[], int Pivot[],
 			 int ISTATUS[] );
 void ros_Decomp( KPP_REAL A[], int Pivot[], int* ising, int ISTATUS[] );
-void ros_Solve( char How, KPP_REAL A[], int Pivot[], KPP_REAL b[], 
+void ros_Solve( char How, KPP_REAL A[], int Pivot[], KPP_REAL b[],
 		int ISTATUS[] );
 void ros_cadj_Y( KPP_REAL T, KPP_REAL Y[] );
-void ros_Hermite3( KPP_REAL a, KPP_REAL b, KPP_REAL T, KPP_REAL Ya[], 
+void ros_Hermite3( KPP_REAL a, KPP_REAL b, KPP_REAL T, KPP_REAL Ya[],
 		   KPP_REAL Yb[], KPP_REAL Ja[], KPP_REAL Jb[], KPP_REAL Y[] );
-void ros_Hermite5( KPP_REAL a, KPP_REAL b, KPP_REAL T, KPP_REAL Ya[], 
-		   KPP_REAL Yb[], KPP_REAL Ja[], KPP_REAL Jb[], KPP_REAL Ha[], 
+void ros_Hermite5( KPP_REAL a, KPP_REAL b, KPP_REAL T, KPP_REAL Ya[],
+		   KPP_REAL Yb[], KPP_REAL Ja[], KPP_REAL Jb[], KPP_REAL Ha[],
 		   KPP_REAL Hb[], KPP_REAL Y[] );
 void Ros2();
 void Ros3();
@@ -101,9 +101,9 @@ void Rodas3();
 void Rodas4();
 void JacTemplate( KPP_REAL T, KPP_REAL Y[], KPP_REAL Jcb[] );
 void HessTemplate( KPP_REAL T, KPP_REAL Y[], KPP_REAL Hes[] );
-void FunTemplate( KPP_REAL T, KPP_REAL Y[], KPP_REAL Fun [] ); 
+void FunTemplate( KPP_REAL T, KPP_REAL Y[], KPP_REAL Fun [] );
 void WSCAL( int N, KPP_REAL Alpha, KPP_REAL X[], int incX );
-void WAXPY( int N, KPP_REAL Alpha, KPP_REAL X[], int incX, KPP_REAL Y[], 
+void WAXPY( int N, KPP_REAL Alpha, KPP_REAL X[], int incX, KPP_REAL Y[],
 	    int incY );
 void WCOPY( int N, KPP_REAL X[], int incX, KPP_REAL Y[], int incY );
 KPP_REAL WLAMCH( char C );
@@ -120,10 +120,10 @@ void KppSolveTR( KPP_REAL JVS[], KPP_REAL X[], KPP_REAL XX[] );
 void Hessian( KPP_REAL V[], KPP_REAL F[], KPP_REAL RCT[], KPP_REAL Hess[] );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-void INTEGRATE_ADJ( int NADJ, KPP_REAL Y[], KPP_REAL Lambda[][NVAR], 
-		    KPP_REAL TIN, KPP_REAL TOUT, KPP_REAL ATOL_adj[][NVAR], 
-		    KPP_REAL RTOL_adj[][NVAR], int ICNTRL_U[], 
-		    KPP_REAL RCNTRL_U[], int ISTATUS_U[], 
+void INTEGRATE_ADJ( int NADJ, KPP_REAL Y[], KPP_REAL Lambda[][NVAR],
+		    KPP_REAL TIN, KPP_REAL TOUT, KPP_REAL ATOL_adj[][NVAR],
+		    KPP_REAL RTOL_adj[][NVAR], int ICNTRL_U[],
+		    KPP_REAL RCNTRL_U[], int ISTATUS_U[],
 		    KPP_REAL RSTATUS_U[] ) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -144,11 +144,11 @@ void INTEGRATE_ADJ( int NADJ, KPP_REAL Y[], KPP_REAL Lambda[][NVAR],
   RCNTRL(3) = STEPMIN ! starting step
   ICNTRL(3) = 5       ! choice of the method for forward integration
   ICNTRL(6) = 1       ! choice of the method for continuous adjoint
-  ICNTRL(7) = 2       ! 1=none, 2=discrete, 3=full continuous, 
+  ICNTRL(7) = 2       ! 1=none, 2=discrete, 3=full continuous,
                         4=simplified continuous adjoint
   ICNTRL(8) = 1       ! Save fwd LU factorization: 0=*don't* save, 1=save */
 
-/* if optional parameters are given, and if they are >=0, then they overwrite 
+/* if optional parameters are given, and if they are >=0, then they overwrite
    default settings */
 //  if(ICNTRL_U != NULL) {
 //    for(i=0; i<20; i++)
@@ -164,7 +164,7 @@ void INTEGRATE_ADJ( int NADJ, KPP_REAL Y[], KPP_REAL Lambda[][NVAR],
 //    } /* end for */
 //  } /* end if */
 
-  IERR = RosenbrockADJ( Y, NADJ, Lambda, TIN, TOUT, ATOL, RTOL, ATOL_adj, 
+  IERR = RosenbrockADJ( Y, NADJ, Lambda, TIN, TOUT, ATOL, RTOL, ATOL_adj,
 			RTOL_adj, RCNTRL, ICNTRL, RSTATUS, ISTATUS );
 
   if (IERR < 0)
@@ -172,7 +172,7 @@ void INTEGRATE_ADJ( int NADJ, KPP_REAL Y[], KPP_REAL Lambda[][NVAR],
 
   STEPMIN = RSTATUS[Nhexit];
 
-/* if optional parameters are given for output 
+/* if optional parameters are given for output
          copy to them to return information */
 //  if(ISTATUS_U != NULL)
 //    for(i=0; i<20; i++)
@@ -188,7 +188,7 @@ void INTEGRATE_ADJ( int NADJ, KPP_REAL Y[], KPP_REAL Lambda[][NVAR],
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 int RosenbrockADJ( KPP_REAL Y[], int NADJ, KPP_REAL Lambda[][NVAR],
-		   KPP_REAL Tstart, KPP_REAL Tend, KPP_REAL AbsTol[], 
+		   KPP_REAL Tstart, KPP_REAL Tend, KPP_REAL AbsTol[],
 		   KPP_REAL RelTol[], KPP_REAL AbsTol_adj[][NVAR],
 		   KPP_REAL RelTol_adj[][NVAR], KPP_REAL RCNTRL[],
 		   int ICNTRL[], KPP_REAL RSTATUS[], int ISTATUS[] ) {
@@ -203,12 +203,12 @@ int RosenbrockADJ( KPP_REAL Y[], int NADJ, KPP_REAL Lambda[][NVAR],
      Y_i = Y0 + \sum_{j=1}^{i-1} A(i,j)*K_j
      G * K_i = Fun( T_i, Y_i ) + \sum_{j=1}^S C(i,j)/H * K_j +
          gamma(i)*dF/dT(t0, Y0)
-     Y1 = Y0 + \sum_{j=1}^S M(j)*K_j 
+     Y1 = Y0 + \sum_{j=1}^S M(j)*K_j
 
     For details on RosenbrockADJ methods and their implementation consult:
       E. Hairer and G. Wanner
       "Solving ODEs II. Stiff and differential-algebraic problems".
-      Springer series in computational mathematics, Springer-Verlag, 1996.  
+      Springer series in computational mathematics, Springer-Verlag, 1996.
     The codes contained in the book inspired this implementation.
 
     (C)  Adrian Sandu, August 2004
@@ -224,7 +224,7 @@ int RosenbrockADJ( KPP_REAL Y[], int NADJ, KPP_REAL Lambda[][NVAR],
 -     Y[NVAR]    = vector of initial conditions (at T=Tstart)
       NADJ       -> dimension of linearized system,
                    i.e. the number of sensitivity coefficients
--     Lambda[NVAR][NADJ] -> vector of initial sensitivity conditions 
+-     Lambda[NVAR][NADJ] -> vector of initial sensitivity conditions
                             (at T=Tstart)
 -    [Tstart,Tend]  = time range of integration
      (if Tstart>Tend the integration is performed backwards in time)
@@ -270,8 +270,8 @@ int RosenbrockADJ( KPP_REAL Y[], int NADJ, KPP_REAL Lambda[][NVAR],
     ICNTRL[2]  -> selection of a particular Rosenbrock method
         = 0 :  default method is Rodas3
         = 1 :  method is  Ros2
-        = 2 :  method is  Ros3 
-        = 3 :  method is  Ros4 
+        = 2 :  method is  Ros3
+        = 3 :  method is  Ros4
         = 4 :  method is  Rodas3
         = 5:   method is  Rodas4
 
@@ -281,7 +281,7 @@ int RosenbrockADJ( KPP_REAL Y[], int NADJ, KPP_REAL Lambda[][NVAR],
     ICNTRL[5]  -> selection of a particular Rosenbrock method for the
                 continuous adjoint integration - for cts adjoint it
                 can be different than the forward method ICNTRL(3)
-         Note 1: to avoid interpolation errors (which can be huge!) 
+         Note 1: to avoid interpolation errors (which can be huge!)
                    it is recommended to use only ICNTRL[6] = 2 or 4
          Note 2: the performance of the full continuous adjoint
                    strongly depends on the forward solution accuracy Abs/RelTol
@@ -338,7 +338,7 @@ int RosenbrockADJ( KPP_REAL Y[], int NADJ, KPP_REAL Lambda[][NVAR],
     ISTATUS[6] = No. of forward/backward substitutions
     ISTATUS[7] = No. of singular matrix decompositions
 
-    RSTATUS[0]  -> Texit, the time corresponding to the 
+    RSTATUS[0]  -> Texit, the time corresponding to the
                    computed Y upon return
     RSTATUS[1]  -> Hexit, last accepted step before exit
     For multiple restarts, use Hexit as Hstart in the following run
@@ -363,16 +363,16 @@ int RosenbrockADJ( KPP_REAL Y[], int NADJ, KPP_REAL Lambda[][NVAR],
 /*~~~>  Autonomous or time dependent ODE. Default is time dependent. */
   Autonomous = !(ICNTRL[0] == 0);
 
-/*~~~> For Scalar tolerances(ICNTRL[1] != 0) the code uses AbsTol[0] and 
+/*~~~> For Scalar tolerances(ICNTRL[1] != 0) the code uses AbsTol[0] and
          RelTol[0]
-   For Vector tolerances(ICNTRL[1] == 0) the code uses AbsTol[1:NVAR] and 
+   For Vector tolerances(ICNTRL[1] == 0) the code uses AbsTol[1:NVAR] and
      RelTol[1:NVAR] */
 
   if (ICNTRL[1] == 0) {
     VectorTol = TRUE;
     UplimTol  = NVAR;
   }
-  else { 
+  else {
     VectorTol = FALSE;
     UplimTol  = 1;
   }
@@ -519,14 +519,14 @@ int RosenbrockADJ( KPP_REAL Y[], int NADJ, KPP_REAL Lambda[][NVAR],
   if (AdjointType == Adj_discrete) {
     ros_AllocateDBuffers( ros_S, SaveLU );
   }
-  else if ( (AdjointType == Adj_continuous) || 
+  else if ( (AdjointType == Adj_continuous) ||
 	    (AdjointType == Adj_simple_continuous) ) {
     ros_AllocateCBuffers();
   }
 
 /*~~~>  CALL Forward Rosenbrock method */
   IERR = ros_FwdInt(Y, Tstart, Tend, Texit, AbsTol, RelTol, AdjointType, Hmin,
-		    Hstart, Hmax, Roundoff, ISTATUS, Max_no_steps, 
+		    Hstart, Hmax, Roundoff, ISTATUS, Max_no_steps,
 		    RSTATUS, Autonomous, VectorTol, FacMax, FacMin,
 		    FacSafe, FacRej, SaveLU);
 
@@ -538,7 +538,7 @@ int RosenbrockADJ( KPP_REAL Y[], int NADJ, KPP_REAL Lambda[][NVAR],
     return IERR;
 
 /*~~~>   Initialize the particular Rosenbrock method for continuous adjoint */
-  if ( (AdjointType == Adj_continuous) || 
+  if ( (AdjointType == Adj_continuous) ||
        (AdjointType == Adj_simple_continuous) ) {
     switch (CadjMethod) {
       case 1:
@@ -564,17 +564,17 @@ int RosenbrockADJ( KPP_REAL Y[], int NADJ, KPP_REAL Lambda[][NVAR],
 
   switch( AdjointType ) {
     case Adj_discrete:
-      IERR = ros_DadjInt (NADJ, Lambda, Tstart, Tend, Texit, SaveLU, ISTATUS, 
+      IERR = ros_DadjInt (NADJ, Lambda, Tstart, Tend, Texit, SaveLU, ISTATUS,
 			  Roundoff, Autonomous );
       break;
     case Adj_continuous:
-      IERR = ros_CadjInt (NADJ, Lambda, Tend, Tstart, Texit, AbsTol_adj, 
+      IERR = ros_CadjInt (NADJ, Lambda, Tend, Tstart, Texit, AbsTol_adj,
 			  RelTol_adj, RSTATUS, Hmin, Hmax, Hstart, Roundoff,
 			  Max_no_steps, Autonomous, VectorTol, FacMax, FacMin,
 			  FacSafe, FacRej, ISTATUS);
       break;
     case Adj_simple_continuous:
-      IERR = ros_SimpleCadjInt (NADJ, Lambda, Tstart, Tend, Texit, ISTATUS, 
+      IERR = ros_SimpleCadjInt (NADJ, Lambda, Tstart, Tend, Texit, ISTATUS,
 				Autonomous, Roundoff);
   } /* End switch for AdjointType */
 
@@ -584,7 +584,7 @@ int RosenbrockADJ( KPP_REAL Y[], int NADJ, KPP_REAL Lambda[][NVAR],
 /*~~~>  Free checkpoint space or close checkpoint files */
   if (AdjointType == Adj_discrete)
     ros_FreeDBuffers( SaveLU );
-  else if ( (AdjointType == Adj_continuous) || 
+  else if ( (AdjointType == Adj_continuous) ||
 	    (AdjointType == Adj_simple_continuous) )
     ros_FreeCBuffers();
 
@@ -595,21 +595,21 @@ int RosenbrockADJ( KPP_REAL Y[], int NADJ, KPP_REAL Lambda[][NVAR],
 void ros_AllocateDBuffers( int S, int SaveLU ) {
 /*~~~>  Allocate buffer space for discrete adjoint
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    
+
   int i;
-    
+
   chk_H = (KPP_REAL*) malloc(bufsize * sizeof(KPP_REAL));
   if (chk_H == NULL) {
     printf("Failed allocation of buffer H");
     exit(0);
   }
-    
+
   chk_T = (KPP_REAL*) malloc(bufsize * sizeof(KPP_REAL));
   if (chk_T == NULL) {
     printf("Failed allocation of buffer T");
     exit(0);
   }
-  
+
   chk_Y = (KPP_REAL**) malloc(bufsize * sizeof(KPP_REAL*));
   if (chk_Y == NULL) {
     printf("Failed allocation of buffer Y");
@@ -622,7 +622,7 @@ void ros_AllocateDBuffers( int S, int SaveLU ) {
       exit(0);
     }
   }
-    
+
   chk_K = (KPP_REAL**) malloc(bufsize * sizeof(KPP_REAL*));
   if (chk_K == NULL) {
     printf("Failed allocation of buffer K");
@@ -635,7 +635,7 @@ void ros_AllocateDBuffers( int S, int SaveLU ) {
       exit(0);
     }
   }
-  
+
   if (SaveLU) {
     chk_J = (KPP_REAL**) malloc(bufsize * sizeof(KPP_REAL*));
     if (chk_J == NULL) {
@@ -659,7 +659,7 @@ void ros_AllocateDBuffers( int S, int SaveLU ) {
       }
     }
 #endif
-  } 
+  }
 
 } /* End of ros_AllocateDBuffers */
 
@@ -751,7 +751,7 @@ void ros_AllocateCBuffers() {
 void ros_FreeCBuffers() {
 /*~~~>  Dallocate buffer space for continuous adjoint
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  
+
   int i;
 
   free(chk_H);
@@ -770,7 +770,7 @@ void ros_FreeCBuffers() {
 } /* End of ros_FreeCBuffers */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-void ros_DPush( int S, KPP_REAL T, KPP_REAL H, KPP_REAL Ystage[], 
+void ros_DPush( int S, KPP_REAL T, KPP_REAL H, KPP_REAL Ystage[],
 		KPP_REAL K[], KPP_REAL E[], int P[], int SaveLU ) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~> Saves the next trajectory snapshot for discrete adjoints
@@ -813,9 +813,9 @@ void ros_DPop( int S, KPP_REAL* T, KPP_REAL* H, KPP_REAL* Ystage,
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~> Retrieves the next trajectory snapshot for discrete adjoints
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    
+
   int i;
-  
+
   if ( stack_ptr < 0 ) {
     printf( "Pop failed: empty buffer" );
     exit(0);
@@ -848,14 +848,14 @@ void ros_DPop( int S, KPP_REAL* T, KPP_REAL* H, KPP_REAL* Ystage,
 } /* End of ros_DPop */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-void ros_CPush( KPP_REAL T, KPP_REAL H, KPP_REAL Y[], KPP_REAL dY[], 
+void ros_CPush( KPP_REAL T, KPP_REAL H, KPP_REAL Y[], KPP_REAL dY[],
 		KPP_REAL d2Y[] ) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~> Saves the next trajectory snapshot for discrete adjoints
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-   
+
   int i;
-  
+
   stack_ptr++;
   if ( stack_ptr > bufsize ) {
     printf( "Push failed: buffer overflow" );
@@ -872,12 +872,12 @@ void ros_CPush( KPP_REAL T, KPP_REAL H, KPP_REAL Y[], KPP_REAL dY[],
 } /* End of ros_CPush */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-void ros_CPop( KPP_REAL T, KPP_REAL H, KPP_REAL Y[], KPP_REAL dY[], 
+void ros_CPop( KPP_REAL T, KPP_REAL H, KPP_REAL Y[], KPP_REAL dY[],
 	       KPP_REAL d2Y[] ) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~> Retrieves the next trajectory snapshot for discrete adjoints
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-   
+
   int i;
 
   if ( stack_ptr <= 0 ) {
@@ -903,7 +903,7 @@ int ros_ErrorMsg( int Code, KPP_REAL T, KPP_REAL H) {
 
   int IERR = Code;
   printf( "Forced exit from RosenbrockADJ due to the following error:");
-  
+
   switch (Code) {
     case -1:
       printf( "--> Improper value for maximal no of steps" );
@@ -940,12 +940,12 @@ int ros_ErrorMsg( int Code, KPP_REAL T, KPP_REAL H) {
 } /* End of ros_ErrorMsg */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-int ros_FwdInt ( KPP_REAL Y[], KPP_REAL Tstart, KPP_REAL Tend, KPP_REAL T, 
-		 KPP_REAL AbsTol[], KPP_REAL RelTol[], int AdjointType, 
-		 KPP_REAL Hmin, KPP_REAL Hstart, KPP_REAL Hmax, 
-		 KPP_REAL Roundoff, int ISTATUS[], int Max_no_steps, 
-		 KPP_REAL RSTATUS[], int Autonomous, int VectorTol, 
-		 KPP_REAL FacMax, KPP_REAL FacMin, KPP_REAL FacSafe, 
+int ros_FwdInt ( KPP_REAL Y[], KPP_REAL Tstart, KPP_REAL Tend, KPP_REAL T,
+		 KPP_REAL AbsTol[], KPP_REAL RelTol[], int AdjointType,
+		 KPP_REAL Hmin, KPP_REAL Hstart, KPP_REAL Hmax,
+		 KPP_REAL Roundoff, int ISTATUS[], int Max_no_steps,
+		 KPP_REAL RSTATUS[], int Autonomous, int VectorTol,
+		 KPP_REAL FacMax, KPP_REAL FacMin, KPP_REAL FacSafe,
 		 KPP_REAL FacRej, int SaveLU ) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    Template for the implementation of a generic RosenbrockADJ method
@@ -996,18 +996,18 @@ int ros_FwdInt ( KPP_REAL Y[], KPP_REAL Tstart, KPP_REAL Tend, KPP_REAL T,
     Direction = -1;
 
   H = Direction*H;
-  
+
   RejectLastH = FALSE;
   RejectMoreH = FALSE;
 
 /*~~~> Time loop begins below */
-  while ( ((Direction > 0) && ((T-Tend)+Roundoff <= ZERO)) || 
+  while ( ((Direction > 0) && ((T-Tend)+Roundoff <= ZERO)) ||
 	  ((Direction < 0) && ((Tend-T)+Roundoff <= ZERO)) ) { /* TimeLoop */
 
     if ( ISTATUS[Nstp] > Max_no_steps )  /* Too many steps */
       return ros_ErrorMsg(-6,T,H);
 
-    if ( ((T+((KPP_REAL)0.1)*H) == T) || (H <= Roundoff) ) /* Step size 
+    if ( ((T+((KPP_REAL)0.1)*H) == T) || (H <= Roundoff) ) /* Step size
 							    too small */
       return ros_ErrorMsg(-7,T,H);
 
@@ -1039,7 +1039,7 @@ int ros_FwdInt ( KPP_REAL Y[], KPP_REAL Tstart, KPP_REAL Tend, KPP_REAL T,
 /*~~~>   Compute the stages */
       for( istage = 0; istage < ros_S; istage++ ) { /* Stage */
 
-	/* Current istage offset. Current istage vector is 
+	/* Current istage offset. Current istage vector is
 	   K(ioffset+1:ioffset+NVAR) */
 	ioffset = NVAR*istage;
 
@@ -1052,12 +1052,12 @@ int ros_FwdInt ( KPP_REAL Y[], KPP_REAL Tstart, KPP_REAL Tend, KPP_REAL T,
 	    WCOPY(NVAR,Y,1,Ynew,1);
 	  }
 	}
-	/* istage>0 and a new function evaluation is needed at the 
+	/* istage>0 and a new function evaluation is needed at the
 	   current istage */
 	else if ( ros_NewF[istage] ) {
 	  WCOPY(NVAR,Y,1,Ynew,1);
 	  for ( j = 0; j < istage; j++ ) {
-	    WAXPY( NVAR,ros_A[(istage)*(istage-1)/2+j], 
+	    WAXPY( NVAR,ros_A[(istage)*(istage-1)/2+j],
 		   &K[NVAR*j],1,Ynew,1 );
 	  }
 	  Tau = T + ros_Alpha[istage]*Direction*H;
@@ -1087,7 +1087,7 @@ int ros_FwdInt ( KPP_REAL Y[], KPP_REAL Tstart, KPP_REAL Tend, KPP_REAL T,
       for( j=0; j<ros_S; j++ )
 	WAXPY(NVAR,ros_M[j],&K[NVAR*j],1,Ynew,1);
 
-/*~~~>  Compute the error estimation */ 
+/*~~~>  Compute the error estimation */
       WSCAL(NVAR,ZERO,Yerr,1);
       for( j=0; j<ros_S; j++ )
 	WAXPY(NVAR,ros_E[j],&K[NVAR*j],1,Yerr,1);
@@ -1104,7 +1104,7 @@ int ros_FwdInt ( KPP_REAL Y[], KPP_REAL Tstart, KPP_REAL Tend, KPP_REAL T,
 	if (AdjointType == Adj_discrete) { /* Save current state */
 	  ros_DPush( ros_S, T, H, Ystage, K, Ghimj, Pivot, SaveLU );
 	}
-	else if ( (AdjointType == Adj_continuous) || 
+	else if ( (AdjointType == Adj_continuous) ||
 		  (AdjointType == Adj_simple_continuous) ) {
 #ifdef FULL_ALGEBRA
 	  K = MATMUL(Jac0,Fcn0);
@@ -1118,7 +1118,7 @@ int ros_FwdInt ( KPP_REAL Y[], KPP_REAL Tstart, KPP_REAL Tend, KPP_REAL T,
 	WCOPY(NVAR,Ynew,1,Y,1);
 	T = T + Direction*H;
 	Hnew = MAX(Hmin,MIN(Hnew,Hmax));
-	if (RejectLastH) { /* No step size increase after a 
+	if (RejectLastH) { /* No step size increase after a
 			     rejected step */
 	  Hnew = MIN(Hnew,H);
 	}
@@ -1140,12 +1140,12 @@ int ros_FwdInt ( KPP_REAL Y[], KPP_REAL Tstart, KPP_REAL Tend, KPP_REAL T,
         if (ISTATUS[Nacc] >= 1)
 	  ISTATUS[Nrej]++;
       } /* End if else - Err <= 1 */
-    
+
     } while(1); /* End of UntilAccepted do loop */
   } /* End of TimeLoop */
-   
+
 /*~~~> Save last state: only needed for continuous adjoint */
-  if ( (AdjointType == Adj_continuous) || 
+  if ( (AdjointType == Adj_continuous) ||
        (AdjointType == Adj_simple_continuous) ) {
     FunTemplate(T,Y,Fcn0);
     ISTATUS[Nfun]++;
@@ -1172,8 +1172,8 @@ int ros_FwdInt ( KPP_REAL Y[], KPP_REAL Tstart, KPP_REAL Tend, KPP_REAL T,
 } /* End of ros_FwdInt */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-int ros_DadjInt ( int NADJ, KPP_REAL Lambda[][NVAR], KPP_REAL Tstart, 
-		  KPP_REAL Tend, KPP_REAL T, int SaveLU, int ISTATUS[], 
+int ros_DadjInt ( int NADJ, KPP_REAL Lambda[][NVAR], KPP_REAL Tstart,
+		  KPP_REAL Tend, KPP_REAL T, int SaveLU, int ISTATUS[],
 		  KPP_REAL Roundoff, int Autonomous) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    Template for the implementation of a generic RosenbrockSOA method
@@ -1204,7 +1204,7 @@ int ros_DadjInt ( int NADJ, KPP_REAL Lambda[][NVAR], KPP_REAL Tstart,
     Direction = 1;
   else
     Direction = -1;
-  
+
   /*~~~> Time loop begins below */
   while ( stack_ptr > 0 ) { /* TimeLoop */
 
@@ -1239,7 +1239,7 @@ int ros_DadjInt ( int NADJ, KPP_REAL Lambda[][NVAR], KPP_REAL Tstart,
 
       /*~~~> Current istage first entry */
       istart = NVAR*istage;
-	 
+
       /*~~~> Compute U */
       for (m = 0; m<NADJ; m++) {
 	WCOPY(NVAR,&Lambda[m][0],1,&U[m][istart],1);
@@ -1266,7 +1266,7 @@ int ros_DadjInt ( int NADJ, KPP_REAL Lambda[][NVAR], KPP_REAL Tstart,
 	for (i=istart; i < istart+NVAR-1; i++ )
 	  V[[m][i] = MATMUL(TRANSPOSE(Jac),U[m][i]];
 #else
-	JacTR_SP_Vec(Jac,&U[m][istart],&V[m][istart]); 
+	JacTR_SP_Vec(Jac,&U[m][istart],&V[m][istart]);
 #endif
       } /* m=0:NADJ-1 */
     } /*End of Stage loop */
@@ -1277,7 +1277,7 @@ int ros_DadjInt ( int NADJ, KPP_REAL Lambda[][NVAR], KPP_REAL Tstart,
       ros_JacTimeDerivative ( T, Roundoff, &Ystage[0], Jac, dJdT, ISTATUS );
 
 /*~~~>  Compute the new solution */
-    /*~~~>  Compute Lambda */ 
+    /*~~~>  Compute Lambda */
     for( istage = 0; istage < ros_S; istage++ ) {
       istart = NVAR*istage;
       for (m = 0; m < NADJ; m++) {
@@ -1319,11 +1319,11 @@ int ros_DadjInt ( int NADJ, KPP_REAL Lambda[][NVAR], KPP_REAL Tstart,
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 int ros_CadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart, KPP_REAL Tend,
-		  KPP_REAL T, KPP_REAL AbsTol_adj[][NVAR], 
-		  KPP_REAL RelTol_adj[][NVAR], KPP_REAL RSTATUS[], 
-		  KPP_REAL Hmin, KPP_REAL Hmax, KPP_REAL Hstart, 
-		  KPP_REAL Roundoff, int Max_no_steps, int Autonomous, 
-		  int VectorTol, KPP_REAL FacMax, KPP_REAL FacMin, 
+		  KPP_REAL T, KPP_REAL AbsTol_adj[][NVAR],
+		  KPP_REAL RelTol_adj[][NVAR], KPP_REAL RSTATUS[],
+		  KPP_REAL Hmin, KPP_REAL Hmax, KPP_REAL Hstart,
+		  KPP_REAL Roundoff, int Max_no_steps, int Autonomous,
+		  int VectorTol, KPP_REAL FacMax, KPP_REAL FacMin,
 		  KPP_REAL FacSafe, KPP_REAL FacRej, int ISTATUS[] ) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    Template for the implementation of a generic RosenbrockADJ method
@@ -1331,7 +1331,7 @@ int ros_CadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart, KPP_REAL Tend,
       and its coefficients ros_{A,C,M,E,Alpha,Gamma}
 ~~~> NADJ, Y[NADJ][NVAR] - Input: the initial condition at Tstart;
                            Output: the solution at T
-~~~> Tstart, Tend - Input: integration interval 
+~~~> Tstart, Tend - Input: integration interval
 ~~~> AbsTol_adj[NADJ][NVAR], RelTol_adj[NADJ][NVAR] - Input: adjoint tolerances
 ~~~> T - Output: time at which the solution is returned (T=Tend if success)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -1341,13 +1341,13 @@ int ros_CadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart, KPP_REAL Tend,
   KPP_REAL Ynew[NADJ][NVAR], Fcn0[NADJ][NVAR], Fcn[NADJ][NVAR];
   KPP_REAL K[NADJ][NVAR*ros_S], dFdT[NADJ][NVAR];
 #ifdef FULL_ALGEBRA
-  KPP_REAL Jac0[NVAR][NVAR], Ghimj[NVAR][NVAR], Jac[NVAR][NVAR], 
+  KPP_REAL Jac0[NVAR][NVAR], Ghimj[NVAR][NVAR], Jac[NVAR][NVAR],
          dJdT[NVAR][NVAR];
 #else
-  KPP_REAL Jac0[LU_NONZERO], Ghimj[LU_NONZERO], Jac[LU_NONZERO], 
+  KPP_REAL Jac0[LU_NONZERO], Ghimj[LU_NONZERO], Jac[LU_NONZERO],
          dJdT[LU_NONZERO];
 #endif
-  KPP_REAL H, Hnew, HC, HG, Fac, Tau; 
+  KPP_REAL H, Hnew, HC, HG, Fac, Tau;
   KPP_REAL Err, Yerr[NADJ][NVAR];
   int Pivot[NVAR], Direction, ioffset, j, istage, iadj;
   int RejectLastH, RejectMoreH, Singular; /* Boolean values */
@@ -1357,14 +1357,14 @@ int ros_CadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart, KPP_REAL Tend,
   T = Tstart;
   RSTATUS[Nhexit] = (KPP_REAL)0.0;
   H = MIN( MAX(ABS(Hmin),ABS(Hstart)) , ABS(Hmax) );
-  if (ABS(H) <= ((KPP_REAL)10.0)*Roundoff) 
+  if (ABS(H) <= ((KPP_REAL)10.0)*Roundoff)
     H = DeltaMin;
-  
+
   if (Tend  >=  Tstart)
     Direction = 1;
   else
     Direction = -1;
-  
+
   H = Direction*H;
   RejectLastH = FALSE;
   RejectMoreH = FALSE;
@@ -1436,7 +1436,7 @@ int ros_CadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart, KPP_REAL Tend,
 /*~~~>   Compute the stages */
       for ( istage = 0; istage < ros_S; istage++ ) { /* Stage loop */
 
-	/* Current istage offset. Current istage vector 
+	/* Current istage offset. Current istage vector
 	   is K[ioffset+1:ioffset+NVAR] */
 	ioffset = NVAR*(istage-1);
 
@@ -1445,7 +1445,7 @@ int ros_CadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart, KPP_REAL Tend,
 	  for ( iadj = 0; iadj < NADJ; iadj++ )
 	    WCOPY(NVAR,&Fcn0[iadj][0],1,&Fcn[iadj][0],1);
 
-	  /* istage>0 and a new function evaluation is needed at 
+	  /* istage>0 and a new function evaluation is needed at
 	     the current istage */
 	}
 	else if ( ros_NewF[istage] ) {
@@ -1513,7 +1513,7 @@ int ros_CadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart, KPP_REAL Tend,
 /*~~~> Max error among all adjoint components */
       iadj = 1;
       Err = ros_ErrorNorm ( &Y[iadj][0], &Ynew[iadj][0], &Yerr[iadj][0],
-			    &AbsTol_adj[iadj][0], &RelTol_adj[iadj][0], 
+			    &AbsTol_adj[iadj][0], &RelTol_adj[iadj][0],
 			    VectorTol );
 
 /*~~~> New step size is bounded by FacMin <= Hnew/H <= FacMax */
@@ -1546,7 +1546,7 @@ int ros_CadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart, KPP_REAL Tend,
 	if (ISTATUS[Nacc] >= 1)
 	  ISTATUS[Nrej]++;
       } /* Err <= 1 */
-      
+
     } while(1); /* End of UntilAccepted do loop */
 
   } /* End of TimeLoop */
@@ -1557,16 +1557,16 @@ int ros_CadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart, KPP_REAL Tend,
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 int ros_SimpleCadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart,
-			 KPP_REAL Tend, KPP_REAL T, int ISTATUS[], 
+			 KPP_REAL Tend, KPP_REAL T, int ISTATUS[],
 			int Autonomous, KPP_REAL Roundoff ) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Template for the implementation of a generic RosenbrockADJ method 
+   Template for the implementation of a generic RosenbrockADJ method
       defined by ros_S (no of stages)
       and its coefficients ros_{A,C,M,E,Alpha,Gamma}
-~~~> NADJ, Y[NADJ][NVAR] - Input: the initial condition at Tstart; 
+~~~> NADJ, Y[NADJ][NVAR] - Input: the initial condition at Tstart;
                            Output: the solution at T
-~~~> Tstart, Tend - Input: integration interval 
-~~~> T - Output: time at which the solution is returned (T=Tend if success) 
+~~~> Tstart, Tend - Input: integration interval
+~~~> T - Output: time at which the solution is returned (T=Tend if success)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /*~~~~ Local variables */
@@ -1574,13 +1574,13 @@ int ros_SimpleCadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart,
    KPP_REAL Ynew[NADJ][NVAR], Fcn0[NADJ][NVAR], Fcn[NADJ][NVAR];
    KPP_REAL K[NADJ][NVAR*ros_S], dFdT[NADJ][NVAR];
 #ifdef FULL_ALGEBRA
-   KPP_REAL Jac0[NVAR][NVAR], Ghimj[NVAR][NVAR], Jac[NVAR][NVAR], 
+   KPP_REAL Jac0[NVAR][NVAR], Ghimj[NVAR][NVAR], Jac[NVAR][NVAR],
           dJdT[NVAR][NVAR];
 #else
-   KPP_REAL Jac0[LU_NONZERO], Ghimj[LU_NONZERO], Jac[LU_NONZERO], 
+   KPP_REAL Jac0[LU_NONZERO], Ghimj[LU_NONZERO], Jac[LU_NONZERO],
           dJdT[LU_NONZERO];
 #endif
-   KPP_REAL H, HC, HG, Tau; 
+   KPP_REAL H, HC, HG, Tau;
    KPP_REAL ghinv;
    int Pivot[NVAR], Direction, ioffset, i, j, istage, iadj;
    int istack;
@@ -1592,7 +1592,7 @@ int ros_SimpleCadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart,
     Direction = -1;
   else
     Direction = 1;
- 
+
 /*~~~> Time loop begins below */
   for( istack = stack_ptr; istack >= 1; istack-- ) { /* TimeLoop */
     T = chk_T[istack];
@@ -1627,7 +1627,7 @@ int ros_SimpleCadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart,
 #else
     WSCAL(LU_NONZERO,(-ONE),Jac0,1);
 #endif
-    
+
     for(iadj=0; iadj<NADJ; iadj++) {
 #ifdef FULL_ALGEBRA
       for(i=0; i<NVAR; i++)
@@ -1636,7 +1636,7 @@ int ros_SimpleCadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart,
       JacTR_SP_Vec(Jac0,&Y[iadj][0],&Fcn0[iadj][0]);
 #endif
     }
-    
+
 /*~~~>    Construct Ghimj = 1/(H*ham) - Jac0 */
     ghinv = ONE/(Direction*H*ros_Gamma[0]);
 #ifdef FULL_ALGEBRA
@@ -1663,7 +1663,7 @@ int ros_SimpleCadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart,
 
 /*~~~>   Compute the stages */
     for(istage=0; istage<ros_S; istage++) { /* Stage */
-      /* Current istage offset. Current istage vector 
+      /* Current istage offset. Current istage vector
 	 is K(ioffset+1:ioffset+NVAR) */
       ioffset = NVAR*istage;
 
@@ -1672,7 +1672,7 @@ int ros_SimpleCadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart,
 	for(iadj=0; iadj<NADJ; iadj++)
 	  WCOPY(NVAR,&Fcn0[iadj][0],1,&Fcn[iadj][0],1);
       }
-      /* istage>=1 and a new function evaluation is needed 
+      /* istage>=1 and a new function evaluation is needed
 	 at the current istage */
       else if ( ros_NewF[istage] ) {
 	WCOPY(NVAR*NADJ,&Y[0][0],1,&Ynew[0][0],1);
@@ -1681,7 +1681,7 @@ int ros_SimpleCadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart,
 	    WAXPY(NVAR,ros_A[istage*(istage-1)/2+j], &K[iadj][NVAR*j],1,
 		  &Ynew[iadj][0],1);
 	}
-	
+
 	Tau = T + ros_Alpha[istage]*Direction*H;
 	for(i=0; i<NVAR; i++)
 	  ros_Hermite3( chk_T[istack-1], chk_T[istack], Tau,
@@ -1724,7 +1724,7 @@ int ros_SimpleCadjInt ( int NADJ, KPP_REAL Y[][NVAR], KPP_REAL Tstart,
       for(iadj=0; iadj<NADJ; iadj++)
 	ros_Solve('T', Ghimj, Pivot, &K[iadj][ioffset], ISTATUS);
     } /* End of Stage loop */
-    
+
 /*~~~>  Compute the new solution */
     for(iadj=0; iadj<NADJ; iadj++) {
       for(j=0; j<ros_S; j++)
@@ -1772,7 +1772,7 @@ void ros_FunTimeDerivative ( KPP_REAL T, KPP_REAL Roundoff, KPP_REAL Y[],
 
 /*~~~> Local variables */
   KPP_REAL Delta;
-  
+
   Delta = SQRT(Roundoff)*MAX(DeltaMin,ABS(T));
   FunTemplate(T+Delta,Y,dFdT);
   ISTATUS[Nfun]++;
@@ -1805,7 +1805,7 @@ void ros_JacTimeDerivative ( KPP_REAL T, KPP_REAL Roundoff, KPP_REAL Y[],
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 int ros_PrepareMatrix ( KPP_REAL H, int Direction, KPP_REAL gam,
-			KPP_REAL Jac0[], KPP_REAL Ghimj[], int Pivot[], 
+			KPP_REAL Jac0[], KPP_REAL Ghimj[], int Pivot[],
 			int ISTATUS[] ) {
 /* --- --- --- --- --- --- --- --- --- --- --- --- ---
   Prepares the LHS matrix for stage calculations
@@ -1846,9 +1846,9 @@ int ros_PrepareMatrix ( KPP_REAL H, int Direction, KPP_REAL gam,
     if (ising == 0)
 /*~~~>    If successful done */
       Singular = FALSE;
-    
+
     else { /* ising != 0 */
-/*~~~>    If unsuccessful half the step size; 
+/*~~~>    If unsuccessful half the step size;
           if 5 consecutive fails then return */
       ISTATUS[Nsng]++;
       Nconsecutive++;
@@ -1882,15 +1882,15 @@ void ros_Decomp( KPP_REAL A[], int Pivot[], int* ising, int ISTATUS[] ) {
 } /* End of ros_Decomp */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-void ros_Solve( char How, KPP_REAL A[], int Pivot[], KPP_REAL b[], 
+void ros_Solve( char How, KPP_REAL A[], int Pivot[], KPP_REAL b[],
 		int ISTATUS[] ) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Template for the forward/backward substitution 
+  Template for the forward/backward substitution
   (using pre-computed LU decomposition)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   switch (How) {
     case 'N':
-#ifdef FULL_ALGEBRA    
+#ifdef FULL_ALGEBRA
       DGETRS( 'N', NVAR , 1, A, NVAR, Pivot, b, NVAR, 0 );
 #else
       KppSolve( A, b );
@@ -1970,7 +1970,7 @@ void ros_Hermite3( KPP_REAL a, KPP_REAL b, KPP_REAL T, KPP_REAL Ya[],
   WAXPY(NVAR,2.0*amb[2],Yb,1,&C[3][0],1);
   WAXPY(NVAR,amb[1],Ja,1,&C[3][0],1);
   WAXPY(NVAR,amb[1],Jb,1,&C[3][0],1);
-   
+
   Tau = T - a;
   WCOPY(NVAR,&C[3][0],1,Y,1);
   WSCAL(NVAR,pow(Tau,3),Y,1);
@@ -1980,8 +1980,8 @@ void ros_Hermite3( KPP_REAL a, KPP_REAL b, KPP_REAL T, KPP_REAL Ya[],
 } /* End of ros_Hermite3 */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-void ros_Hermite5( KPP_REAL a, KPP_REAL b, KPP_REAL T, KPP_REAL Ya[], 
-		   KPP_REAL Yb[], KPP_REAL Ja[], KPP_REAL Jb[], KPP_REAL Ha[], 
+void ros_Hermite5( KPP_REAL a, KPP_REAL b, KPP_REAL T, KPP_REAL Ya[],
+		   KPP_REAL Yb[], KPP_REAL Ja[], KPP_REAL Jb[], KPP_REAL Ha[],
 		   KPP_REAL Hb[], KPP_REAL Y[] ) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Template for Hermite interpolation of order 5 on the interval [a,b]
@@ -2005,7 +2005,7 @@ void ros_Hermite5( KPP_REAL a, KPP_REAL b, KPP_REAL T, KPP_REAL Ya[],
   WCOPY(NVAR,Ha,1,&C[2][0],1);
   WSCAL(NVAR,HALF,&C[2][0],1);
 
-/* c(4) = 10*amb(3)*ya - 10*amb(3)*yb - 6*amb(2)*ja - 4*amb(2)*jb  
+/* c(4) = 10*amb(3)*ya - 10*amb(3)*yb - 6*amb(2)*ja - 4*amb(2)*jb
           + 1.5*amb(1)*ha - 0.5*amb(1)*hb ; */
   WCOPY(NVAR,Ya,1,&C[3][0],1);
   WSCAL(NVAR,10.0*amb[2],&C[3][0],1);
@@ -2015,7 +2015,7 @@ void ros_Hermite5( KPP_REAL a, KPP_REAL b, KPP_REAL T, KPP_REAL Ya[],
   WAXPY(NVAR, 1.5*amb[0],Ha,1,&C[3][0],1);
   WAXPY(NVAR,-0.5*amb[0],Hb,1,&C[3][0],1);
 
-/* c(5) =   15*amb(4)*ya - 15*amb(4)*yb - 8.*amb(3)*ja - 7*amb(3)*jb 
+/* c(5) =   15*amb(4)*ya - 15*amb(4)*yb - 8.*amb(3)*ja - 7*amb(3)*jb
             + 1.5*amb(2)*ha - 1*amb(2)*hb ; */
   WCOPY(NVAR,Ya,1,&C[4][0],1);
   WSCAL(NVAR, 15.0*amb[3],&C[4][0],1);
@@ -2025,7 +2025,7 @@ void ros_Hermite5( KPP_REAL a, KPP_REAL b, KPP_REAL T, KPP_REAL Ya[],
   WAXPY(NVAR,1.5*amb[1],Ha,1,&C[4][0],1);
   WAXPY(NVAR,-amb[1],Hb,1,&C[4][0],1);
 
-/* c(6) =   6*amb(5)*ya - 6*amb(5)*yb - 3.*amb(4)*ja - 3.*amb(4)*jb 
+/* c(6) =   6*amb(5)*ya - 6*amb(5)*yb - 3.*amb(4)*ja - 3.*amb(4)*jb
             + 0.5*amb(3)*ha -0.5*amb(3)*hb ; */
   WCOPY(NVAR,Ya,1,&C[5][0],1);
   WSCAL(NVAR, 6.0*amb[4],&C[5][0],1);
@@ -2071,7 +2071,7 @@ void Ros2() {
   ros_C[0] = ((KPP_REAL)-2.0)/g;
 
 /*~~~> Does the stage i require a new function evaluation (ros_NewF[i]=TRUE)
-       or does it re-use the function evaluation from stage i-1 
+       or does it re-use the function evaluation from stage i-1
        (ros_NewF[i]=FALSE) */
   ros_NewF[0] = TRUE;
   ros_NewF[1] = TRUE;
@@ -2125,7 +2125,7 @@ void Ros3() {
   ros_C[2] = (KPP_REAL) 0.92076794298330791242156818474003e01;
 
 /*~~~> Does the stage i require a new function evaluation (ros_NewF[i]=TRUE)
-       or does it re-use the function evaluation from stage i-1 
+       or does it re-use the function evaluation from stage i-1
        (ros_NewF[i]=FALSE) */
   ros_NewF[0] = TRUE;
   ros_NewF[1] = TRUE;
@@ -2193,7 +2193,7 @@ void Ros4() {
   ros_C[5] = (KPP_REAL)-0.6949742501781779;
 
 /*~~~> Does the stage i require a new function evaluation (ros_NewF[i]=TRUE)
-       or does it re-use the function evaluation from stage i-1 
+       or does it re-use the function evaluation from stage i-1
        (ros_NewF[i]=FALSE) */
   ros_NewF[0] = TRUE;
   ros_NewF[1] = TRUE;
@@ -2218,7 +2218,7 @@ void Ros4() {
   ros_Alpha[1] = (KPP_REAL)0.1145640000000000e01;
   ros_Alpha[2] = (KPP_REAL)0.6552168638155900;
   ros_Alpha[3] = ros_Alpha[2];
-/*~~~> Gamma_i = \sum_j  gamma_{i,j} */ 
+/*~~~> Gamma_i = \sum_j  gamma_{i,j} */
   ros_Gamma[0] = (KPP_REAL) 0.5728200000000000;
   ros_Gamma[1] = (KPP_REAL)-0.1769193891319233e01;
   ros_Gamma[2] = (KPP_REAL) 0.7592633437920482;
@@ -2260,7 +2260,7 @@ void Rodas3() {
   ros_C[5] = -(((KPP_REAL)8.0)/((KPP_REAL)3.0));
 
 /*~~~> Does the stage i require a new function evaluation (ros_NewF[i]=TRUE)
-       or does it re-use the function evaluation from stage i-1 
+       or does it re-use the function evaluation from stage i-1
        (ros_NewF[i]=FALSE) */
   ros_NewF[0] = TRUE;
   ros_NewF[1] = FALSE;
@@ -2347,7 +2347,7 @@ void Rodas4() {
   ros_A[12] = ros_A[8];
   ros_A[13] = ros_A[9];
   ros_A[14] = (KPP_REAL)1.0;
-  
+
   ros_C[0]  = (KPP_REAL)-0.5668800000000000e01;
   ros_C[1]  = (KPP_REAL)-0.2430093356833875e01;
   ros_C[2]  = (KPP_REAL)-0.2063599157091915;
@@ -2381,7 +2381,7 @@ void Rodas4() {
   ros_E[5] = (KPP_REAL)1.0;
 
 /*~~~> Does the stage i require a new function evaluation (ros_NewF[i]=TRUE)
-       or does it re-use the function evaluation from stage i-1 
+       or does it re-use the function evaluation from stage i-1
        (ros_NewF[i]=FALSE) */
   ros_NewF[0] = TRUE;
   ros_NewF[1] = TRUE;

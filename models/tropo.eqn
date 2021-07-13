@@ -1,5 +1,5 @@
 #EQUATIONS
-                
+
 {----NEXT KR APPROXIMATED BY ADRIAN---}
 {1} NO2 + hv = NO + O3 :                              1.765E-2*SUN ;
 {2} NO + O3 = NO2 + O2 :                              ARR2(2.2E-12,-1430.0) ;
@@ -75,7 +75,7 @@
   AS READ FROM LILING STEM CODE ----}
 {53} RAO2 + NO = 0.9261NO2 - 0.1892NO + 0.263RAN2 +
             1.0482ALD2 + 0.3KET +
-            0.1879ETO2 + 0.1116MO2 + 
+            0.1879ETO2 + 0.1116MO2 +
             0.28HO2 + 0.1057R3O2 + 0.06RAO2 :         ARR2(4.2E-12,180.0) ;
 {54} ALKA + NO3 = HNO3 + RAO2 :                       4.00E-17 ;
 {55} RAN2 + OH = RAN1 + H2O :                         2.00E-12 ;
@@ -131,7 +131,7 @@
 {---- IN THE NEXT REACTION
   BETA 12, 13 WHERE REPLACED BY NUMBERS
   AS GIVEN IN LILING'S STEM CODE ----}
-{102} CRES + OH = 0.83HO2 + 0.9ZO2 + 0.9TCO3 
+{102} CRES + OH = 0.83HO2 + 0.9ZO2 + 0.9TCO3
             -0.9OH - 0.0315NO2 :                      4.25E-11 ;
 {103} NO3 + CRES = HNO3 :                             1.00E-11 ;
 {104} OH + DIAL = TCO3 :                              2.80E-11 ;
@@ -147,7 +147,7 @@
 {---- HERE COMES AEROSOL PART ----}
 {113} AHO2 = HCHO + HO2 :                             1.5*1. ;
 {114} ISOP + OH = RIO2 :                              ARR2(2.5E-11,409.0) ;
-{115} RIO2 + NO = 0.9NO2 + 0.45MVK + 0.45MACR + 
+{115} RIO2 + NO = 0.9NO2 + 0.45MVK + 0.45MACR +
             0.9HO2 + 0.9HCHO :                        ARR2(4.2E-12,180.0) ;
 {116} RIO2 + HO2 = ROOH :                             3.00E-12 ;
 {117} MVK + OH = VRO2 :                               ARR2(3.0E-12,500.0) ;
@@ -217,14 +217,14 @@
 {175} DMS + OH = SO2 + MSA :                          8.3E-12 ;
 {176} NO3 + NO3 = 2NO2 + O2 :                         ARR2(8.5E-13,-2450.0) ;
 {177} OH + PAN = PROD :                               ARR2(1.23E-12,-651.0) ;
-{178} NO3 + HO2 = 0.6OH + 0.6NO2 + 0.4HNO3 :          ARR2(2.3E-12,170.0) ;  
- 
- 
-    
-                                                  
+{178} NO3 + HO2 = 0.6OH + 0.6NO2 + 0.4HNO3 :          ARR2(2.3E-12,170.0) ;
 
 
-                       
+
+
+
+
+
 
 
 

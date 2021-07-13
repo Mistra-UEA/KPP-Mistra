@@ -12,6 +12,6 @@
 { 8.}  RO2 + NO = NO2 + RCHO + HO2 :       1.127E+4 ;
 { 9.}  RCOO2 + NO = NO2 + RO2 + CO2 :      1.127E+4 ;
 {10.}  OH + NO2 = HNO3 :                   1.613E+4 ;
-{11.}  RCOO2 + NO2 = RCOO2NO2 :            6.893E+3 ;  
+{11.}  RCOO2 + NO2 = RCOO2NO2 :            6.893E+3 ;
 {12.}  RCOO2NO2 = RCOO2 + NO2 :            2.143E-2 ;
 

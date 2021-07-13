@@ -6,8 +6,8 @@
 
       KPP_REAL SunRise, SunSet
       KPP_REAL Thour, Tlocal, Ttmp, PI
-      PARAMETER (PI = 3.14159265358979d0) 
-   
+      PARAMETER (PI = 3.14159265358979d0)
+
       SunRise = 4.5
       SunSet  = 19.5
       Thour = TIME/3600.
@@ -20,7 +20,7 @@
         ELSE
           Ttmp = -Ttmp*Ttmp
         END IF
-        SUN = ( 1.0 + COS(PI*Ttmp) )/2.0 
+        SUN = ( 1.0 + COS(PI*Ttmp) )/2.0
       ELSE
         SUN = 0.0
       END IF

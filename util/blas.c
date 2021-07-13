@@ -1,11 +1,11 @@
 /*--------------------------------------------------------------
- 
+
   BLAS/LAPACK-like subroutines used by the integration algorithms
   It is recommended to replace them by calls to the optimized
        BLAS/LAPACK library for your machine
- 
+
    (C) Adrian Sandu, Aug. 2004
- 
+
 --------------------------------------------------------------*/
 
 #define ZERO  (KPP_REAL)0.0
@@ -32,7 +32,7 @@ void WCOPY(int N, KPP_REAL X[], int incX, KPP_REAL Y[], int incY)
         for ( i = 0; i < M; i++ )
           Y[i] = X[i];
         if( N < 8 ) return;
-      } /* end if */	
+      } /* end if */
       for ( i = M; i<N; i+=8 ) {
         Y[i] = X[i];
         Y[i + 1] = X[i + 1];
@@ -48,8 +48,8 @@ void WCOPY(int N, KPP_REAL X[], int incX, KPP_REAL Y[], int incY)
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-void WAXPY(int N, KPP_REAL Alpha, 
-         KPP_REAL X[], int incX, 
+void WAXPY(int N, KPP_REAL Alpha,
+         KPP_REAL X[], int incX,
 	 KPP_REAL Y[], int incY )
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     constant times a vector plus a vector: y <- y + Alpha*x
@@ -70,7 +70,7 @@ void WAXPY(int N, KPP_REAL Alpha,
           Y[i] = Y[i] + Alpha*X[i];
         if ( N < 4 ) return;
       } /* end if */
-      
+
       for ( i = M; i < N; i += 4 ) {
         Y[i] = Y[i] + Alpha*X[i];
         Y[i + 1] = Y[i + 1] + Alpha*X[i + 1];
@@ -85,7 +85,7 @@ void WAXPY(int N, KPP_REAL Alpha,
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 void WSCAL(int N, KPP_REAL Alpha, KPP_REAL X[], int incX)
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    constant times a vector: x(1:N) <- Alpha*x(1:N) 
+    constant times a vector: x(1:N) <- Alpha*x(1:N)
     only for incX=incY=1
     after BLAS
     replace this by the function from the optimized BLAS implementation:
@@ -93,7 +93,7 @@ void WSCAL(int N, KPP_REAL Alpha, KPP_REAL X[], int incX)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 {
       int i, M;
-      
+
       if (Alpha == ONE) return;
       if (N  <=  0) return;
 
@@ -109,7 +109,7 @@ void WSCAL(int N, KPP_REAL Alpha, KPP_REAL X[], int incX)
         } /* end else */
         if( N < 5 ) return;
       } /* end if */
-      
+
       if (Alpha == (-ONE))
         for ( i = M; i<N; i+=5 ) {
           X[i]     = -X[i];
@@ -136,10 +136,10 @@ void WSCAL(int N, KPP_REAL Alpha, KPP_REAL X[], int incX)
             X[i + 4] = Alpha*X[i + 4];
            } /* end for */
       }  /* else  */
-      
+
 } /* end function WSCAL */
-   
-     
+
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 KPP_REAL WLAMCH_ADD( KPP_REAL  A, KPP_REAL  B )
 {
@@ -159,7 +159,7 @@ KPP_REAL WLAMCH( char C )
       KPP_REAL Suma;
       static KPP_REAL Eps;
       static char First = 1;
-      
+
       if (First) {
         First = 0;
         Eps = pow(HALF,16);
@@ -172,7 +172,7 @@ KPP_REAL WLAMCH( char C )
 	   printf("\nERROR IN WLAMCH. Very small EPS = %g\n",Eps);
            return (double)2.2e-16;
 	}
-        Eps *= TWO; i--;      
+        Eps *= TWO; i--;
       } /* end if First */
 
       return Eps;
@@ -186,7 +186,7 @@ KPP_REAL WLAMCH( char C )
 void Set2Zero(int N, KPP_REAL Y[])
 {
    int i,M;
-	
+
    if (N <= 0) return;
 
    M = MOD(N,8);
@@ -196,7 +196,7 @@ void Set2Zero(int N, KPP_REAL Y[])
 	{
 	   Y[i] = ZERO;
 	}
-	if (N < 8) 
+	if (N < 8)
 	   return;
    } /* end if */
    for (i = M; i < N; i += 8)
@@ -221,7 +221,7 @@ void WADD(int N, KPP_REAL X[], KPP_REAL Y[], KPP_REAL Z[])
 	int i, M;
 
 	if ( N <= 0 ) return;
-	
+
 	M = MOD(N,5);
 	if ( M != 0 )
 	{

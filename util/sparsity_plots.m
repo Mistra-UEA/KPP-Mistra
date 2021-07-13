@@ -32,15 +32,15 @@ for i=1:M
       % spy(G); figure;hold on
       for iH=1:NVAR; for jH=1:NVAR
          if( G(iH, jH) )
-	    plot(iH,NVAR+1-jH,'.'); 
+	    plot(iH,NVAR+1-jH,'.');
 	 end;
       end; end
       text(NVAR/6,NVAR*0.6,int2str(k))
       set(gca,'XLim',[1,NVAR],'YLim',[1,NVAR]);
       set(gca,'XTick',[],'YTick',[]);
       axis('square');
-      box on     
+      box on
       hold off;
     end
   end
-end    
+end

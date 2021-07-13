@@ -3,7 +3,7 @@
   KPP - The Kinetic PreProcessor
         Builds simulation code for chemical kinetic systems
 
-  Copyright (C) 1995-1996 Valeriu Damian and Adrian Sandu 
+  Copyright (C) 1995-1996 Valeriu Damian and Adrian Sandu
   Copyright (C) 1997-2005 Adrian Sandu
 
   KPP is free software; you can redistribute it and/or modify it under the
@@ -18,7 +18,7 @@
 
   A copy of the GNU General Public License could be found below;  you
   could also consult http://www.gnu.org/copyleft/gpl.html or write to the
-  Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 
+  Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
   02111-1307,  USA.
 
   Adrian Sandu

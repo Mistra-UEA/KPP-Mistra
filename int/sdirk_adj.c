@@ -11,15 +11,15 @@
 #define HALF        (KPP_REAL)0.5
 #define DeltaMin    (KPP_REAL)1.0e-5
 enum boolean { FALSE=0, TRUE=1 };
-  
+
 /*~~~>  Statistics on the work performed by the SDIRK method */
-enum statistics { Nfun=1, Njac=2, Nstp=3, Nacc=4, Nrej=5, Ndec=6, Nsol=7, 
+enum statistics { Nfun=1, Njac=2, Nstp=3, Nacc=4, Nrej=5, Ndec=6, Nsol=7,
 		  Nsng=8, Ntexit=1, Nhexit=2, Nhnew=3 };
 
 /*~~~>  SDIRK method coefficients, up to 5 stages */
 int Smax = 5;
 enum ros_Params { S2A=1, S2B=2, S3A=3, S4A=4, S4B=5 };
-KPP_REAL rkGamma, rkA[5][5], rkB[5], rkC[5], rkD[5], rkE[5], 
+KPP_REAL rkGamma, rkA[5][5], rkB[5], rkC[5], rkD[5], rkE[5],
   rkBhat[5], rkELO, rkAlpha[5][5], rkTheta[5][5];
 int sdMethod, rkS; /* The number of stages */
 
@@ -36,42 +36,42 @@ int **chk_P;
 #endif
 
 /* Function Headers */
-void INTEGRATE_ADJ( int NADJ, KPP_REAL Y[], KPP_REAL Lambda[][NVAR], 
-		    KPP_REAL TIN, KPP_REAL TOUT, KPP_REAL ATOL_adj[][NVAR], 
-		    KPP_REAL RTOL_adj[][NVAR], int ICNTRL_U[], 
-		    KPP_REAL RCNTRL_U[], int ISTATUS_U[], 
+void INTEGRATE_ADJ( int NADJ, KPP_REAL Y[], KPP_REAL Lambda[][NVAR],
+		    KPP_REAL TIN, KPP_REAL TOUT, KPP_REAL ATOL_adj[][NVAR],
+		    KPP_REAL RTOL_adj[][NVAR], int ICNTRL_U[],
+		    KPP_REAL RCNTRL_U[], int ISTATUS_U[],
 		    KPP_REAL RSTATUS_U[] );
 int SDIRKADJ( int N, int NADJ, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
-	      KPP_REAL Lambda[][NVAR], KPP_REAL RelTol[], KPP_REAL AbsTol[], 
-	      KPP_REAL RelTol_adj[][NVAR], KPP_REAL AbsTol_adj[][NVAR], 
-	      KPP_REAL RCNTRL[], int ICNTRL[], KPP_REAL RSTATUS[], 
+	      KPP_REAL Lambda[][NVAR], KPP_REAL RelTol[], KPP_REAL AbsTol[],
+	      KPP_REAL RelTol_adj[][NVAR], KPP_REAL AbsTol_adj[][NVAR],
+	      KPP_REAL RCNTRL[], int ICNTRL[], KPP_REAL RSTATUS[],
 	      int ISTATUS[]);
-int SDIRK_FwdInt( int N, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[], 
-		  KPP_REAL Hmax, KPP_REAL Hmin, KPP_REAL Hstart, 
-		  KPP_REAL Roundoff, KPP_REAL AbsTol[], KPP_REAL RelTol[], 
-		  int ISTATUS[], KPP_REAL RSTATUS[], int Max_no_steps, 
-		  int NewtonMaxit, KPP_REAL NewtonTol, KPP_REAL ThetaMin, 
-		  KPP_REAL FacSafe, KPP_REAL FacMin, KPP_REAL FacMax, 
-		  KPP_REAL FacRej, KPP_REAL Qmin, KPP_REAL Qmax, int ITOL, 
+int SDIRK_FwdInt( int N, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
+		  KPP_REAL Hmax, KPP_REAL Hmin, KPP_REAL Hstart,
+		  KPP_REAL Roundoff, KPP_REAL AbsTol[], KPP_REAL RelTol[],
+		  int ISTATUS[], KPP_REAL RSTATUS[], int Max_no_steps,
+		  int NewtonMaxit, KPP_REAL NewtonTol, KPP_REAL ThetaMin,
+		  KPP_REAL FacSafe, KPP_REAL FacMin, KPP_REAL FacMax,
+		  KPP_REAL FacRej, KPP_REAL Qmin, KPP_REAL Qmax, int ITOL,
 		  int SaveLU );
-int SDIRK_DadjInt( int N, int NADJ, KPP_REAL Lambda[][NVAR], int SaveLU, 
-		   int ISTATUS[], int ITOL, KPP_REAL AbsTol_adj[][NVAR], 
+int SDIRK_DadjInt( int N, int NADJ, KPP_REAL Lambda[][NVAR], int SaveLU,
+		   int ISTATUS[], int ITOL, KPP_REAL AbsTol_adj[][NVAR],
 		   KPP_REAL RelTol_adj[][NVAR], int NewtonMaxit,
 		   KPP_REAL ThetaMin, KPP_REAL NewtonTol, int DirectADJ );
 void SDIRK_AllocBuffers( int Max_no_steps, int rkS, int SaveLU );
 void SDIRK_FreeBuffers( int Max_no_steps, int SaveLU );
-void SDIRK_Push( KPP_REAL T, KPP_REAL H, KPP_REAL Y[], KPP_REAL Z[][NVAR], 
+void SDIRK_Push( KPP_REAL T, KPP_REAL H, KPP_REAL Y[], KPP_REAL Z[][NVAR],
 		 KPP_REAL E[], int P[], int Max_no_steps, int SaveLU );
-void SDIRK_Pop( KPP_REAL* T, KPP_REAL* H, KPP_REAL* Y, KPP_REAL* Z, 
+void SDIRK_Pop( KPP_REAL* T, KPP_REAL* H, KPP_REAL* Y, KPP_REAL* Z,
 		KPP_REAL* E, int* P, int SaveLU );
 void SDIRK_ErrorScale( int N, int ITOL, KPP_REAL AbsTol[], KPP_REAL RelTol[],
 		       KPP_REAL Y[],KPP_REAL SCAL[]);
 KPP_REAL SDIRK_ErrorNorm( int N, KPP_REAL Y[], KPP_REAL SCAL[] );
 int SDIRK_ErrorMsg( int code, KPP_REAL T, KPP_REAL H );
 void SDIRK_PrepareMatrix( KPP_REAL H, KPP_REAL T, KPP_REAL Y[], KPP_REAL FJAC[],
-			  int SkipJac, int SkipLU, KPP_REAL E[], int IP[], 
+			  int SkipJac, int SkipLU, KPP_REAL E[], int IP[],
 			  int Reject, int ISING, int ISTATUS[] );
-void SDIRK_Solve ( char Transp, KPP_REAL H, int N, KPP_REAL E[], 
+void SDIRK_Solve ( char Transp, KPP_REAL H, int N, KPP_REAL E[],
 		   int IP[], int ISING, KPP_REAL RHS[], int ISTATUS[] );
 void Sdirk4a();
 void Sdirk4b();
@@ -82,7 +82,7 @@ void FUN_CHEM( KPP_REAL T, KPP_REAL Y[], KPP_REAL P[] );
 void JAC_CHEM( KPP_REAL T, KPP_REAL Y[], KPP_REAL JV[] );
 KPP_REAL WLAMCH( char C );
 void Set2Zero( int N, KPP_REAL Y[] );
-void WAXPY( int N, KPP_REAL Alpha, KPP_REAL X[], int incX, KPP_REAL Y[], 
+void WAXPY( int N, KPP_REAL Alpha, KPP_REAL X[], int incX, KPP_REAL Y[],
 	    int incY );
 void WADD( int N, KPP_REAL Y[], KPP_REAL Z[], KPP_REAL TMP[] );
 void WSCAL( int N, KPP_REAL Alpha, KPP_REAL X[], int incX );
@@ -97,10 +97,10 @@ void Jac_SP( KPP_REAL Y[], KPP_REAL FIX[], KPP_REAL RCONST[], KPP_REAL Ydot[] );
 void Set2Zero( int N, KPP_REAL Y[] );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-void INTEGRATE_ADJ( int NADJ, KPP_REAL Y[], KPP_REAL Lambda[][NVAR], 
-		    KPP_REAL TIN, KPP_REAL TOUT, KPP_REAL ATOL_adj[][NVAR], 
-		    KPP_REAL RTOL_adj[][NVAR], int ICNTRL_U[], 
-		    KPP_REAL RCNTRL_U[], int ISTATUS_U[], 
+void INTEGRATE_ADJ( int NADJ, KPP_REAL Y[], KPP_REAL Lambda[][NVAR],
+		    KPP_REAL TIN, KPP_REAL TOUT, KPP_REAL ATOL_adj[][NVAR],
+		    KPP_REAL RTOL_adj[][NVAR], int ICNTRL_U[],
+		    KPP_REAL RCNTRL_U[], int ISTATUS_U[],
 		    KPP_REAL RSTATUS_U[] ) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -120,8 +120,8 @@ void INTEGRATE_ADJ( int NADJ, KPP_REAL Y[], KPP_REAL Lambda[][NVAR],
   ICNTRL[6] = 1;   /* Adjoint solution by: 0=Newton, 1=direct */
   ICNTRL[7] = 1;    /* Save fwd LU factorization: 0 = do *not* save, 1 = save */
 
-  /* If optional parameters are given, and if they are >0, 
-     then they overwrite default settings. */ 
+  /* If optional parameters are given, and if they are >0,
+     then they overwrite default settings. */
   //if(ICNTRL_U != NULL) { /* Check to see if ICNTRL_U is not NULL */
   //  for(i=0; i<20; i++) {
   //	if(ICNTRL_U[i] > 0)
@@ -135,25 +135,25 @@ void INTEGRATE_ADJ( int NADJ, KPP_REAL Y[], KPP_REAL Lambda[][NVAR],
   //	  RCNTRL[i] = RCNTRL_U[i];
   //  }
   //}
-  
-  T1 = TIN; 
+
+  T1 = TIN;
   T2 = TOUT;
-  Ierr = SDIRKADJ( NVAR, NADJ, T1, T2, Y, Lambda, RTOL, ATOL, ATOL_adj, 
+  Ierr = SDIRKADJ( NVAR, NADJ, T1, T2, Y, Lambda, RTOL, ATOL, ATOL_adj,
 		   RTOL_adj, RCNTRL, ICNTRL, RSTATUS, ISTATUS );
 
   /*~~~> Debug option: number of steps */
   // Ntotal = Ntotal + ISTATUS(Nstp)
-  // printf( "NSTEP=%d Ntotal=%d O3=%e NO2=%e\n", ISTATUS(Nstp), Ntotal, 
-  //          VAR(ind_O3), VAR(ind_NO2) );    
+  // printf( "NSTEP=%d Ntotal=%d O3=%e NO2=%e\n", ISTATUS(Nstp), Ntotal,
+  //          VAR(ind_O3), VAR(ind_NO2) );
 
   if (Ierr < 0)
     printf("SDIRK: Unsuccessful exit at T=%f (Ierr=%d)\n", TIN, Ierr );
-   
+
   /* if optional parameters are given for output they to return information */
   //if(ISTATUS_U != NULL) { /* Check to see if ISTATUS_U is not NULL */
   //	for(i=0; i<20; i++)
   //	  ISTATUS_U[i] = ISTATUS[i];
-  //} 
+  //}
   //
   //if(RSTATUS_U != NULL) { /* Check to see if RSTATUS_U is not NULL */
   //	for(i=0; i<20; i++)
@@ -161,14 +161,14 @@ void INTEGRATE_ADJ( int NADJ, KPP_REAL Y[], KPP_REAL Lambda[][NVAR],
   //}
   //
   //Ierr_U = Ierr;
-  
+
 } /* END of SUBROUTINE INTEGRATE_ADJ */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 int SDIRKADJ( int N, int NADJ, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
-	      KPP_REAL Lambda[][NVAR], KPP_REAL RelTol[], KPP_REAL AbsTol[], 
-	      KPP_REAL RelTol_adj[][NVAR], KPP_REAL AbsTol_adj[][NVAR], 
-	      KPP_REAL RCNTRL[], int ICNTRL[], KPP_REAL RSTATUS[], 
+	      KPP_REAL Lambda[][NVAR], KPP_REAL RelTol[], KPP_REAL AbsTol[],
+	      KPP_REAL RelTol_adj[][NVAR], KPP_REAL AbsTol_adj[][NVAR],
+	      KPP_REAL RCNTRL[], int ICNTRL[], KPP_REAL RSTATUS[],
 	      int ISTATUS[] ) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -183,14 +183,14 @@ int SDIRKADJ( int N, int NADJ, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
     This code is based on the SDIRK4 routine in the above book.
 
     Methods:
-            * Sdirk 2a, 2b: L-stable, 2 stages, order 2                  
-            * Sdirk 3a:     L-stable, 3 stages, order 2, adjoint-invariant   
-            * Sdirk 4a, 4b: L-stable, 5 stages, order 4                  
+            * Sdirk 2a, 2b: L-stable, 2 stages, order 2
+            * Sdirk 3a:     L-stable, 3 stages, order 2, adjoint-invariant
+            * Sdirk 4a, 4b: L-stable, 5 stages, order 4
 
     (C)  Adrian Sandu, July 2005
     Virginia Polytechnic Institute and State University
     Contact: sandu@cs.vt.edu
-    Revised by Philipp Miehe and Adrian Sandu, May 2006     
+    Revised by Philipp Miehe and Adrian Sandu, May 2006
     Translation F90 to C by Paul Eller, May 2007
     This implementation is part of KPP - the Kinetic PreProcessor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -226,7 +226,7 @@ int SDIRKADJ( int N, int NADJ, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
 
     Note: For input parameters equal to zero the default values of the
           corresponding variables are used.
-~~~>  
+~~~>
     ICNTRL[0] = not used
 
     ICNTRL[1] = 0: AbsTol, RelTol are NVAR-dimensional vectors
@@ -303,10 +303,10 @@ int SDIRKADJ( int N, int NADJ, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/* Local variables */     
-  KPP_REAL Hmin=0.0, Hmax=0.0, Hstart=0.0, Roundoff, FacMin=0.0, FacMax=0.0, 
+/* Local variables */
+  KPP_REAL Hmin=0.0, Hmax=0.0, Hstart=0.0, Roundoff, FacMin=0.0, FacMax=0.0,
     FacSafe=0.0, FacRej=0.0, ThetaMin, NewtonTol,Qmin, Qmax;
-  int SaveLU, DirectADJ; /* Boolean variables */                 
+  int SaveLU, DirectADJ; /* Boolean variables */
   int ITOL, NewtonMaxit, Max_no_steps=0, i, Ierr=0;
 
   stack_ptr = -1;
@@ -317,9 +317,9 @@ int SDIRKADJ( int N, int NADJ, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
     RSTATUS[i] = ZERO;
   }
 
-/*~~~>  For Scalar tolerances (ICNTRL[1] != 0)  the code uses AbsTol[0] 
+/*~~~>  For Scalar tolerances (ICNTRL[1] != 0)  the code uses AbsTol[0]
             and RelTol[0]
-	For Vector tolerances (ICNTRL[1] == 0) the code uses AbsTol[0:NVAR-1] 
+	For Vector tolerances (ICNTRL[1] == 0) the code uses AbsTol[0:NVAR-1]
             and RelTol[0:NVAR-1]*/
   if (ICNTRL[1]==0)
     ITOL = 1;
@@ -347,7 +347,7 @@ int SDIRKADJ( int N, int NADJ, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
     default:
       Sdirk2a();
   }
-      
+
 /*~~~>   The maximum number of time steps admitted */
   if (ICNTRL[3] == 0)
     Max_no_steps = 200000;
@@ -371,7 +371,7 @@ int SDIRKADJ( int N, int NADJ, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
 
 /*~~~> Solve ADJ equations directly or by Newton iterations */
   DirectADJ = (ICNTRL[6] == 1);
- 
+
 /*~~~> Save or not the forward LU factorization */
   SaveLU = ((ICNTRL[7] != 0) && (DirectADJ == 0));
 
@@ -387,7 +387,7 @@ int SDIRKADJ( int N, int NADJ, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
     printf("User-selected RCNTRL[0]=%f", RCNTRL[0]);
     Ierr = SDIRK_ErrorMsg(-3,Tinitial,ZERO);
   }
-   
+
 /*~~~>  Upper bound on the step size: (positive value) */
   if (RCNTRL[1] == ZERO)
     Hmax = ABS(Tfinal-Tinitial);
@@ -417,7 +417,7 @@ int SDIRKADJ( int N, int NADJ, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
     printf("User-selected FacMin: RCNTRL[3]=%f", RCNTRL[3]);
     Ierr = SDIRK_ErrorMsg(-4,Tinitial,ZERO);
   }
-   
+
   if (RCNTRL[4] == ZERO)
     FacMax = (KPP_REAL)10.0;
   else if (RCNTRL[4] > ZERO)
@@ -484,22 +484,22 @@ int SDIRKADJ( int N, int NADJ, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
 
   if (Ierr < 0)
     return Ierr;
-    
+
 /*~~~>  Allocate memory buffers */
   SDIRK_AllocBuffers(Max_no_steps, rkS, SaveLU);
 
 /*~~~>  Call forward integration */
-  Ierr = SDIRK_FwdInt( N, Tinitial, Tfinal, Y, Hmax, Hmin, Hstart, Roundoff, 
-		       AbsTol, RelTol, ISTATUS, RSTATUS, Max_no_steps, 
-		       NewtonMaxit, NewtonTol, ThetaMin, FacSafe, FacMin, 
+  Ierr = SDIRK_FwdInt( N, Tinitial, Tfinal, Y, Hmax, Hmin, Hstart, Roundoff,
+		       AbsTol, RelTol, ISTATUS, RSTATUS, Max_no_steps,
+		       NewtonMaxit, NewtonTol, ThetaMin, FacSafe, FacMin,
 		       FacMax, FacRej, Qmin, Qmax, ITOL, SaveLU );
 
-/*~~~>  Call adjoint integration */  
-  Ierr = SDIRK_DadjInt( N, NADJ, Lambda, SaveLU, ISTATUS, ITOL, AbsTol_adj, 
-			RelTol_adj, NewtonMaxit, ThetaMin, NewtonTol, 
+/*~~~>  Call adjoint integration */
+  Ierr = SDIRK_DadjInt( N, NADJ, Lambda, SaveLU, ISTATUS, ITOL, AbsTol_adj,
+			RelTol_adj, NewtonMaxit, ThetaMin, NewtonTol,
 			DirectADJ );
 
-/*~~~>  Free memory buffers */ 
+/*~~~>  Free memory buffers */
   SDIRK_FreeBuffers(Max_no_steps, SaveLU);
 
   return Ierr;
@@ -507,28 +507,28 @@ int SDIRKADJ( int N, int NADJ, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
 } /* End of main SDIRK_ADJ */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-int SDIRK_FwdInt( int N, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[], 
-		  KPP_REAL Hmax, KPP_REAL Hmin, KPP_REAL Hstart, 
-		  KPP_REAL Roundoff, KPP_REAL AbsTol[], KPP_REAL RelTol[], 
-		  int ISTATUS[], KPP_REAL RSTATUS[], int Max_no_steps, 
-		  int NewtonMaxit, KPP_REAL NewtonTol, KPP_REAL ThetaMin, 
-		  KPP_REAL FacSafe, KPP_REAL FacMin, KPP_REAL FacMax, 
-		  KPP_REAL FacRej, KPP_REAL Qmin, KPP_REAL Qmax, int ITOL, 
+int SDIRK_FwdInt( int N, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
+		  KPP_REAL Hmax, KPP_REAL Hmin, KPP_REAL Hstart,
+		  KPP_REAL Roundoff, KPP_REAL AbsTol[], KPP_REAL RelTol[],
+		  int ISTATUS[], KPP_REAL RSTATUS[], int Max_no_steps,
+		  int NewtonMaxit, KPP_REAL NewtonTol, KPP_REAL ThetaMin,
+		  KPP_REAL FacSafe, KPP_REAL FacMin, KPP_REAL FacMax,
+		  KPP_REAL FacRej, KPP_REAL Qmin, KPP_REAL Qmax, int ITOL,
 		  int SaveLU ) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-      
-/*~~~> Local variables: */   
+
+/*~~~> Local variables: */
   KPP_REAL Z[Smax][NVAR], G[NVAR], TMP[NVAR], NewtonRate, SCAL[NVAR], RHS[NVAR],
-    T, H, Theta=0.0, Hratio, NewtonPredictedErr, Qnewton, Err, Fac, Hnew, 
+    T, H, Theta=0.0, Hratio, NewtonPredictedErr, Qnewton, Err, Fac, Hnew,
     Tdirection, NewtonIncrement, NewtonIncrementOld=0.0;
   int i, j, IER=0, istage, NewtonIter, IP[NVAR];
 
   /*Boolean Variables*/
   int Reject, FirstStep, SkipJac, SkipLU, NewtonDone, CycleTloop;
-      
-#ifdef FULL_ALGEBRA      
+
+#ifdef FULL_ALGEBRA
   KPP_REAL FJAC[NVAR][NVAR], E[NVAR][NVAR];
-#else      
+#else
   KPP_REAL FJAC[LU_NONZERO], E[LU_NONZERO];
 #endif
 
@@ -557,7 +557,7 @@ int SDIRK_FwdInt( int N, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
 
   /*~~~>  Compute E = 1/(h*gamma)-Jac and its LU decomposition */
     if (SkipLU == 0) { /* This time around skip the Jac update and LU */
-      SDIRK_PrepareMatrix( H, T, Y, FJAC, SkipJac, SkipLU, E, IP, 
+      SDIRK_PrepareMatrix( H, T, Y, FJAC, SkipJac, SkipLU, E, IP,
 	                   Reject, IER, ISTATUS);
       if (IER != 0)
 	return SDIRK_ErrorMsg(-8, T, H);
@@ -605,7 +605,7 @@ int SDIRK_FwdInt( int N, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
 
       /*~~~>   Solve the linear system  */
 	SDIRK_Solve('N', H, N, E, IP, IER, RHS, ISTATUS);
-            
+
       /*~~~>   Check convergence of Newton iterations */
 	NewtonIncrement = SDIRK_ErrorNorm(N, RHS, SCAL);
 	if (NewtonIter == 0) {
@@ -622,7 +622,7 @@ int SDIRK_FwdInt( int N, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
 	    if(NewtonPredictedErr >= NewtonTol) {
 	    /* Non-convergence of Newton: predicted error too large*/
 	      Qnewton = MIN((KPP_REAL)10.0, NewtonPredictedErr/NewtonTol);
-	      Fac = (KPP_REAL)0.8 * pow(Qnewton, (-ONE / (1 + NewtonMaxit - 
+	      Fac = (KPP_REAL)0.8 * pow(Qnewton, (-ONE / (1 + NewtonMaxit -
 							  NewtonIter + 1)));
 	      break;
 	    }
@@ -642,7 +642,7 @@ int SDIRK_FwdInt( int N, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
 	if (NewtonDone == 1)
 	  break;
       } /* end NewtonLoop for */
-                      
+
       if(NewtonDone == 0) {
 	H = Fac*H;
 	Reject = 1;
@@ -716,7 +716,7 @@ int SDIRK_FwdInt( int N, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
         else {
 	  Hratio = Hnew/H;
         /* If step not changed too much keep Jacobian and reuse LU */
-          SkipLU = ((Theta <= ThetaMin) && (Hratio >= Qmin) 
+          SkipLU = ((Theta <= ThetaMin) && (Hratio >= Qmin)
 		    && (Hratio <= Qmax));
 	  if (SkipLU==0)
 	    H = Hnew;
@@ -729,7 +729,7 @@ int SDIRK_FwdInt( int N, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
       else { /*~~~> Step is rejected */
         if ((FirstStep==1) || (Reject==1))
 	  H = FacRej * H;
-        else  
+        else
           H = Hnew;
 
         Reject = 1;
@@ -746,45 +746,45 @@ int SDIRK_FwdInt( int N, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
   return 1;
 
 } /* end SDIRK_FwdInt */
-         
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-int SDIRK_DadjInt( int N, int NADJ, KPP_REAL Lambda[][NVAR], int SaveLU, 
-		   int ISTATUS[], int ITOL, KPP_REAL AbsTol_adj[][NVAR], 
-		   KPP_REAL RelTol_adj[][NVAR], int NewtonMaxit, 
+int SDIRK_DadjInt( int N, int NADJ, KPP_REAL Lambda[][NVAR], int SaveLU,
+		   int ISTATUS[], int ITOL, KPP_REAL AbsTol_adj[][NVAR],
+		   KPP_REAL RelTol_adj[][NVAR], int NewtonMaxit,
 		   KPP_REAL ThetaMin, KPP_REAL NewtonTol, int DirectADJ) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /*~~~> Local variables: */
   KPP_REAL Y[NVAR];
-  KPP_REAL Z[Smax][NVAR], U[Smax][NADJ][NVAR], TMP[NVAR], G[NVAR], NewtonRate, 
-    SCAL[NVAR], DU[NVAR], T, H, Theta, NewtonPredictedErr, NewtonIncrement, 
+  KPP_REAL Z[Smax][NVAR], U[Smax][NADJ][NVAR], TMP[NVAR], G[NVAR], NewtonRate,
+    SCAL[NVAR], DU[NVAR], T, H, Theta, NewtonPredictedErr, NewtonIncrement,
     NewtonIncrementOld=0.0;
   int i, j, IER=0, istage, iadj, NewtonIter, IP[NVAR], IP_adj[NVAR];
   int Reject=0, SkipJac, SkipLU, NewtonDone; /* Boolean */
-      
-#ifdef FULL_ALGEBRA      
+
+#ifdef FULL_ALGEBRA
   KPP_REAL E[NVAR][NVAR], Jac[NVAR][NVAR], E_adj[NVAR][NVAR];
-#else      
+#else
   KPP_REAL E[LU_NONZERO], Jac[LU_NONZERO], E_adj[LU_NONZERO];
-#endif      
+#endif
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~>  Time loop begins
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   while ( stack_ptr > -1 ) { /* Tloop */
-        
+
   /*~~~>  Recover checkpoints for stage values and vectors */
     SDIRK_Pop( &T, &H, &Y[0], &Z[0][0], &E[0], &IP[0], SaveLU );
 
   /*~~~>  Compute E = 1/(h*gamma)-Jac and its LU decomposition */
     if (!SaveLU) {
-      SkipJac = FALSE; 
+      SkipJac = FALSE;
       SkipLU = FALSE;
-      SDIRK_PrepareMatrix ( H, T, Y, Jac, SkipJac, SkipLU, E, IP, Reject, IER, 
+      SDIRK_PrepareMatrix ( H, T, Y, Jac, SkipJac, SkipLU, E, IP, Reject, IER,
 			    ISTATUS );
       if (IER != 0)
-	return SDIRK_ErrorMsg(-8,T,H); 
-    }  
+	return SDIRK_ErrorMsg(-8,T,H);
+    }
 
     for( istage = rkS-1; istage >=0; istage--) { /* Stages Loop */
     /*~~~>  Jacobian of the current stage solution */
@@ -792,7 +792,7 @@ int SDIRK_DadjInt( int N, int NADJ, KPP_REAL Lambda[][NVAR], int SaveLU,
 	TMP[i] = Y[i] + Z[istage][i];
       JAC_CHEM(T+rkC[istage]*H,TMP,Jac);
       ISTATUS[Njac]++;
-       
+
       if (DirectADJ) {
 #ifdef FULL_ALGEBRA
 	for(i=0; i<N; i++) {
@@ -814,19 +814,19 @@ int SDIRK_DadjInt( int N, int NADJ, KPP_REAL Lambda[][NVAR], int SaveLU,
 #endif
 	ISTATUS[Ndec]++;
         if (IER != 0) {
-	  printf("At stage %d the matrix used in adjoint computation is " 
+	  printf("At stage %d the matrix used in adjoint computation is "
 		 "singular\n", istage);
           return SDIRK_ErrorMsg(-8,T,H);
 	}
       }
 
       for(iadj=0; iadj<NADJ; iadj++) { /* adj loop */
-       
+
       /*~~~> Update scaling coefficients */
 	for(i=0; i<NVAR; i++)
-	  SDIRK_ErrorScale(N, ITOL, &AbsTol_adj[iadj][i], &RelTol_adj[iadj][i], 
+	  SDIRK_ErrorScale(N, ITOL, &AbsTol_adj[iadj][i], &RelTol_adj[iadj][i],
 			   &Lambda[iadj][i], SCAL);
-      
+
       /*~~~>   Prepare the loop-independent part of the right-hand side
 	       G(:) = H*Jac^T*( B(i)*Lambda + sum_j A(j,i)*Uj(:) ) */
 	for(i=0; i<N; i++)
@@ -835,14 +835,14 @@ int SDIRK_DadjInt( int N, int NADJ, KPP_REAL Lambda[][NVAR], int SaveLU,
 	  for (j=istage+1; j<rkS; j++)
 	    WAXPY(N,rkA[istage][j],&U[j][iadj][0],1,G,1);
 	}
-#ifdef FULL_ALGEBRA  
+#ifdef FULL_ALGEBRA
 	TMP = MATMUL(TRANSPOSE(Jac),G); /* DZ <- Jac(Y+Z)*Y_tlm */
-#else      
-	JacTR_SP_Vec ( Jac, G, TMP );    
-#endif     
+#else
+	JacTR_SP_Vec ( Jac, G, TMP );
+#endif
 	for(i=0; i<N; i++)
 	  G[i] = H*TMP[i];
-	
+
 	if (DirectADJ) {
 	  SDIRK_Solve ( 'T', H, N, E_adj, IP_adj, IER, G, ISTATUS );
 	  for(i=0; i<N; i++)
@@ -851,24 +851,24 @@ int SDIRK_DadjInt( int N, int NADJ, KPP_REAL Lambda[][NVAR], int SaveLU,
 	  /*~~~>  Initializations for Newton iteration */
 	  Set2Zero(N,&U[istage][iadj][0]);
 	  NewtonDone = FALSE;
-            
+
 	  /* Newton Loop */
 	  for( NewtonIter=0; NewtonIter<NewtonMaxit; NewtonIter++) {
 
 	  /*~~~>   Prepare the loop-dependent part of the right-hand side */
-#ifdef FULL_ALGEBRA  
+#ifdef FULL_ALGEBRA
 	    for(i=0; i<N; i++)
-	      TMP = MATMUL(TRANSPOSE(Jac),U[istage][iadj][i]);    
-#else      
+	      TMP = MATMUL(TRANSPOSE(Jac),U[istage][iadj][i]);
+#else
 	    for(i=0; i<N; i++)
-	      JacTR_SP_Vec ( Jac, &U[istage][iadj][i], TMP );    
-#endif      
+	      JacTR_SP_Vec ( Jac, &U[istage][iadj][i], TMP );
+#endif
 	    for(i=0; i<N; i++)
 	      DU[i] = U[istage][iadj][i] - (H*rkGamma)*TMP[i] - G[i];
 
 	  /*~~~>   Solve the linear system */
             SDIRK_Solve ( 'T', H, N, E, IP, IER, DU, ISTATUS );
-            
+
 	  /*~~~>   Check convergence of Newton iterations */
             NewtonIncrement = SDIRK_ErrorNorm(N, DU, SCAL);
             if ( NewtonIter == 0 ) {
@@ -879,7 +879,7 @@ int SDIRK_DadjInt( int N, int NADJ, KPP_REAL Lambda[][NVAR], int SaveLU,
 	      Theta = NewtonIncrement/NewtonIncrementOld;
 	      if (Theta < (KPP_REAL)0.99) {
 		NewtonRate = Theta/(ONE-Theta);
-	      /* Predict error at the end of Newton process */ 
+	      /* Predict error at the end of Newton process */
 		NewtonPredictedErr = NewtonIncrement*
 		  pow(Theta,(NewtonMaxit-NewtonIter)) / (ONE-Theta);
 	      /* Non-convergence of Newton: predicted error too large */
@@ -893,16 +893,16 @@ int SDIRK_DadjInt( int N, int NADJ, KPP_REAL Lambda[][NVAR], int SaveLU,
 	  /* Update solution */
 	    for(i=0; i<N; i++)
 	      U[istage][iadj][i] -= DU[i];
-            
+
           /* Check error in Newton iterations */
             NewtonDone = (NewtonRate*NewtonIncrement <= NewtonTol);
           /* AbsTol is often inappropriate for adjoints -
               we do at least 4 Newton iterations to ensure convergence
               of all adjoint components */
             if ((NewtonIter>=4) && NewtonDone)
-	      break; /* Exit Newton Loop */ 
+	      break; /* Exit Newton Loop */
 	  }
-            
+
 	/*~~~> If Newton iterations fail employ the direct solution */
 	  if (!NewtonDone) {
 	    printf("Problems with Newton Adjoint!!!\n");
@@ -929,14 +929,14 @@ int SDIRK_DadjInt( int N, int NADJ, KPP_REAL Lambda[][NVAR], int SaveLU,
 	    }
 	    SDIRK_Solve ( 'T', H, N, E_adj, IP_adj, IER, G, ISTATUS );
 	    for(i=0; i<N; i++)
-	      U[istage][iadj][i] = G[i];  
+	      U[istage][iadj][i] = G[i];
 	  }
 
 	/*~~~>  End of implified Newton iterations */
 	} /* End of DirADJ */
 
       } /* End of adj */
- 
+
     } /* End of stages */
 
     /*~~~> Update adjoint solution
@@ -951,7 +951,7 @@ int SDIRK_DadjInt( int N, int NADJ, KPP_REAL Lambda[][NVAR], int SaveLU,
 
   /* Successful return */
   return 1;
-  
+
 } /* End of SDIRK_DadjInt */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -984,7 +984,7 @@ void SDIRK_AllocBuffers(int Max_no_steps, int rkS, int SaveLU) {
       exit(0);
     }
   }
-   
+
   chk_Z = (KPP_REAL***) malloc(Max_no_steps * sizeof(KPP_REAL**));
   if (chk_Z == NULL) {
     printf("Failed allocation of buffer Z\n");
@@ -1040,7 +1040,7 @@ void SDIRK_AllocBuffers(int Max_no_steps, int rkS, int SaveLU) {
       }
     }
 #endif
- 
+
     chk_P = (int**) malloc(Max_no_steps * sizeof(int*));
     if (chk_P == NULL) {
       printf("Failed allocation of buffer P\n");
@@ -1099,12 +1099,12 @@ void SDIRK_FreeBuffers(int Max_no_steps, int SaveLU) {
 } /* End of SDIRK_FreeBuffers */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-void SDIRK_Push( KPP_REAL T, KPP_REAL H, KPP_REAL Y[], KPP_REAL Z[][NVAR], 
+void SDIRK_Push( KPP_REAL T, KPP_REAL H, KPP_REAL Y[], KPP_REAL Z[][NVAR],
 		 KPP_REAL E[], int P[], int Max_no_steps, int SaveLU ) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~> Saves the next trajectory snapshot for discrete adjoints
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  
+
   int i,j;
 
   stack_ptr++;
@@ -1128,22 +1128,22 @@ void SDIRK_Push( KPP_REAL T, KPP_REAL H, KPP_REAL Y[], KPP_REAL Z[][NVAR],
 	chk_J[stack_ptr][i][j] = E[i][j];
       chk_P[stack_ptr][i] = P[i];
     }
-#else   
+#else
     for(i=0; i<LU_NONZERO; i++)
       chk_J[stack_ptr][i] = E[i];
 #endif
   }
-  
+
 } /* End of SDIRK_Push */
-  
-   
+
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 void SDIRK_Pop( KPP_REAL* T, KPP_REAL* H, KPP_REAL* Y, KPP_REAL* Z, KPP_REAL* E,
 		int* P, int SaveLU ) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~> Retrieves the next trajectory snapshot for discrete adjoints
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-   
+
   int i,j;
 
   if ( stack_ptr < 0 ) {
@@ -1173,7 +1173,7 @@ void SDIRK_Pop( KPP_REAL* T, KPP_REAL* H, KPP_REAL* Y, KPP_REAL* Z, KPP_REAL* E,
   }
 
   stack_ptr--;
-  
+
 } /* End of SDIRK_Pop */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -1192,7 +1192,7 @@ void SDIRK_ErrorScale( int N, int ITOL, KPP_REAL AbsTol[], KPP_REAL RelTol[],
   }
 
 } /*  End of SDIRK_ErrorScale */
-      
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 KPP_REAL SDIRK_ErrorNorm( int N, KPP_REAL Y[], KPP_REAL SCAL[] ) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -1249,11 +1249,11 @@ int SDIRK_ErrorMsg(int code, KPP_REAL T, KPP_REAL H) {
   return code;
 
 } /*  end SDIRK_ErrorMsg   */
-      
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-void SDIRK_PrepareMatrix ( KPP_REAL H, KPP_REAL T, KPP_REAL Y[], 
-			   KPP_REAL FJAC[], int SkipJac, int SkipLU, 
-			   KPP_REAL E[], int IP[], int Reject, int ISING, 
+void SDIRK_PrepareMatrix ( KPP_REAL H, KPP_REAL T, KPP_REAL Y[],
+			   KPP_REAL FJAC[], int SkipJac, int SkipLU,
+			   KPP_REAL E[], int IP[], int Reject, int ISING,
 			   int ISTATUS[] ) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~>  Compute the matrix E = 1/(H*GAMMA)*Jac, and its decomposition
@@ -1291,14 +1291,14 @@ void SDIRK_PrepareMatrix ( KPP_REAL H, KPP_REAL T, KPP_REAL Y[],
     ISING = KppDecomp(E);
     IP[0] = 1;
 #endif
-      
+
     ISTATUS[Ndec]++;
 
     if (ISING != 0) {
       printf("MATRIX IS SINGULAR, ISING=%d T=%e H=%e\n", ISING, T, H);
       ISTATUS[Nsng]++;
       ConsecutiveSng++;
-      if (ConsecutiveSng >= 6) 
+      if (ConsecutiveSng >= 6)
 	return; /* Failure */
       H = (KPP_REAL)(0.5)*H;
       SkipJac = 0; /* False */
@@ -1309,7 +1309,7 @@ void SDIRK_PrepareMatrix ( KPP_REAL H, KPP_REAL T, KPP_REAL Y[],
 } /* End of SDIRK_PrepareMatrix */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-void SDIRK_Solve ( char Transp, KPP_REAL H, int N, KPP_REAL E[], int IP[], 
+void SDIRK_Solve ( char Transp, KPP_REAL H, int N, KPP_REAL E[], int IP[],
 		   int ISING, KPP_REAL RHS[], int ISTATUS[] ) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~>  Solves the system (H*Gamma-Jac)*x = R
@@ -1317,19 +1317,19 @@ void SDIRK_Solve ( char Transp, KPP_REAL H, int N, KPP_REAL E[], int IP[],
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
   KPP_REAL HGammaInv;
-      
+
   HGammaInv = ONE/(H*rkGamma);
   WSCAL(N,HGammaInv,RHS,1);
   switch (Transp) {
     case 'N':
-#ifdef FULL_ALGEBRA  
+#ifdef FULL_ALGEBRA
       DGETRS( 'N', N, 1, E, N, IP, RHS, N, ISING );
 #else
       KppSolve(E, RHS);
 #endif
       break;
     case 'T':
-#ifdef FULL_ALGEBRA  
+#ifdef FULL_ALGEBRA
       DGETRS( 'T', N, 1, E, N, IP, RHS, N, ISING );
 #else
       KppSolveTR(E, RHS, RHS);

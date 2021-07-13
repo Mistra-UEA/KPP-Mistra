@@ -1,6 +1,6 @@
 #include atoms
 
-#DEFVAR   
+#DEFVAR
 	NO2             = N + 2O;
 	NO              = N + O;
 	O3P             = O;
@@ -74,9 +74,9 @@
 	OLE1            = IGNORE;
 	OLE2            = IGNORE;
 
-#DEFFIX	
+#DEFFIX
 	M		= IGNORE;
 	O2		= 2O;
 	H2O		= 2H + O;
-	H2		= 2H;	
-	CH4		= C + 4H;	
+	H2		= 2H;
+	CH4		= C + 4H;

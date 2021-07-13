@@ -18,12 +18,12 @@ MODULE KPP_ROOT_Integrator
   ! variables from the former COMMON block /CONRA5/ are now here:
   INTEGER :: NN, NN2, NN3, NN4
   KPP_REAL :: TSOL, HSOL
-  
+
   ! Statistics
   INTEGER :: Nfun,Njac,Nstp,Nacc,Nrej,Ndec,Nsol,Nsng
-  
+
   ! Method parameters
-  
+
   ! mz_rs_20050717: TODO: use strings of IERR_NAMES for error messages
   ! description of the error numbers IERR
   CHARACTER(LEN=50), PARAMETER, DIMENSION(-4:1) :: IERR_NAMES = (/ &
@@ -69,12 +69,12 @@ CONTAINS
     RCNTRL(1:20)  = 0._dp
     ICNTRL(10)=0    !~~~> OUTPUT ROUTINE IS NOT USED DURING INTEGRATION
 
-    ! if optional parameters are given, and if they are >0, 
+    ! if optional parameters are given, and if they are >0,
     ! they overwrite the default settings
     IF (PRESENT(ICNTRL_U)) ICNTRL(:) = ICNTRL_U(:)
     IF (PRESENT(RCNTRL_U)) RCNTRL(:) = RCNTRL_U(:)
     !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-----
-    
+
 
     CALL ATMSEULEX(NVAR,TIN,TOUT,VAR,H,RTOL,ATOL,      &
                     RCNTRL,ICNTRL,RSTATUS,ISTATUS,IERR )
@@ -116,7 +116,7 @@ CONTAINS
 !!$    ENDIF
 
   END SUBROUTINE INTEGRATE
-  
+
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   SUBROUTINE ATMSEULEX( N,Tinitial,Tfinal,Y,H,RelTol,AbsTol,     &
                         RCNTRL,ICNTRL,RSTATUS,ISTATUS,IERR )
@@ -211,7 +211,7 @@ CONTAINS
 !
 !    Note: For input parameters equal to zero the default values of the
 !          corresponding variables are used.
-!~~~>  
+!~~~>
 !    ICNTRL(1) = 1: F = F(y)   Independent of T (autonomous)
 !              = 0: F = F(t,y) Depends on T (non-autonomous)
 !
@@ -257,8 +257,8 @@ CONTAINS
 !                  than the predicted value  (default=0.9)
 !    RCNTRL(8)  -> ThetaMin. If Newton convergence rate smaller
 !                  than ThetaMin the Jacobian is not recomputed;
-!                  (default=0.001). Increase cntrl(3), to 0.01 say, when 
-!                   Jacobian evaluations are costly. for small systems it 
+!                  (default=0.001). Increase cntrl(3), to 0.01 say, when
+!                   Jacobian evaluations are costly. for small systems it
 !                   should be smaller.
 !    RCNTRL(9)  -> not used
 !    RCNTRL(10,11) -> FAC1,FAC2 (parameters for step size selection)
@@ -266,7 +266,7 @@ CONTAINS
 !    RCNTRL(14,15) -> FacSafe1, FacSafe2
 !                     Safety factors for step size prediction
 !                     HNEW=H*FacSafe2*(FacSafe1*TOL/ERR)**(1/(J-1))
-!    RCNTRL(16:19) -> WorkFcn, WorkJac, WorkDec, WorkSol 
+!    RCNTRL(16:19) -> WorkFcn, WorkJac, WorkDec, WorkSol
 !                     estimated computational work
 !
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -306,11 +306,11 @@ CONTAINS
    Nrej=0
    Ndec=0
    Nsol=0
-       
+
    IERR = 0
 
    IF (ICNTRL(1) == 0) THEN
-      AUTNMS = .FALSE. 
+      AUTNMS = .FALSE.
    ELSE
       AUTNMS = .TRUE.
    END IF
@@ -339,13 +339,13 @@ CONTAINS
        PRINT * ,'User-selected ICNTRL(10)=',ICNTRL(10)
        IOUT = 0
    END IF
-   
+
 !~~~> Ncolumns:  maximum number of columns in the extrapolation
    IF (ICNTRL(11)==0) THEN
        Ncolumns=12
    ELSEIF (ICNTRL(11) > 2) THEN
        Ncolumns=ICNTRL(11)
-   ELSE   
+   ELSE
        PRINT * ,'User-selected ICNTRL(11)=',ICNTRL(11)
        CALL SEULEX_ErrorMsg(-2,Tinitial,ZERO,IERR);
    END IF
@@ -366,7 +366,7 @@ CONTAINS
        PRINT * ,'User-selected ICNTRL(13)=',ICNTRL(13)
        CALL SEULEX_ErrorMsg(-4,Tinitial,ZERO,IERR)
    END IF
-      
+
 !~~~>- NRDENS:  number of dense output components
    NRDENS=ICNTRL(14)
    IF ( (NRDENS < 0) .OR. (NRDENS > N)  ) THEN
@@ -388,7 +388,7 @@ CONTAINS
       CALL SEULEX_ErrorMsg(-7,Tinitial,ZERO,IERR)
       RETURN
    END IF
-   
+
 !~~~>  Upper bound on the step size: (positive value)
    IF (RCNTRL(2) == ZERO) THEN
       Hmax = ABS(Tfinal-Tinitial)
@@ -399,7 +399,7 @@ CONTAINS
       CALL SEULEX_ErrorMsg(-7,Tinitial,ZERO,IERR)
       RETURN
    END IF
-   
+
 !~~~>  Starting step size: (positive value)
    IF (RCNTRL(3) == ZERO) THEN
       Hstart = MAX(Hmin,Roundoff)
@@ -410,8 +410,8 @@ CONTAINS
       CALL SEULEX_ErrorMsg(-7,Tinitial,ZERO,IERR)
       RETURN
    END IF
-   
-   
+
+
 !~~~>  Step size can be changed s.t.  FacMin < Hnew/Hexit < FacMax
    IF (RCNTRL(4) == ZERO) THEN
       FacMin = 0.2_dp
@@ -501,7 +501,7 @@ CONTAINS
       ELSE
          FacSafe2=RCNTRL(15)
       END IF
-      
+
 !~~~> WorkFcn: estimated computational work for a calls to FCN
       IF(RCNTRL(16) == 0.D0)THEN
          WorkFcn=1.D0
@@ -544,20 +544,20 @@ CONTAINS
             END IF
          END DO
       END IF
-    
+
     IF (IERR < 0) RETURN
-       
+
 !~~~>---- PREPARE THE ENTRY-POINTS FOR THE ARRAYS IN WORK -----
       Ncolumns2=(Ncolumns*(Ncolumns+1))/2
       NRD=MAX(1,NRDENS)
 
       T = Tinitial
-!~~~> CALL TO CORE INTEGRATOR 
+!~~~> CALL TO CORE INTEGRATOR
       CALL SEULEX_Integrator(N,T,Tfinal,Y,Hmax,H,Ncolumns,RelTol,AbsTol,ITOL,  &
                 IOUT,IERR,Max_no_steps,Roundoff,Nsequence,AUTNMS,  &
                 FAC1,FAC2,FAC3,FAC4,ThetaMin,FacSafe1,FacSafe2,WorkJac,  &
                 WorkDec,WorkRow,Ncolumns2,NRD,LAMBDA,Nstp)
-        
+
       ISTATUS(1)=Nfun
       ISTATUS(2)=Njac
       ISTATUS(3)=Nstp
@@ -567,7 +567,7 @@ CONTAINS
       ISTATUS(7)=Nsol
 
       END SUBROUTINE ATMSEULEX
-      
+
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  SUBROUTINE SEULEX_ErrorMsg(Code,T,H,IERR)
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -615,7 +615,7 @@ CONTAINS
    PRINT *, "T=", T, "and H=", H
 
  END SUBROUTINE SEULEX_ErrorMsg
-      
+
 
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       SUBROUTINE SEULEX_Integrator(N,T,Tend,Y,Hmax,H,Ncolumns,RelTol,AbsTol,ITOL,&
@@ -637,11 +637,11 @@ CONTAINS
        KPP_REAL ::  Y(NVAR),DY(NVAR),FX(NVAR),YHH(NVAR)
        KPP_REAL ::  DYH(NVAR), DEL(NVAR), WH(NVAR)
        KPP_REAL ::  SCAL(NVAR), HH(Ncolumns), W(Ncolumns), A(Ncolumns)
-#ifdef FULL_ALGEBRA    
+#ifdef FULL_ALGEBRA
        KPP_REAL :: FJAC(NVAR,NVAR)
-#else       
+#else
        KPP_REAL :: FJAC(LU_NONZERO)
-#endif       
+#endif
        KPP_REAL Table(Ncolumns,N)
        INTEGER IP(N),NJ(Ncolumns),IPHES(N),ICOMP(NRD)
        KPP_REAL RelTol(*),AbsTol(*)
@@ -686,7 +686,7 @@ CONTAINS
           A(i)=A(i-1)+(NJ(i)-1)*WorkRow+WorkDec
        END DO
        K=MAX0(3,MIN0(Ncolumns-2,INT(-DLOG10(RelTol(1)+AbsTol(1))*.6D0+1.5D0)))
-       
+
        ! T = Tinitial
        HmaxN = MIN(ABS(Hmax),ABS(Tend-T))
        IF (ABS(H) <= 10.D0*Roundoff) H=1.0D-6
@@ -909,8 +909,8 @@ CONTAINS
   979 FORMAT(' EXIT OF SEULEX AT T=',D14.7,'   H=',D14.7)
       IERR=-1
       RETURN
-                                                      
-                             
+
+
       END SUBROUTINE SEULEX_Integrator
 
 
@@ -932,22 +932,22 @@ CONTAINS
       INTEGER :: Ncolumns, Ncolumns2, N, NRD
       KPP_REAL :: Y(NVAR),YH(NVAR),DY(NVAR),FX(NVAR),DYH(NVAR)
       KPP_REAL :: DEL(NVAR),WH(NVAR),SCAL(NVAR),HH(Ncolumns),W(Ncolumns),A(Ncolumns)
-#ifdef FULL_ALGEBRA    
+#ifdef FULL_ALGEBRA
       KPP_REAL :: FJAC(NVAR,NVAR), E(NVAR,NVAR)
 #else
       KPP_REAL :: FJAC(LU_NONZERO), E(LU_NONZERO)
-#endif      
+#endif
       KPP_REAL :: Table(Ncolumns,NVAR)
       KPP_REAL :: FSAFE(Ncolumns2,NRD)
       INTEGER :: IP(N),NJ(Ncolumns),IPHES(N),ICOMP(NRD)
       LOGICAL ATOV,REJECT,AUTNMS,CALHES
-      
+
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !  COMPUTE THE MATRIX E AND ITS DECOMPOSITION
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       HJ=H/NJ(JJ)
       HJI=1.D0/HJ
-#ifdef FULL_ALGEBRA    
+#ifdef FULL_ALGEBRA
       DO j=1,N
         DO  i=1,N
            E(i,j)=-FJAC(i,j)
@@ -963,7 +963,7 @@ CONTAINS
          E(LU_DIAG(j))=E(LU_DIAG(j))+HJI
       END DO
       CALL KppDecomp (E,ISING)
-#endif      
+#endif
       Ndec=Ndec+1
       IF (ISING.NE.0) GOTO 79
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -976,11 +976,11 @@ CONTAINS
           YH(i)=Y(i)
           DEL(i)=DY(i)
        END DO
-#ifdef FULL_ALGEBRA      
+#ifdef FULL_ALGEBRA
        CALL DGETRS ('N',N,1,E,N,IP,DEL,N,ISING)
 #else
        CALL KppSolve (E,DEL)
-#endif       
+#endif
        Nsol=Nsol+1
        M=NJ(JJ)
        IF (IOUT == 2.AND.M == JJ) THEN
@@ -1002,7 +1002,7 @@ CONTAINS
              ELSE
                 CALL FUN_CHEM(T+HJ*(MM+1),YH,DYH)
              END IF
-             
+
              IF (MM == 1.AND.JJ <= 2) THEN
 !~~~> STABILITY CHECK
                 DEL1=0.D0
@@ -1012,7 +1012,7 @@ CONTAINS
                 DEL1=SQRT(DEL1)
                 IF (.NOT.AUTNMS) THEN
                    CALL FUN_CHEM(T+HJ,YH,WH)
-                   
+
                    DO i=1,N
                       DEL(i)=WH(i)-DEL(i)*HJI
                    END DO
@@ -1021,7 +1021,7 @@ CONTAINS
                       DEL(i)=DYH(i)-DEL(i)*HJI
                    END DO
                 END IF
-#ifdef FULL_ALGEBRA      
+#ifdef FULL_ALGEBRA
                 CALL DGETRS ('N',N,1,E,N,IP,DEL,N,ISING)
 #else
                 CALL KppSolve (E,DEL)
@@ -1035,11 +1035,11 @@ CONTAINS
                 Theta=DEL2/MAX(1.D0,DEL1)
                 IF (Theta > 1.D0) GOTO 79
              END IF
-#ifdef FULL_ALGEBRA      
+#ifdef FULL_ALGEBRA
              CALL DGETRS ('N',N,1,E,N,IP,DYH,N,ISING)
 #else
              CALL KppSolve (E,DYH)
-#endif             
+#endif
              Nsol=Nsol+1
              DO i=1,N
                 DEL(i)=DYH(i)
@@ -1127,12 +1127,12 @@ CONTAINS
     IMPLICIT NONE
 
     KPP_REAL :: V(NVAR), T, TOLD
-#ifdef FULL_ALGEBRA    
+#ifdef FULL_ALGEBRA
     KPP_REAL :: JV(LU_NONZERO), Jcb(NVAR,NVAR)
     INTEGER :: i,j
 #else
     KPP_REAL :: Jcb(LU_NONZERO)
-#endif   
+#endif
 
     !TOLD = TIME
     !TIME = T
@@ -1140,8 +1140,8 @@ CONTAINS
     !CALL Update_RCONST()
     !CALL Update_PHOTO()
     !TIME = TOLD
-    
-#ifdef FULL_ALGEBRA    
+
+#ifdef FULL_ALGEBRA
     CALL Jac_SP(V, FIX, RCONST, JV)
     DO j=1,NVAR
       DO i=1,NVAR
@@ -1152,10 +1152,10 @@ CONTAINS
        Jcb(LU_IROW(i),LU_ICOL(i)) = JV(i)
     END DO
 #else
-    CALL Jac_SP(V, FIX, RCONST, Jcb) 
-#endif   
+    CALL Jac_SP(V, FIX, RCONST, Jcb)
+#endif
     Njac=Njac+1
-    
+
   END SUBROUTINE JAC_CHEM
 
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

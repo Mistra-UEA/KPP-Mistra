@@ -15,10 +15,10 @@ PROGRAM KPP_ROOT_Driver
       KPP_REAL :: Y_tlm(NVAR,NSOA)
       KPP_REAL :: Y_adj(NVAR,1)
       KPP_REAL :: Y_soa(NVAR,NSOA)
- 
+
       integer          lwork, n
       parameter        (n = NVAR)
-      
+
       ! Number of desired eigenvectors
       INTEGER, PARAMETER :: NEIG = 4
       double complex   zwork(2000), alpha(NEIG), beta(NEIG), &
@@ -36,7 +36,7 @@ PROGRAM KPP_ROOT_Driver
       tol = 1.d-9
       kmax = NEIG           ! Number of wanted solutions
       jmin = 10; jmax = 20  ! min/max size of search space
-      
+
       maxstep = 30  ! Max number of Jacobi-Davidson iterations
       lock = 1.d-9
 !...     order =  0: nearest to target
@@ -51,7 +51,7 @@ PROGRAM KPP_ROOT_Driver
       l = 2       ! for cgstab(l):
 
       maxnmv = 20 !...     maximum number of matvecs in cgstab or gmres
-      
+
       testspace = 3
 !...     Testspace 1: w = "Standard Petrov" * v (Section 3.1.1)
 !...     Testspace 2: w = "Standard 'variable' Petrov" * v (Section 3.1.2)
@@ -72,7 +72,7 @@ PROGRAM KPP_ROOT_Driver
       elapse = etime( tarray )
 
       print*,'Number of converged eigenvalues = ',kmax
-      
+
 !...     Compute the norms of the residuals:
       do j = 1, kmax
          call amul  ( n, eivec(1,j), residu )
@@ -93,14 +93,14 @@ PROGRAM KPP_ROOT_Driver
       do i=1,NVAR
         write(120,120) (eivec(i,j), j=1,NEIG)
       end do
-      close(120)	
+      close(120)
 
       open(120,file='KPP_ROOT_val.m')
       do i=1,NEIG
         write(120,120) ALPHA(i), BETA(i), ALPHA(i)/BETA(i)
       end do
-      close(120)	
-      
+      close(120)
+
 120   format(10000(E14.7,1X))
 
 END PROGRAM KPP_ROOT_Driver
@@ -137,14 +137,14 @@ END PROGRAM KPP_ROOT_Driver
   USE KPP_ROOT_Initialize, ONLY: Initialize
       integer           n, j
       Double Complex u(n), v(n)
-      Double precision xr(n), yr(n),  xi(n), yi(n), three, two 
+      Double precision xr(n), yr(n),  xi(n), yi(n), three, two
       parameter         (three = 3.0D+0, two = 2.0D+0)
       INTEGER, PARAMETER :: NSOA = 1
       KPP_REAL :: Y_tlm(NVAR,NSOA)
       KPP_REAL :: Y_adj(NVAR,1)
       KPP_REAL :: Y_soa(NVAR,NSOA)
       integer, save :: indexA = 0
-      
+
       indexA = indexA + 1
       print*,'AMUL #',indexA
 
@@ -197,11 +197,11 @@ END PROGRAM KPP_ROOT_Driver
 ! Convert double outputs to complex
       DO i=1,n
         v(i) = DCMPLX( yr(i), yi(i) )
-      END DO	
+      END DO
 
 
       print*,'   (END AMUL #',indexA,')'
-      
+
       end  subroutine AMUL
 
 !==========================================================================
@@ -229,7 +229,7 @@ END PROGRAM KPP_ROOT_Driver
       KPP_REAL :: Y_soa(NVAR,NSOA)
       KPP_REAL :: Final(NVAR), FinalTlm(NVAR)
       integer, save :: indexB = 0
-      
+
       indexB = indexB + 1
       print*,'BMUL #',indexB
 
@@ -251,9 +251,9 @@ END PROGRAM KPP_ROOT_Driver
       Y_soa(1:NVAR,1) = 0.0d0
       CALL INTEGRATE_SOA( NSOA, VAR, Y_tlm, Y_adj, Y_soa, TSTART, TEND, &
                             ATOL, RTOL)
-      Final(1:NVAR)    = VAR(1:NVAR)			    
-      FinalTlm(1:NVAR) = Y_tlm(1:NVAR)			    
-			    
+      Final(1:NVAR)    = VAR(1:NVAR)
+      FinalTlm(1:NVAR) = Y_tlm(1:NVAR)
+
 ! Adjoint and SOA integration, real part
       CALL Initialize()
       Y_adj(1:NVAR,1) = 0.0d0; Y_adj(ind_COST,1) = Final(ind_COST)
@@ -261,8 +261,8 @@ END PROGRAM KPP_ROOT_Driver
       Y_tlm(1:NVAR,1) = xr
       CALL INTEGRATE_SOA( NSOA, VAR, Y_tlm, Y_adj, Y_soa, TSTART, TEND, &
                             ATOL, RTOL)
-			    
-      yr(1:NVAR) = Y_soa(1:NVAR,1)			    
+
+      yr(1:NVAR) = Y_soa(1:NVAR,1)
 
 
 ! Forward & TLM integration
@@ -272,8 +272,8 @@ END PROGRAM KPP_ROOT_Driver
       Y_soa(1:NVAR,1) = 0.0d0
       CALL INTEGRATE_SOA( NSOA, VAR, Y_tlm, Y_adj, Y_soa, TSTART, TEND, &
                             ATOL, RTOL)
-      Final(1:NVAR)    = VAR(1:NVAR)			    
-      FinalTlm(1:NVAR) = Y_tlm(1:NVAR)			    
+      Final(1:NVAR)    = VAR(1:NVAR)
+      FinalTlm(1:NVAR) = Y_tlm(1:NVAR)
 
 ! Adjoint and SOA integration, imaginary part
       CALL Initialize()
@@ -282,18 +282,18 @@ END PROGRAM KPP_ROOT_Driver
       Y_tlm(1:NVAR,1) = xi
       CALL INTEGRATE_SOA( NSOA, VAR, Y_tlm, Y_adj, Y_soa, TSTART, TEND, &
                             ATOL, RTOL)
-			    
-      yi(1:NVAR) = Y_soa(1:NVAR,1)			    
+
+      yi(1:NVAR) = Y_soa(1:NVAR,1)
 
 ! Convert double outputs to complex
       DO i=1,n
         v(i) = DCMPLX( yr(i), yi(i) )
-      END DO	
+      END DO
 
 
       print*,'   (END BMUL #',indexB,')'
-      
-      end subroutine BMUL 
+
+      end subroutine BMUL
 ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 

@@ -5,8 +5,8 @@
 
       KPP_REAL DVAL(NSPEC)
       INTEGER i
-  
-C ---- TIME VARIABLES ------------------      
+
+C ---- TIME VARIABLES ------------------
 
       TSTART = 0
       TEND = TSTART + 600
@@ -21,14 +21,14 @@ C ---- TIME VARIABLES ------------------
         RTOL(i) = RTOLS
         ATOL(i) = 1
       END DO
-     
+
       CALL Initialize()
 
 C ********** TIME LOOP *************************
 
       CALL InitSaveData()
 
-      WRITE(6,990) (SPC_NAMES(MONITOR(i)), i=1,NMONITOR), 
+      WRITE(6,990) (SPC_NAMES(MONITOR(i)), i=1,NMONITOR),
      *             (SMASS(i), i=1,NMASS )
 990   FORMAT('Done[%] Time[h] ',20(4X,A6))
 
@@ -43,7 +43,7 @@ C ********** TIME LOOP *************************
 
         CALL SaveData()
 
-        CALL Update_SUN() 
+        CALL Update_SUN()
         CALL Update_RCONST()
 
         CALL INTEGRATE( TIME, TIME+DT )
@@ -65,7 +65,7 @@ C *********** END TIME LOOP ********
       do i=1,KPP_NVAR
         write(75,75) VAR(i)
       end do
-75    FORMAT(100(E24.14,1X))      
+75    FORMAT(100(E24.14,1X))
 
       STOP
       END

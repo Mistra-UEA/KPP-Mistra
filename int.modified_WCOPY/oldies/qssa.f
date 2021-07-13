@@ -3,7 +3,7 @@ C    For plain QSSA (to remove the steady state assumption)
 C    modify slow -> 0, fast -> 1e20
 C
 
-      SUBROUTINE INTEGRATE( TIN, TOUT  ) 
+      SUBROUTINE INTEGRATE( TIN, TOUT  )
 
       INCLUDE 'KPP_ROOT_params.h'
       INCLUDE 'KPP_ROOT_global.h'
@@ -18,7 +18,7 @@ C Local variables
       LOGICAL IsReject
       KPP_REAL T, Tnext, STEP, STEPold, Told, SUP
       KPP_REAL ERR, ERRold, ratio, factor, facmax, tmp
-      INTEGER i 
+      INTEGER i
       KPP_REAL slow, fast
 
       T = TIN
@@ -30,9 +30,9 @@ C Local variables
       ERR = 1.d0
       ERRold = 1.d0
       slow = 0.01
-      fast = 10.  
+      fast = 10.
 
- 10    continue  
+ 10    continue
        Tplus = T + STEP
        if ( Tplus .gt. Tnext ) then
           STEP = Tnext - T
@@ -42,7 +42,7 @@ C Local variables
 
         TITI = TIME
         TIME = T
-        CALL Update_SUN() 
+        CALL Update_SUN()
         CALL Update_RCONST()
         TIME = TITI
         CALL FSPLIT_VAR ( VAR,  P_VAR, D_VAR )
@@ -73,7 +73,7 @@ C Local variables
 
         TITI = TIME
         TIME = T + 0.5*STEP
-        CALL Update_SUN() 
+        CALL Update_SUN()
         CALL Update_RCONST()
         TIME = TITI
         CALL FSPLIT_VAR ( V2,  P_VAR, D_VAR )
@@ -103,7 +103,7 @@ C ===== Extrapolation and error estimation ========
         ERR=0.0D0
           do i=1,NVAR
              ERR = ERR + ((V2(i)-V1(i))/(ATOL(i) + RTOL(i)*V2(i)))**2
-          end do       
+          end do
         ERR = DSQRT( ERR/NVAR )
         STEPold=STEP
 
@@ -114,9 +114,9 @@ C ===== choosing the stepsize =====================
             facmax=1.
         else
             facmax=8.
-        end if 
+        end if
         factor = DMAX1( 1.25D-1, DMIN1(factor,facmax) )
-        STEP = DMIN1( STEPMAX, DMAX1(STEPMIN,factor*STEP) )    
+        STEP = DMIN1( STEPMAX, DMAX1(STEPMIN,factor*STEP) )
 
 C===================================================
 
@@ -126,11 +126,11 @@ C===================================================
           IsReject = .false.
           do 140 i=1,NVAR
              VAR(i)  = DMAX1(V2(i), 0.d0)
- 140      continue 
-          T = Tplus     
+ 140      continue
+          T = Tplus
         end if
       if ( T .lt. Tnext ) go to 10
 
       TIME = Tnext
-      RETURN 
-      END        
+      RETURN
+      END

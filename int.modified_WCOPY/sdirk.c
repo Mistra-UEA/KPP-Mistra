@@ -27,45 +27,45 @@
 
 int S2A=1,
 	S2B=2,
-	S3A=3, 
-	S4A=4, 
+	S3A=3,
+	S4A=4,
 	S4B=5;
 
-int sdMethod, 
+int sdMethod,
 	rkS;
 
-KPP_REAL rkGamma, 
-	rkA[Smax][Smax], 
-	rkB[Smax], 
-	rkELO, 
+KPP_REAL rkGamma,
+	rkA[Smax][Smax],
+	rkB[Smax],
+	rkELO,
 	rkBhat[Smax],
-	rkC[Smax], 
-	rkD[Smax], 
-	rkE[Smax], 
-	rkTheta[Smax][Smax], 
+	rkC[Smax],
+	rkD[Smax],
+	rkE[Smax],
+	rkTheta[Smax][Smax],
 	rkAlpha[Smax][Smax];
 
 /*~~~> Function headers     */
 //void INTEGRATE(KPP_REAL TIN, KPP_REAL TOUT, int ICNTRL_U[], KPP_REAL RCNTRL_U[],
 //	int ISTATUS_U[], KPP_REAL RSTATUS_U[], int Ierr);
 void INTEGRATE(KPP_REAL TIN, KPP_REAL TOUT);
-int SDIRK(int N, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[], 
-	KPP_REAL RelTol[], KPP_REAL AbsTol[], KPP_REAL RCNTRL[], int ICNTRL[], 
+int SDIRK(int N, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
+	KPP_REAL RelTol[], KPP_REAL AbsTol[], KPP_REAL RCNTRL[], int ICNTRL[],
 	KPP_REAL RSTATUS[], int ISTATUS[]);
-int SDIRK_Integrator(int N, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[], 
-	int Ierr, KPP_REAL Hstart, KPP_REAL Hmin, KPP_REAL Hmax, KPP_REAL Roundoff, 
+int SDIRK_Integrator(int N, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
+	int Ierr, KPP_REAL Hstart, KPP_REAL Hmin, KPP_REAL Hmax, KPP_REAL Roundoff,
 	KPP_REAL AbsTol[], KPP_REAL RelTol[], int ISTATUS[], KPP_REAL RSTATUS[],
-	int ITOL, int Max_no_steps, int StartNewton, KPP_REAL NewtonTol, 
+	int ITOL, int Max_no_steps, int StartNewton, KPP_REAL NewtonTol,
 	KPP_REAL ThetaMin, KPP_REAL FacSafe, KPP_REAL FacMin, KPP_REAL FacMax,
 	KPP_REAL FacRej, KPP_REAL Qmin, KPP_REAL Qmax, int NewtonMaxit);
 void SDIRK_ErrorScale(int N, int ITOL, KPP_REAL AbsTol[], KPP_REAL RelTol[],
 	KPP_REAL Y[], KPP_REAL SCAL[]);
 KPP_REAL SDIRK_ErrorNorm(int N, KPP_REAL Y[], KPP_REAL SCAL[]);
 int SDIRK_ErrorMsg(int code, KPP_REAL T, KPP_REAL H, int Ierr);
-void SDIRK_PrepareMatrix(KPP_REAL H, KPP_REAL T, KPP_REAL Y[], KPP_REAL FJAC[], 
-	int SkipJac, int SkipLU, KPP_REAL E[], int IP[], int Reject, 
+void SDIRK_PrepareMatrix(KPP_REAL H, KPP_REAL T, KPP_REAL Y[], KPP_REAL FJAC[],
+	int SkipJac, int SkipLU, KPP_REAL E[], int IP[], int Reject,
 	int ISING, int ISTATUS[]);
-void SDIRK_Solve(KPP_REAL H, int N, KPP_REAL E[], int IP[], int ISING, 
+void SDIRK_Solve(KPP_REAL H, int N, KPP_REAL E[], int IP[], int ISING,
 	KPP_REAL RHS[], int ISTATUS[]);
 void Sdirk4a(void);
 void Sdirk4b(void);
@@ -94,13 +94,13 @@ void INTEGRATE(KPP_REAL TIN, KPP_REAL TOUT)
 {
 
 /* int Ntotal = 0; *//* Used for debug option below to print the number of steps */
-KPP_REAL RCNTRL[20], 
-	RSTATUS[20], 
-	T1, 
+KPP_REAL RCNTRL[20],
+	RSTATUS[20],
+	T1,
 	T2;
-	
-int ICNTRL[20], 
-	ISTATUS[20], 
+
+int ICNTRL[20],
+	ISTATUS[20],
 	Ierr;
 
 Ierr = 0;
@@ -117,7 +117,7 @@ for(i=0; i<20; i++) {
 ICNTRL[1] = 0; /* 0 - vector tolerances, 1 - scalar tolerances */
 ICNTRL[5] = 0; /* starting values of N. iter.: interpolated 0), zero (1) */
 
-///* If optional parameters are given, and if they are >0, 
+///* If optional parameters are given, and if they are >0,
 //	then they overwrite default settings. */
 //if(ICNTRL_U != NULL) { /* Check to see if ICNTRL_U is not NULL */
 //	for(i=0; i<20; i++) {
@@ -277,7 +277,7 @@ int SDIRK(int N, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
   For multiple restarts, use Hnew as Hstart in the following run
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-{ 
+{
 
 int Max_no_steps=0;
 
@@ -514,7 +514,7 @@ return Ierr;
 }  /* end of main SDIRK function */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-int SDIRK_Integrator(int N, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[], 
+int SDIRK_Integrator(int N, KPP_REAL Tinitial, KPP_REAL Tfinal, KPP_REAL Y[],
 	int Ierr, KPP_REAL Hstart, KPP_REAL Hmin, KPP_REAL Hmax, KPP_REAL Roundoff,
 	KPP_REAL AbsTol[], KPP_REAL RelTol[], int ISTATUS[], KPP_REAL RSTATUS[],
 	int ITOL, int Max_no_steps, int StartNewton, KPP_REAL NewtonTol,
@@ -592,7 +592,7 @@ while((Tfinal-T)*Tdirection - Roundoff > ZERO) {  /* Tloop */
 
 /*~~~>  Compute E = 1/(h*gamma)-Jac and its LU decomposition */
 	if(SkipLU == 0) { /* This time around skip the Jac update and LU */
-		SDIRK_PrepareMatrix(H, T, Y, FJAC, SkipJac, SkipLU, E, IP, 
+		SDIRK_PrepareMatrix(H, T, Y, FJAC, SkipJac, SkipLU, E, IP,
 			Reject, IER, ISTATUS);
 		if(IER != 0) {
 			SDIRK_ErrorMsg(-8, T, H, Ierr);
@@ -622,11 +622,11 @@ while((Tfinal-T)*Tdirection - Roundoff > ZERO) {  /* Tloop */
 		Set2Zero(N, G);
 			if(istage > 0) {
 				for(j=0; j < istage; j++) {
-         				 WAXPY(N, rkTheta[j][istage], 
+         				 WAXPY(N, rkTheta[j][istage],
 						&Z[j][0], 1, G, 1);
 					if(StartNewton == 1) {
 						WAXPY(N, rkAlpha[j][istage],
-							&Z[j][0], 1, 
+							&Z[j][0], 1,
 							&Z[istage][0], 1);
 					} /* end if */
 				} /* end for */
@@ -662,12 +662,12 @@ while((Tfinal-T)*Tdirection - Roundoff > ZERO) {  /* Tloop */
 				if(Theta < (KPP_REAL)0.99) {
 					NewtonRate = Theta/(ONE-Theta);
 			/* Predict error at the end of Newton process */
-					NewtonPredictedErr = 	
+					NewtonPredictedErr =
 						(NewtonIncrement*pow(Theta,
 						(NewtonMaxit - (NewtonIter +
 						1)) / (ONE - Theta)));
 					if(NewtonPredictedErr >= NewtonTol) {
-		              /* Non-convergence of Newton: 
+		              /* Non-convergence of Newton:
 				predicted error too large*/
 						Qnewton = MIN((KPP_REAL)10.0,
 							NewtonPredictedErr/
@@ -679,7 +679,7 @@ while((Tfinal-T)*Tdirection - Roundoff > ZERO) {  /* Tloop */
 						break;
 					} /* end internal if */
 				}
-				else  /* Non-convergence of Newton: 
+				else  /* Non-convergence of Newton:
 					Theta too large */ {
 					break;
 				} /* end internal if else */
@@ -777,7 +777,7 @@ while((Tfinal-T)*Tdirection - Roundoff > ZERO) {  /* Tloop */
 		else {
 			Hratio = Hnew/H;
 		/* If step not changed too much keep Jacobian and reuse LU */
-			SkipLU = ((Theta <= ThetaMin) && (Hratio >= Qmin) && 
+			SkipLU = ((Theta <= ThetaMin) && (Hratio >= Qmin) &&
 				(Hratio <= Qmax));
 
 			if(SkipLU==0) {
@@ -903,7 +903,7 @@ return code;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 void SDIRK_PrepareMatrix(KPP_REAL H, KPP_REAL T, KPP_REAL Y[], KPP_REAL FJAC[],
-			int SkipJac, int SkipLU, KPP_REAL E[], int IP[], 
+			int SkipJac, int SkipLU, KPP_REAL E[], int IP[],
 			int Reject, int ISING, int ISTATUS[] )
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *  Compute the matrix E = 1/(H*GAMMA)*Jac, and its decomposition
@@ -969,7 +969,7 @@ while( ISING != 0) {
 } /* end SDIRK_PrepareMatrix */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-void SDIRK_Solve( KPP_REAL H, int N, KPP_REAL E[], int IP[], int ISING, 
+void SDIRK_Solve( KPP_REAL H, int N, KPP_REAL E[], int IP[], int ISING,
 		KPP_REAL RHS[], int ISTATUS[] )
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *  Solves the system (H*Gamma-Jac)*x = RHS

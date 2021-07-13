@@ -10,31 +10,31 @@ C TOUT - End Time
       EXTERNAL ITER
       KPP_REAL T
       KPP_REAL V(NVAR), VOLD(NVAR), VNEW(NVAR)
-      KPP_REAL startdt, hmin, hmax, h 
+      KPP_REAL startdt, hmin, hmax, h
 
       INTEGER    INFO(5)
 
       INFO(1) = Autonomous
       h = hmin
-      
-c Number of Jacobi-Seidel iterations      
-      numit = 3   
 
-      
+c Number of Jacobi-Seidel iterations
+      numit = 3
+
+
       DO i=1,NVAR
         RTOL(i) = 1.e-2
-      ENDDO	
+      ENDDO
 
       CALL twostepj(NVAR,TIN,TOUT,h,hmin,hmax,
-     +                   VOLD,VAR,VNEW, 
+     +                   VOLD,VAR,VNEW,
      +                   ATOL,RTOL,numit,
      +                   nfcn,naccpt,nrejec,nstart,startdt,ITER)
 
 
       RETURN
       END
-      
-      
+
+
 
       SUBROUTINE ITER(n,T,y,yp,yl)
       INCLUDE 'KPP_ROOT_params.h'
@@ -48,7 +48,7 @@ c Number of Jacobi-Seidel iterations
       TIME = TOLD
       RETURN
       END
-     
+
 
       subroutine twostepj(n,t,te,dt,dtmin,dtmax,
      +                   yold,y,ynew,
@@ -74,8 +74,8 @@ c     Initialization of counters, etc.
       restart=.false.
       accept=.true.
 
-c     Initial stepsize computation. 
-    
+c     Initial stepsize computation.
+
    10 if (dtmin.eq.dtmax) then
        nstart=1
        dt=min(dtmin,(te-t)/2)
@@ -169,7 +169,7 @@ c     Otherwise stepsize control is carried out.
       CALL NEWDT(t,te,dt,dtold,ratio,errlte,accept,
      +           dtmin,dtmax)
 
-c     Here the step has been accepted. 
+c     Here the step has been accepted.
 
       if (accept) then
  201   format(2(E24.16,1X))
@@ -186,7 +186,7 @@ c     Here the step has been accepted.
       endif
 
 c     A restart check is carried out.
-      
+
       if (failer) then
        nrejec=nrejec+1
        failer=.false.
@@ -203,7 +203,7 @@ c     Here the step has been rejected.
       nrejec=nrejec+1
       failer=.true.
       goto 60
-      
+
 c     End of TWOSTEP.
   120 end
 c=====================================================================
@@ -239,6 +239,6 @@ c=====================================================================
 
 
 
-C End of MAIN function                                             
-C **************************************************************** 
+C End of MAIN function
+C ****************************************************************
 

@@ -14,11 +14,11 @@ MODULE KPP_ROOT_Integrator
   USE KPP_ROOT_JacobianSP, ONLY: LU_DIAG
   USE KPP_ROOT_LinearAlgebra, ONLY: KppDecomp, KppSolve, &
                Set2zero, WLAMCH, WAXPY, WCOPY
-  
+
   IMPLICIT NONE
   PUBLIC
   SAVE
-  
+
   !~~~>  Statistics on the work performed by the SDIRK method
   INTEGER :: Nfun,Njac,Nstp,Nacc,Nrej,Ndec,Nsol,Nsng
   INTEGER, PARAMETER :: ifun=1, ijac=2, istp=3, iacc=4,  &
@@ -26,7 +26,7 @@ MODULE KPP_ROOT_Integrator
   !  SDIRK method coefficients
   KPP_REAL :: rkAlpha(5,4), rkBeta(5,4), rkD(4,5),  &
                    rkGamma, rkA(5,5), rkB(5), rkC(5)
-                   
+
   ! description of the error numbers IERR
   CHARACTER(LEN=50), PARAMETER, DIMENSION(-8:1) :: IERR_NAMES = (/ &
     'Matrix is repeatedly singular                     ', & ! -8
@@ -66,8 +66,8 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
    RCNTRL(:)  = 0.0_dp
    ISTATUS(:) = 0
 
-   ! If optional parameters are given, and if they are >0, 
-   ! then they overwrite default settings. 
+   ! If optional parameters are given, and if they are >0,
+   ! then they overwrite default settings.
    IF (PRESENT(ICNTRL_U)) THEN
      WHERE(ICNTRL_U(:) > 0) ICNTRL(:) = ICNTRL_U(:)
    END IF
@@ -87,13 +87,13 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
 !!$   PRINT*,'NSTEPS=',Nstp, '(',Ntotal,')'
 
     STEPMIN = RSTATUS(ihexit) ! Save last step
-   
+
    ! if optional parameters are given for output they to return information
    IF (PRESENT(ISTATUS_U)) ISTATUS_U(:) = ISTATUS(:)
    IF (PRESENT(RSTATUS_U)) THEN
      RSTATUS_U(:) = RSTATUS(:)
      RSTATUS_U(1) = TOUT ! final time
-   END IF  
+   END IF
    IF (PRESENT(IERR_U))    IERR_U       = IERR
 
    END SUBROUTINE INTEGRATE
@@ -149,7 +149,7 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
 !
 !    Note: For input parameters equal to zero the default values of the
 !          corresponding variables are used.
-!~~~>  
+!~~~>
 !    ICNTRL(1) = not used
 !
 !    ICNTRL(2) = 0: AbsTol, RelTol are NVAR-dimensional vectors
@@ -214,16 +214,16 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       IMPLICIT NONE
 
-! Arguments      
+! Arguments
       INTEGER, INTENT(IN)          :: N, ICNTRL(20)
       KPP_REAL, INTENT(IN)    :: Tinitial, Tfinal,    &
                     RelTol(NVAR), AbsTol(NVAR), RCNTRL(20)
       KPP_REAL, INTENT(INOUT) :: Y(NVAR)
       INTEGER, INTENT(OUT)         :: IDID
-      INTEGER, INTENT(INOUT)       :: ISTATUS(20) 
+      INTEGER, INTENT(INOUT)       :: ISTATUS(20)
       KPP_REAL, INTENT(OUT)   :: RSTATUS(20)
-       
-! Local variables      
+
+! Local variables
       KPP_REAL :: Hmin, Hmax, Hstart, Roundoff,    &
                        FacMin, Facmax, FacSafe, FacRej, &
                        ThetaMin, NewtonTol, Qmin, Qmax, &
@@ -242,7 +242,7 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
    Nsng = ISTATUS(isng)
 !   Nfun=0; Njac=0; Nstp=0; Nacc=0
 !   Nrej=0; Ndec=0; Nsol=0; Nsng=0
-       
+
    IDID = 0
 
 !~~~>  For Scalar tolerances (ICNTRL(2).NE.0)  the code uses AbsTol(1) and RelTol(1)
@@ -287,7 +287,7 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
       PRINT * , 'User-selected RCNTRL(1)=', RCNTRL(1)
       CALL SDIRK_ErrorMsg(-3,Tinitial,ZERO,IDID)
    END IF
-   
+
 !~~~>  Upper bound on the step size: (positive value)
    IF (RCNTRL(2) == ZERO) THEN
       Hmax = ABS(Tfinal-Tinitial)
@@ -297,7 +297,7 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
       PRINT * , 'User-selected RCNTRL(2)=', RCNTRL(2)
       CALL SDIRK_ErrorMsg(-3,Tinitial,ZERO,IDID)
    END IF
-   
+
 !~~~>  Starting step size: (positive value)
    IF (RCNTRL(3) == ZERO) THEN
       Hstart = MAX(Hmin,Roundoff)
@@ -307,7 +307,7 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
       PRINT * , 'User-selected Hstart: RCNTRL(3)=', RCNTRL(3)
       CALL SDIRK_ErrorMsg(-3,Tinitial,ZERO,IDID)
    END IF
-   
+
 !~~~>  Step size can be changed s.t.  FacMin < Hnew/Hexit < FacMax
    IF (RCNTRL(4) == ZERO) THEN
       FacMin = 0.2_dp
@@ -386,11 +386,11 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
             END IF
          END DO
       END IF
-    
+
     IF (IDID < 0) RETURN
 
 
-!~~~> CALL TO CORE INTEGRATOR 
+!~~~> CALL TO CORE INTEGRATOR
     CALL SDIRK_Integrator( N,Tinitial,Tfinal,Y,Hmin,Hmax,Hstart, &
           RelTol,AbsTol,ITOL, Max_no_steps, NewtonMaxit,         &
           Roundoff, FacMin, FacMax, FacRej, FacSafe, ThetaMin,   &
@@ -427,7 +427,7 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
       USE KPP_ROOT_Parameters
       IMPLICIT NONE
 
-!~~~> Arguments:      
+!~~~> Arguments:
       INTEGER :: N
       KPP_REAL, INTENT(INOUT) :: Y(NVAR)
       KPP_REAL, INTENT(IN) :: Tinitial, Tfinal, Hmin, Hmax, Hstart, &
@@ -437,8 +437,8 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
       KPP_REAL, INTENT(OUT) :: Hexit, Texit
       INTEGER, INTENT(IN)  :: ITOL, Max_no_steps, NewtonMaxit
       INTEGER, INTENT(OUT) :: IDID
-      
-!~~~> Local variables:      
+
+!~~~> Local variables:
       KPP_REAL :: Z(NVAR,5), FV(NVAR,5), CONT(NVAR,4),      &
                        NewtonFactor(5), SCAL(NVAR), RHS(NVAR),   &
                        G(NVAR), Yhat(NVAR), TMP(NVAR),           &
@@ -447,12 +447,12 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
                        Tdirection, NewtonErr, NewtonErrOld
       INTEGER :: i, j, IER, istage, NewtonIter, IP(NVAR)
       LOGICAL :: Reject, FIRST, NewtonReject, FreshJac, SkipJacUpdate, SkipLU
-      
-#ifdef FULL_ALGEBRA      
+
+#ifdef FULL_ALGEBRA
       KPP_REAL FJAC(NVAR,NVAR),  E(NVAR,NVAR)
-#else      
+#else
       KPP_REAL FJAC(LU_NONZERO), E(LU_NONZERO)
-#endif      
+#endif
       KPP_REAL, PARAMETER :: ZERO = 0.0d0, ONE = 1.0d0
 
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -492,14 +492,14 @@ Tloop: DO WHILE ( (Tfinal-T)*Tdirection - Roundoff > ZERO )
          IF (IER /= 0) THEN
              CALL SDIRK_ErrorMsg(-8,T,H,IDID); RETURN
          END IF
-      END IF      
+      END IF
 
       IF (Nstp>Max_no_steps) THEN
              CALL SDIRK_ErrorMsg(-6,T,H,IDID); RETURN
-      END IF   
+      END IF
       IF ( (T+0.1d0*H == T) .OR. (ABS(H) <= Roundoff) ) THEN
              CALL SDIRK_ErrorMsg(-7,T,H,IDID); RETURN
-      END IF   
+      END IF
 
       HGammaInv = ONE/(H*rkGamma)
 
@@ -518,7 +518,7 @@ stages:DO istage=1,5
               W=ONE+rkGamma*H/Hold
               DO i=1,N
                 Z(i,istage)=W*(CONT(i,1)+W*(CONT(i,2)+W*(CONT(i,3)+W*CONT(i,4))))-Yhat(i)
-              END DO     
+              END DO
           END IF
       ELSE
           DO j = 1, istage-1
@@ -538,9 +538,9 @@ stages:DO istage=1,5
             Theta=ABS(ThetaMin)
             IF (Reject) Theta=2*ABS(ThetaMin)
             NewtonErr = 1.0e+6 ! To force-enter Newton loop
-            
+
   Newton:   DO WHILE (NewtonFactor(istage)*NewtonErr > NewtonTol)
-            
+
             IF (NewtonIter >= NewtonMaxit) THEN
                 H=H*0.5d0
                 Reject=.TRUE.
@@ -556,13 +556,13 @@ stages:DO istage=1,5
             CALL WAXPY(N,HGammaInv,TMP,1,RHS,1) ! RHS(:) <- RHS(:) + HGammaInv*(G(:)-Z(:))
 
 !~~~>     SOLVE THE LINEAR SYSTEMS
-#ifdef FULL_ALGEBRA  
+#ifdef FULL_ALGEBRA
             CALL DGETRS( 'N', N, 1, E, N, IP, RHS, N, IER )
 #else
             CALL KppSolve(E, RHS)
 #endif
             Nsol=Nsol+1
-            
+
 !~~~>     CHECK CONVERGENCE OR IF NUMBER OF ITERATIONS TOO LARGE
             CALL SDIRK_ErrorNorm(N, RHS, SCAL, NewtonErr)
             IF ( (NewtonIter >= 2) .AND. (NewtonIter < NewtonMaxit) ) THEN
@@ -587,7 +587,7 @@ stages:DO istage=1,5
             END IF
             NewtonErrOld = NewtonErr
             CALL WAXPY(N,ONE,RHS,1,Z(1,istage),1) ! Z(:) <-- Z(:)+RHS(:)
-            
+
             END DO Newton
 
 !~~> END OF SIMPLIFIED NEWTON ITERATION
@@ -604,7 +604,7 @@ stages:DO istage=1,5
       Nstp=Nstp+1
       TMP(1:N)=HGammaInv*(Z(1:N,5)-Yhat(1:N))
 
-#ifdef FULL_ALGEBRA  
+#ifdef FULL_ALGEBRA
       CALL DGETRS( 'N', N, 1, E, N, IP, TMP, N, IER )
 #else
       CALL KppSolve(E, TMP)
@@ -636,7 +636,7 @@ accept:  IF ( ERR < ONE ) THEN !~~~> STEP IS ACCEPTED
              CALL WAXPY(N,rkD(i,j),Z(1,j),1,CONT(1,i),1)
            END DO
          END DO
-         
+
          CALL SDIRK_ErrorScale(ITOL, AbsTol, RelTol, Y, SCAL)
 
          T=T+H
@@ -655,14 +655,14 @@ accept:  IF ( ERR < ONE ) THEN !~~~> STEP IS ACCEPTED
             !    do not update Jacobian and reuse LU
             IF ( (Theta <= ThetaMin) .AND. (Hratio >= Qmin) &
                                      .AND. (Hratio <= Qmax) ) THEN
-               SkipJacUpdate = .TRUE. 
-               SkipLU        = .TRUE. 
-            ELSE   
+               SkipJacUpdate = .TRUE.
+               SkipLU        = .TRUE.
+            ELSE
                H = Hnew
-            END IF   
+            END IF
          END IF
          ! If convergence is fast enough, do not update Jacobian
-         IF (Theta <= ThetaMin) SkipJacUpdate = .TRUE. 
+         IF (Theta <= ThetaMin) SkipJacUpdate = .TRUE.
 
       ELSE accept !~~~> STEP IS REJECTED
 
@@ -673,15 +673,15 @@ accept:  IF ( ERR < ONE ) THEN !~~~> STEP IS ACCEPTED
              H=Hnew
          END IF
          IF (Nacc >= 1) Nrej=Nrej+1
-         
+
       END IF accept
-      
+
       END DO Tloop
 
       ! Successful return
       Texit = T
       IDID  = 1
-  
+
       END SUBROUTINE SDIRK_Integrator
 
 
@@ -702,14 +702,14 @@ accept:  IF ( ERR < ONE ) THEN !~~~> STEP IS ACCEPTED
         END DO
       END IF
       END SUBROUTINE SDIRK_ErrorScale
-      
-      
+
+
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       SUBROUTINE SDIRK_ErrorNorm(N, Y, SCAL, ERR)
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!      
+!
       INTEGER :: i, N
-      KPP_REAL :: Y(N), SCAL(N), ERR      
+      KPP_REAL :: Y(N), SCAL(N), ERR
       ERR=0.0d0
       DO i=1,N
            ERR = ERR+(Y(i)*SCAL(i))**2
@@ -741,15 +741,15 @@ accept:  IF ( ERR < ONE ) THEN !~~~> STEP IS ACCEPTED
    PRINT *, "T=", T, "and H=", H
 
  END SUBROUTINE SDIRK_ErrorMsg
-      
-      
+
+
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       SUBROUTINE SDIRK_PrepareMatrix ( H, T, Y, FJAC, &
                    FreshJac, SkipJacUpdate, E, IP, Reject, IER )
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!     
+!
       IMPLICIT NONE
-      
+
       KPP_REAL, INTENT(INOUT) :: H
       KPP_REAL, INTENT(IN)    :: T, Y(NVAR)
       LOGICAL, INTENT(INOUT)       :: FreshJac, SkipJacUpdate
@@ -774,16 +774,16 @@ accept:  IF ( ERR < ONE ) THEN !~~~> STEP IS ACCEPTED
       ELSE IF ( .NOT.FreshJac  ) THEN
           CALL JAC_CHEM( T, Y, FJAC )
           FreshJac = .TRUE.
-      END IF  
+      END IF
 
 !~~~>  Compute the matrix E = 1/(H*GAMMA)*Jac, and its decomposition
       ConsecutiveSng = 0
       IER = 1
-      
+
 Hloop: DO WHILE (IER /= 0)
-      
+
       HGammaInv = ONE/(H*rkGamma)
-      
+
 #ifdef FULL_ALGEBRA
       DO j=1,NVAR
          DO i=1,NVAR
@@ -813,7 +813,7 @@ Hloop: DO WHILE (IER /= 0)
           !~~~> Update Jacobian if not fresh
           IF ( .NOT.FreshJac ) GOTO 20
       END IF
-      
+
       END DO Hloop
 
       END SUBROUTINE SDIRK_PrepareMatrix
@@ -823,13 +823,13 @@ Hloop: DO WHILE (IER /= 0)
       SUBROUTINE SDIRK_Coefficients
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           rkGamma=4.0d0/15.0d0
-          
+
           rkA(1,1)= 4.d0/15.d0
           rkA(2,1)= 1.d0/2.d0
           rkA(2,2)= 4.d0/15.d0
           rkA(3,1)= 51069.d0/144200.d0
           rkA(3,2)=-7809.d0/144200.d0
-          rkA(3,3)= 4.d0/15.d0 
+          rkA(3,3)= 4.d0/15.d0
           rkA(4,1)= 12047244770625658.d0/141474406359725325.d0
           rkA(4,2)=-3057890203562191.d0/47158135453241775.d0
           rkA(4,3)= 2239631894905804.d0/28294881271945065.d0
@@ -839,19 +839,19 @@ Hloop: DO WHILE (IER /= 0)
           rkA(5,3)= 83636.d0/34851.d0
           rkA(5,4)=-69863904375173.d0/23297141763930.d0
           rkA(5,5)= 4.d0/15.d0
-     
+
           rkB(1)= 181513.d0/86430.d0
           rkB(2)=-89074.d0/116015.d0
           rkB(3)= 83636.d0/34851.d0
           rkB(4)=-69863904375173.d0/23297141763930.d0
           rkB(5)= 4/15.d0
-     
+
           rkC(1)=4.d0/15.d0
           rkC(2)=23.d0/30.d0
           rkC(3)=17.d0/30.d0
           rkC(4)=707.d0/1931.d0
           rkC(5)=1.d0
-          
+
           rkBeta(2,1)=15.0d0/8.0d0
           rkBeta(3,1)=1577061.0d0/922880.0d0
           rkBeta(3,2)=-23427.0d0/115360.0d0
@@ -862,7 +862,7 @@ Hloop: DO WHILE (IER /= 0)
           rkBeta(5,2)=-830832077.0d0/267298560.0d0
           rkBeta(5,3)=30957577.0d0/2509272.0d0
           rkBeta(5,4)=-69863904375173.0d0/6212571137048.0d0
-          
+
           rkAlpha(2,1)= 23.d0/8.d0
           rkAlpha(3,1)= 0.9838473040915402d0
           rkAlpha(3,2)= 0.3969226768377252d0
@@ -873,7 +873,7 @@ Hloop: DO WHILE (IER /= 0)
           rkAlpha(5,2)=-17881415427.0d0/11470078208.0d0
           rkAlpha(5,3)=2433277665.0d0/179459416.0d0
           rkAlpha(5,4)=-96203066666797.0d0/6212571137048.0d0
-          
+
           rkD(1,1)= 24.74416644927758d0
           rkD(1,2)= -4.325375951824688d0
           rkD(1,3)= 41.39683763286316d0
@@ -894,7 +894,7 @@ Hloop: DO WHILE (IER /= 0)
           rkD(4,3)= -117.6778956422581d0
           rkD(4,4)= 134.3962081008550d0
           rkD(4,5)= 8.678995715052762d0
-          
+
       END SUBROUTINE SDIRK_Coefficients
 
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -913,17 +913,17 @@ Hloop: DO WHILE (IER /= 0)
       INTEGER N
       KPP_REAL   T, Told
       KPP_REAL   Y(NVAR), P(NVAR)
-      
+
       Told = TIME
       TIME = T
       CALL Update_SUN()
       CALL Update_RCONST()
-      
+
       CALL Fun( Y,  FIX, RCONST, P )
-      
+
       TIME = Told
       Nfun=Nfun+1
-      
+
       END SUBROUTINE FUN_CHEM
 
 
@@ -935,7 +935,7 @@ Hloop: DO WHILE (IER /= 0)
       USE KPP_ROOT_Global, ONLY: TIME, FIX, RCONST
       USE KPP_ROOT_Jacobian
       USE KPP_ROOT_Rates, ONLY: Update_SUN, Update_RCONST
-  
+
       INTEGER N
       KPP_REAL   T, Told
       KPP_REAL   Y(NVAR)
@@ -945,7 +945,7 @@ Hloop: DO WHILE (IER /= 0)
 #else
       KPP_REAL :: JV(LU_NONZERO)
 #endif
- 
+
       Told = TIME
       TIME = T
       CALL Update_SUN()

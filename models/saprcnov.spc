@@ -1,8 +1,8 @@
 #include atoms
 
-  #DEFVAR   
+  #DEFVAR
      O3        	= 3O ;
-     H2O2		= 2H + 2O ;        
+     H2O2		= 2H + 2O ;
      NO		= N + O ;
      NO2		= N + 2O ;
      NO3		= N + 3O ;
@@ -10,50 +10,50 @@
      HONO		= H + 2O + N ;
      HNO3		= H + N + 3O ;
      HNO4		= H + N + 4O ;
-     SO2		= S + 2O ;	
-     H2SO4		= 2H + S + 4O ;		
+     SO2		= S + 2O ;
+     H2SO4		= 2H + S + 4O ;
      CO 		= C + O ;
-     HCHO		= 2H + C + O ;	
-     CCHO		= 2C + H + O ;	
+     HCHO		= 2H + C + O ;
+     CCHO		= 2C + H + O ;
      RCHO		= 3C + ignore ;
-     ACET		= 			ignore ;	
+     ACET		= 			ignore ;
      MEK		= 			ignore ;
-     HCOOH		= 2H + C + 2O ;	
+     HCOOH		= 2H + C + 2O ;
      MEOH		= 			ignore ;
-     ETOH		= 			ignore ;	
+     ETOH		= 			ignore ;
      CCO_OH		= 			ignore ;
-     RCO_OH		= 			ignore ;	
+     RCO_OH		= 			ignore ;
      GLY		= 			ignore ;
-     MGLY		= 3C + 4H + 2O ;	
-     BACL		=			ignore ;		
+     MGLY		= 3C + 4H + 2O ;
+     BACL		=			ignore ;
      CRES		= 			ignore ;
-     BALD		= 			ignore ;	
-     ISOPROD		=			ignore ;	
+     BALD		= 			ignore ;
+     ISOPROD		=			ignore ;
      METHACRO	= 			ignore ;
      MVK		=  			ignore ;
-     PROD2		= 			ignore ;	
+     PROD2		= 			ignore ;
      DCB1		= 			ignore ;
      DCB2		= 			ignore ;
      DCB3 		= 			ignore ;
      ETHENE		= 2C + 4H ;
      ISOPRENE	= 			ignore ;
-     C2H6		= 2C + 6H ;   
-     C3H8		= 3C + 8H ;		
-     C2H2		= 2C + 2H ;   
-     C3H6		= 3C + 6H ;	
+     C2H6		= 2C + 6H ;
+     C3H8		= 3C + 8H ;
+     C2H2		= 2C + 2H ;
+     C3H6		= 3C + 6H ;
      ALK3		= 			ignore ;
      ALK4		= 			ignore ;
-     ALK5		= 			ignore ;		
+     ALK5		= 			ignore ;
      ARO1		= 			ignore ;
      ARO2		= 			ignore ;
      OLE1		= 			ignore ;
-     OLE2		= 			ignore ;	
+     OLE2		= 			ignore ;
      TERP		= 			ignore ;
-     RNO3		= 			ignore ;	
-     NPHE		= 			ignore ;	
-     PHEN		= 			ignore ;	
-     PAN		= 2C + 3H + 5O + N ;	
-     PAN2		= N + ignore ;	
+     RNO3		= 			ignore ;
+     NPHE		= 			ignore ;
+     PHEN		= 			ignore ;
+     PAN		= 2C + 3H + 5O + N ;
+     PAN2		= N + ignore ;
      PBZN		= N + ignore ;
      MA_PAN		= N + ignore ;
      BC 		= C ;
@@ -68,34 +68,34 @@
      DST3		= 			ignore ;
      CO2		= C + 2O ;
      CCO_OOH		= 2C + 3O + H ;
-     RCO_O2		= 			ignore ;	
-     RCO_OOH		= 			ignore ;				
-     XN		= 			ignore ;	
+     RCO_O2		= 			ignore ;
+     RCO_OOH		= 			ignore ;
+     XN		= 			ignore ;
      XC		= 			ignore ;
      O3P		= O ;
      O1D		= O ;
      OH		= H + O ;
-     HO2		= H+ 2O ;	
+     HO2		= H+ 2O ;
      C_O2		= 			ignore ;
      COOH		= C + 2O + H ;
-     ROOH		= 			ignore ;	
-     RO2_R		= 			ignore ;	
+     ROOH		= 			ignore ;
+     RO2_R		= 			ignore ;
      R2O2		= 			ignore ;
-     RO2_N		= 			ignore ;	
+     RO2_N		= 			ignore ;
      HOCOO		= H + 3O + C ;
-     CCO_O2		= 			ignore ;	
+     CCO_O2		= 			ignore ;
      BZCO_O2		= 			ignore ;
-     BZNO2_O		= 			ignore ;	
+     BZNO2_O		= 			ignore ;
      BZ_O		= 			ignore ;
-     MA_RCO3		= 			ignore ;									
+     MA_RCO3		= 			ignore ;
      TBU_O		= 			ignore ;
-    
-     
-#DEFFIX	
+
+
+#DEFFIX
      AIR		= ignore ;
      N2		= 2N ;
      O2		= 2O ;
      H2O		= 2H + O ;
-     H2		= 2H ;	
-     CH4		= C + 4H ;	
-	
+     H2		= 2H ;
+     CH4		= C + 4H ;
+

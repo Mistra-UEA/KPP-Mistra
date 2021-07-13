@@ -1,6 +1,6 @@
 C --- Plain QSSA with fixed step size
 C
-      SUBROUTINE INTEGRATE( TIN, TOUT  ) 
+      SUBROUTINE INTEGRATE( TIN, TOUT  )
 
       INCLUDE 'KPP_ROOT_params.h'
       INCLUDE 'KPP_ROOT_global.h'
@@ -11,7 +11,7 @@ C TOUT - End Time
       KPP_REAL TOUT
 
 C Local variables
-      KPP_REAL P_VAR(NVAR), D_VAR(NVAR)                    
+      KPP_REAL P_VAR(NVAR), D_VAR(NVAR)
       LOGICAL IsReject
       KPP_REAL T, Tnext, STEP, Told, SUP
       KPP_REAL ratio, tmp
@@ -26,8 +26,8 @@ C Local variables
 
 C -- BELOW THIS LIMIT USE TAYLOR INSTEAD OF EXP ---
 
-      do while ( T.lt.Tnext )   
-   
+      do while ( T.lt.Tnext )
+
         if ( T.gt.Tnext ) then
           STEP = Tnext - Told
           T = Tnext
@@ -52,5 +52,5 @@ C -- BELOW THIS LIMIT USE TAYLOR INSTEAD OF EXP ---
 
       end do
 
-      RETURN 
-      END        
+      RETURN
+      END

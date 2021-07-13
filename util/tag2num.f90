@@ -1,5 +1,5 @@
 ! ****************************************************************
-!                            
+!
 ! tag2num - convert equation tags to kpp reaction number
 !   Arguments :
 !      id        - string with the equation tag

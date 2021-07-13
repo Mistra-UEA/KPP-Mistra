@@ -1,8 +1,8 @@
- 
+
 #FUNCTION   aggregate
 #JACOBIAN   SPARSE_LU_ROW
-#DOUBLE     on 
-#STOCHASTIC on 
+#DOUBLE     on
+#STOCHASTIC on
 #INTFILE    tau_leap
 
 

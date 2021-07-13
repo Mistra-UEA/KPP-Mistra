@@ -1,5 +1,5 @@
 #MODEL      small_strato
-#INTEGRATOR none 
+#INTEGRATOR none
 #LANGUAGE   Matlab
 #DRIVER     general
 #HESSIAN    on

@@ -22,7 +22,7 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}:${CC}" 
     *:IRIX:*:*:cc*) # For machines running IRIX
         echo " " 1>&5; exit 0 ;;
 
-    *:IRIX64:*:*:cc*) # For machines running IRIX64 
+    *:IRIX64:*:*:cc*) # For machines running IRIX64
         echo " " 1>&5; exit 0 ;;
 
     *:Linux:*:*:cc*) # For Linux machines

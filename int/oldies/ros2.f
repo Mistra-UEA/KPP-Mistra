@@ -1,5 +1,5 @@
       SUBROUTINE INTEGRATE( TIN, TOUT )
- 
+
       INCLUDE 'KPP_ROOT_params.h'
       INCLUDE 'KPP_ROOT_global.h'
 
@@ -11,7 +11,7 @@ C TOUT - END Time
       INTEGER    INFO(5)
 
       EXTERNAL FUNC_CHEM, JAC_CHEM
-      
+
 C--------------------------------
       INTEGER N_stepss, N_accepteds, N_rejecteds, N_jacs, ITOL, IERR
       SAVE N_stepss, N_accepteds, N_rejecteds, N_jacs
@@ -19,11 +19,11 @@ C--------------------------------
 
       INFO(1) = 1 ! Autonomous
       INFO(2) = 0
- 
+
       CALL ROS2(NVAR,TIN,TOUT,STEPMIN,STEPMAX,
      +                   STEPMIN,VAR,ATOL,RTOL,
      +                   Info,FUNC_CHEM,JAC_CHEM)
- 
+
 C--------------------------------
       N_stepss=N_stepss+Info(4)+Info(5)
       N_accepteds=N_accepteds+Info(4)
@@ -35,16 +35,16 @@ C--------------------------------
 
       RETURN
       END
-  
 
- 
- 
+
+
+
       SUBROUTINE ROS2(N,T,Tnext,Hmin,Hmax,Hstart,
      +                   Y,AbsTol,RelTol,
      +                   Info,FUNC_CHEM,JAC_CHEM)
       IMPLICIT NONE
       INCLUDE 'KPP_ROOT_params.h'
-      INCLUDE 'KPP_ROOT_sparse.h'                                                                                                  
+      INCLUDE 'KPP_ROOT_sparse.h'
 
 C  INPUT ARGUMENTS:
 C     Y = Vector of (NVAR) concentrations, contains the
@@ -63,7 +63,7 @@ C          sparse format. KPP syntax. See the header below.
 C     Info(1) = 1  for  autonomous   system
 C             = 0  for nonautonomous system
 C     Info(2) = 1  for third order embedded formula
-C             = 0  for first order embedded formula 
+C             = 0  for first order embedded formula
 C
 C   Note: Stage 3 used to build strongly A-stable order 3 formula for error control
 C            Embed3 = (Info(2).EQ.1)
@@ -78,7 +78,7 @@ C     Info(2) = # of FUNC_CHEM CALLs.
 C     Info(3) = # of JAC_CHEM CALLs.
 C     Info(4) = # of accepted steps.
 C     Info(5) = # of rejected steps.
- 
+
       KPP_REAL  K1(NVAR), K2(NVAR), K3(NVAR)
       KPP_REAL  F1(NVAR), JAC(LU_NONZERO)
       KPP_REAL  DFDT(NVAR)
@@ -92,10 +92,10 @@ C     Info(5) = # of rejected steps.
       INTEGER    n,nfcn,njac,Naccept,Nreject,i,j,ier
       INTEGER    Info(5)
       LOGICAL    IsReject, Autonomous, Embed3
-      EXTERNAL    FUNC_CHEM, JAC_CHEM                                                                                                
+      EXTERNAL    FUNC_CHEM, JAC_CHEM
 
       KPP_REAL  gamma, m1, m2, alpha, beta1, beta2, delta, w, e
- 
+
 c     Initialization of counters, etc.
       Autonomous = Info(1) .EQ. 1
       Embed3  = Info(2) .EQ. 1
@@ -108,8 +108,8 @@ c     Initialization of counters, etc.
       Nreject  = 0
       Nfcn     = 0
       Njac     = 0
-      
-C     Method Parameters      
+
+C     Method Parameters
       gamma = 1.d0 + 1.d0/sqrt(2.d0)
       a21   = - 1.d0/gamma
       m1 = -3.d0/(2.d0*gamma)
@@ -125,7 +125,7 @@ C     Method Parameters
       d2 = ((-1.0D0+3.0D0*gamma)/gamma**2/
      &          (-1.0D0+2.0D0*gamma))/6.0D0
       d3 = -1.0D0/(3.0D0*gamma)
- 
+
 C === Start the time loop ===
        DO WHILE (T .LT. Tnext)
 
@@ -136,16 +136,16 @@ C === Start the time loop ===
           H = Tnext - T
           Tplus = Tnext
        END IF
- 
+
        CALL JAC_CHEM( T, Y, JAC )
- 
+
        Njac = Njac+1
        ghinv = -1.0d0/(gamma*H)
        DO 20 j=1,NVAR
          JAC(LU_DIAG(j)) = JAC(LU_DIAG(j)) + ghinv
  20    CONTINUE
        CALL KppDecomp (JAC, ier)
- 
+
        IF (ier.ne.0) THEN
          IF ( H.gt.Hmin) THEN
             H = 5.0d-1*H
@@ -155,9 +155,9 @@ C === Start the time loop ===
             STOP
          END IF
        END IF
- 
+
        CALL FUNC_CHEM( T, Y, F1 )
- 
+
 C ====== NONAUTONOMOUS CASE ===============
        IF (.NOT. Autonomous) THEN
          tau = DSIGN(DROUND*DMAX1( 1.0d-6, DABS(T) ), T)
@@ -167,19 +167,19 @@ C ====== NONAUTONOMOUS CASE ===============
            DFDT(j) = ( K2(j)-F1(j) )/tau
  30      CONTINUE
        END IF ! .NOT.Autonomous
- 
+
 C ----- STAGE 1 -----
        delta = gamma*H
        DO 40 j = 1,NVAR
-          K1(j) =  F1(j) 
+          K1(j) =  F1(j)
  40    CONTINUE
        IF (.NOT.Autonomous) THEN
          DO 45 j = 1,NVAR
            K1(j) = K1(j) + delta*DFDT(j)
- 45      CONTINUE       
+ 45      CONTINUE
        END IF ! .NOT.Autonomous
        CALL KppSolve (JAC, K1)
- 
+
 C ----- STAGE 2  -----
        DO 50 j = 1,NVAR
          Ynew(j) = Y(j) + a21*K1(j)
@@ -188,41 +188,41 @@ C ----- STAGE 2  -----
        nfcn=nfcn+1
        beta = -c21/H
        DO 55 j = 1,NVAR
-         K2(j) = F1(j) + beta*K1(j) 
+         K2(j) = F1(j) + beta*K1(j)
  55    CONTINUE
        IF (.NOT.Autonomous) THEN
          delta = -gamma*H
          DO 56 j = 1,NVAR
            K2(j) = K2(j) + delta*DFDT(j)
- 56      CONTINUE       
+ 56      CONTINUE
        END IF ! .NOT.Autonomous
        CALL KppSolve (JAC, K2)
- 
+
 C ----- STAGE 3  -----
        IF (Embed3) THEN
        beta1 = -c31/H
        beta2 = -c32/H
        delta = gamma3*H
        DO 57 j = 1,NVAR
-         K3(j) = F1(j) + beta1*K1(j) + beta2*K2(j) 
+         K3(j) = F1(j) + beta1*K1(j) + beta2*K2(j)
  57    CONTINUE
        IF (.NOT.Autonomous) THEN
          DO 58 j = 1,NVAR
            K3(j) = K3(j) + delta*DFDT(j)
- 58      CONTINUE       
+ 58      CONTINUE
        END IF ! .NOT.Autonomous
        CALL KppSolve (JAC, K3)
        END IF ! Embed3
- 
+
 
 C ---- The Solution ---
        DO 120 j = 1,NVAR
          Ynew(j) = Y(j) + m1*K1(j) + m2*K2(j)
  120   CONTINUE
- 
- 
+
+
 C ====== Error estimation ========
- 
+
         ERR=0.d0
         DO 130 i=1,NVAR
            w = AbsTol(i) + RelTol(i)*DMAX1(DABS(Y(i)),DABS(Ynew(i)))
@@ -230,23 +230,23 @@ C ====== Error estimation ========
 	     e = d1*K1(i) + d2*K2(i) + d3*K3(i)
 	   ELSE
              e = 1.d0/(2.d0*gamma)*(K1(i)+K2(i))
-	   END IF  ! Embed3 
+	   END IF  ! Embed3
            ERR = ERR + ( e/w )**2
  130    CONTINUE
         ERR = DMAX1( uround, DSQRT( ERR/NVAR ) )
- 
+
 C ======= Choose the stepsize ===============================
- 
+
         IF ( Embed3 ) THEN
             elo = 3.0D0 ! estimator local order
 	ELSE
 	    elo = 2.0D0
-	END IF    
+	END IF
         factor = DMAX1(2.0D-1,DMIN1(6.0D0,ERR**(1.0D0/elo)/.9D0))
         Hnew   = DMIN1(Hmax,DMAX1(Hmin, H/factor))
- 
+
 C ======= Rejected/Accepted Step ============================
- 
+
         IF ( (ERR.gt.1).and.(H.gt.Hmin) ) THEN
           IsReject = .true.
 	  H = DMIN1(H/10,Hnew)
@@ -258,26 +258,26 @@ C ======= Rejected/Accepted Step ============================
           T = Tplus
 	  IF (.NOT.IsReject) THEN
 	      H = Hnew   ! Do not increase stepsize IF previous step was rejected
-	  END IF    
+	  END IF
           IsReject = .false.
           Naccept = Naccept+1
         END IF
- 
+
 C ======= END of the time loop ===============================
       END DO
-  
- 
+
+
 C ======= Output Information =================================
       Info(2) = Nfcn
       Info(3) = Njac
       Info(4) = Naccept
       Info(5) = Nreject
- 
+
       RETURN
       END
- 
- 
- 
+
+
+
       SUBROUTINE FUNC_CHEM( T, Y, P )
       INCLUDE 'KPP_ROOT_params.h'
       INCLUDE 'KPP_ROOT_global.h'
@@ -292,7 +292,7 @@ C ======= Output Information =================================
       RETURN
       END
 
- 
+
       SUBROUTINE JAC_CHEM( T, Y, J )
       INCLUDE 'KPP_ROOT_params.h'
       INCLUDE 'KPP_ROOT_global.h'
@@ -305,10 +305,10 @@ C ======= Output Information =================================
       CALL Jac_SP( Y,  FIX, RCONST, J )
       TIME = Told
       RETURN
-      END                                                                                                                 
-  
+      END
 
 
 
 
-                                                                                                                            
+
+

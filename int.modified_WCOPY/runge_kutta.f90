@@ -29,7 +29,7 @@ MODULE KPP_ROOT_Integrator
 !~~~>  Statistics on the work performed by the Runge-Kutta method
   INTEGER, PARAMETER :: Nfun=1, Njac=2, Nstp=3, Nacc=4, &
     Nrej=5, Ndec=6, Nsol=7, Nsng=8, Ntexit=1, Nhacc=2, Nhnew=3
-  
+
 CONTAINS
 
   ! **************************************************************************
@@ -75,7 +75,7 @@ CONTAINS
       WHERE(RCNTRL_U(:) > 0) RCNTRL(:) = RCNTRL_U(:)
     END IF
 
-    
+
     T1 = TIN; T2 = TOUT
     CALL RungeKutta(  NVAR, T1, T2, VAR, RTOL, ATOL, &
                       RCNTRL,ICNTRL,RSTATUS,ISTATUS,IERR  )
@@ -104,7 +104,7 @@ CONTAINS
 !  This implementation is based on the book and the code Radau5:
 !
 !         E. HAIRER AND G. WANNER
-!         "SOLVING ORDINARY DIFFERENTIAL EQUATIONS II. 
+!         "SOLVING ORDINARY DIFFERENTIAL EQUATIONS II.
 !              STIFF AND DIFFERENTIAL-ALGEBRAIC PROBLEMS."
 !         SPRINGER SERIES IN COMPUTATIONAL MATHEMATICS 14,
 !         SPRINGER-VERLAG (1991)
@@ -114,16 +114,16 @@ CONTAINS
 !         E-MAIL:  HAIRER@DIVSUN.UNIGE.CH,  WANNER@DIVSUN.UNIGE.CH
 !
 !   Methods:
-!          * Radau-2A   quadrature (order 5)                              
-!          * Radau-1A   quadrature (order 5)                              
-!          * Lobatto-3C quadrature (order 4)                              
-!          * Gauss      quadrature (order 6)                              
-!                                                                         
-!   (C)  Adrian Sandu, August 2005                                       
-!   Virginia Polytechnic Institute and State University                  
-!   Contact: sandu@cs.vt.edu                                             
-!   Revised by Philipp Miehe and Adrian Sandu, May 2006                  
-!   This implementation is part of KPP - the Kinetic PreProcessor        
+!          * Radau-2A   quadrature (order 5)
+!          * Radau-1A   quadrature (order 5)
+!          * Lobatto-3C quadrature (order 4)
+!          * Gauss      quadrature (order 6)
+!
+!   (C)  Adrian Sandu, August 2005
+!   Virginia Polytechnic Institute and State University
+!   Contact: sandu@cs.vt.edu
+!   Revised by Philipp Miehe and Adrian Sandu, May 2006
+!   This implementation is part of KPP - the Kinetic PreProcessor
 !
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !
@@ -140,18 +140,18 @@ CONTAINS
 !
 !     Y(N)        Initial values for Y
 !
-!     RelTol,AbsTol   Relative and absolute error tolerances. 
+!     RelTol,AbsTol   Relative and absolute error tolerances.
 !          for ICNTRL(2) = 0: AbsTol, RelTol are N-dimensional vectors
 !                        = 1: AbsTol, RelTol are scalars
 !
 !~~~>  Integer input parameters:
-!  
+!
 !    ICNTRL(1) = not used
 !
 !    ICNTRL(2) = 0: AbsTol, RelTol are NVAR-dimensional vectors
 !              = 1: AbsTol, RelTol are scalars
 !
-!    ICNTRL(3) = RK method selection       
+!    ICNTRL(3) = RK method selection
 !              = 1:  Radau-2A    (the default)
 !              = 2:  Lobatto-3C
 !              = 3:  Gauss
@@ -165,15 +165,15 @@ CONTAINS
 !        For ICNTRL(5)=0 the default value of 8 is used
 !
 !    ICNTRL(6)  -> starting values of Newton iterations:
-!        ICNTRL(6)=0 : starting values are obtained from 
+!        ICNTRL(6)=0 : starting values are obtained from
 !                      the extrapolated collocation solution
 !                      (the default)
 !        ICNTRL(6)=1 : starting values are zero
 !
 !    ICNTRL(10) -> switch for error estimation strategy
-!		ICNTRL(10) = 0: one additional stage at c=0, 
+!		ICNTRL(10) = 0: one additional stage at c=0,
 !				see Hairer (default)
-!		ICNTRL(10) = 1: two additional stages at c=0 
+!		ICNTRL(10) = 1: two additional stages at c=0
 !				and SDIRK at c=1, stiffly accurate
 !
 !    ICNTRL(11) -> switch for step size strategy
@@ -242,13 +242,13 @@ CONTAINS
 !                     computed Y upon return
 !    RSTATUS(2)  -> Hexit, last accepted step before exit
 !    RSTATUS(3)  -> Hnew, last predicted step (not yet taken)
-!                   For multiple restarts, use Hnew as Hstart 
+!                   For multiple restarts, use Hnew as Hstart
 !                     in the subsequent run
 !
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
       IMPLICIT NONE
-      
+
       INTEGER :: N
       KPP_REAL :: Y(N),AbsTol(N),RelTol(N),RCNTRL(20),RSTATUS(20)
       INTEGER :: ICNTRL(20), ISTATUS(20)
@@ -270,29 +270,29 @@ CONTAINS
        !~~~> Local variables
       INTEGER :: i
       KPP_REAL, PARAMETER :: ZERO = 0.0d0, ONE = 1.0d0
-   
+
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !        SETTING THE PARAMETERS
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       IERR = 0
       ISTATUS(1:20) = 0
       RSTATUS(1:20) = ZERO
-       
-!~~~> ICNTRL(1) - autonomous system - not used       
+
+!~~~> ICNTRL(1) - autonomous system - not used
 !~~~> ITOL: 1 for vector and 0 for scalar AbsTol/RelTol
       IF (ICNTRL(2) == 0) THEN
          ITOL = 1
       ELSE
          ITOL = 0
       END IF
-!~~~> Error control selection  
-      IF (ICNTRL(10) == 0) THEN 
+!~~~> Error control selection
+      IF (ICNTRL(10) == 0) THEN
          SdirkError = .FALSE.
       ELSE
          SdirkError = .TRUE.
-      END IF      
-!~~~> Method selection  
-      SELECT CASE (ICNTRL(3))     
+      END IF
+!~~~> Method selection
+      SELECT CASE (ICNTRL(3))
       CASE (0,1)
          CALL Radau2A_Coefficients
       CASE (2)
@@ -332,7 +332,7 @@ CONTAINS
          StartNewton = .TRUE.
       ELSE
          StartNewton = .FALSE.
-      END IF      
+      END IF
 !~~~> Gustafsson: step size controller
       IF(ICNTRL(11) == 0)THEN
          Gustafsson = .TRUE.
@@ -430,7 +430,7 @@ CONTAINS
 !~~~> Check if tolerances are reasonable
       IF (ITOL == 0) THEN
           IF (AbsTol(1) <= ZERO.OR.RelTol(1) <= 10.d0*Roundoff) THEN
-              WRITE (6,*) 'AbsTol/RelTol=',AbsTol,RelTol 
+              WRITE (6,*) 'AbsTol/RelTol=',AbsTol,RelTol
               CALL RK_ErrorMsg(-8,T,ZERO,IERR)
           END IF
       ELSE
@@ -464,11 +464,11 @@ CONTAINS
 !~~~> Local variables
 #ifdef FULL_ALGEBRA
       KPP_REAL    :: FJAC(NVAR,NVAR), E1(NVAR,NVAR)
-      COMPLEX(kind=dp) :: E2(NVAR,NVAR)   
+      COMPLEX(kind=dp) :: E2(NVAR,NVAR)
 #else
       KPP_REAL    :: FJAC(LU_NONZERO), E1(LU_NONZERO)
-      COMPLEX(kind=dp) :: E2(LU_NONZERO)   
-#endif                
+      COMPLEX(kind=dp) :: E2(LU_NONZERO)
+#endif
       KPP_REAL, DIMENSION(NVAR) :: Z1,Z2,Z3,Z4,SCAL,DZ1,DZ2,DZ3,DZ4, &
       				G,TMP,F0
       KPP_REAL  :: CONT(NVAR,3), Tdirection,  H, Hacc, Hnew, Hold, Fac, &
@@ -476,8 +476,8 @@ CONTAINS
                  Hratio, Qnewton, NewtonPredictedErr,NewtonIncrementOld, ThetaSD
       INTEGER :: IP1(NVAR),IP2(NVAR),NewtonIter, ISING, Nconsecutive
       LOGICAL :: Reject, FirstStep, SkipJac, NewtonDone, SkipLU
-      
-            
+
+
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !~~~>  Initial setting
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -501,10 +501,10 @@ CONTAINS
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Tloop: DO WHILE ( (Tend-T)*Tdirection - Roundoff > ZERO )
 
-      !IF ( .NOT.Reject ) THEN      
+      !IF ( .NOT.Reject ) THEN
          CALL FUN_CHEM(T,Y,F0)
          ISTATUS(Nfun) = ISTATUS(Nfun) + 1
-      !END IF   
+      !END IF
 
       IF ( .NOT.SkipLU ) THEN ! This time around skip the Jac update and LU
         !~~~> Compute the Jacobian matrix
@@ -522,10 +522,10 @@ Tloop: DO WHILE ( (Tend-T)*Tdirection - Roundoff > ZERO )
           H=H*0.5d0; Reject=.TRUE.; SkipJac = .TRUE.;  SkipLU = .FALSE.
           CYCLE Tloop
         ELSE
-          Nconsecutive = 0    
-        END IF   
+          Nconsecutive = 0
+        END IF
       END IF ! SkipLU
-   
+
       ISTATUS(Nstp) = ISTATUS(Nstp) + 1
       IF (ISTATUS(Nstp) > Max_no_steps) THEN
         PRINT*,'Max number of time steps is ',Max_no_steps
@@ -534,11 +534,11 @@ Tloop: DO WHILE ( (Tend-T)*Tdirection - Roundoff > ZERO )
       IF (0.1D0*ABS(H) <= ABS(T)*Roundoff)  THEN
         CALL RK_ErrorMsg(-10,T,H,IERR); RETURN
       END IF
-      
+
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !~~~>  Loop for the simplified Newton iterations
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            
+
       !~~~>  Starting values for Newton iteration
       IF ( FirstStep .OR. (.NOT.StartNewton) ) THEN
          CALL Set2zero(N,Z1)
@@ -548,26 +548,26 @@ Tloop: DO WHILE ( (Tend-T)*Tdirection - Roundoff > ZERO )
          ! Evaluate quadratic polynomial
          CALL RK_Interpolate('eval',N,H,Hold,Z1,Z2,Z3,CONT)
       END IF
-      
+
       !~~~>  Initializations for Newton iteration
       NewtonDone = .FALSE.
       Fac = 0.5d0 ! Step reduction if too many iterations
-      
+
 NewtonLoop:DO  NewtonIter = 1, NewtonMaxit
- 
+
             !~~~> Prepare the right-hand side
             CALL RK_PrepareRHS(N,T,H,Y,F0,Z1,Z2,Z3,DZ1,DZ2,DZ3)
-            
+
             !~~~> Solve the linear systems
             CALL RK_Solve( N,H,E1,IP1,E2,IP2,DZ1,DZ2,DZ3,ISING )
-            
+
             NewtonIncrement = SQRT( ( RK_ErrorNorm(N,SCAL,DZ1)**2 + &
                                 RK_ErrorNorm(N,SCAL,DZ2)**2 + &
                                 RK_ErrorNorm(N,SCAL,DZ3)**2 )/3.0d0 )
-            
+
             IF ( NewtonIter == 1 ) THEN
                 Theta      = ABS(ThetaMin)
-                NewtonRate = 2.0d0 
+                NewtonRate = 2.0d0
             ELSE
                 Theta = NewtonIncrement/NewtonIncrementOld
                 IF (Theta < 0.99d0) THEN
@@ -575,8 +575,8 @@ NewtonLoop:DO  NewtonIter = 1, NewtonMaxit
                 ELSE ! Non-convergence of Newton: Theta too large
                     EXIT NewtonLoop
                 END IF
-                IF ( NewtonIter < NewtonMaxit ) THEN 
-                  ! Predict error at the end of Newton process 
+                IF ( NewtonIter < NewtonMaxit ) THEN
+                  ! Predict error at the end of Newton process
                   NewtonPredictedErr = NewtonIncrement &
                                *Theta**(NewtonMaxit-NewtonIter)/(ONE-Theta)
                   IF (NewtonPredictedErr >= NewtonTol) THEN
@@ -588,12 +588,12 @@ NewtonLoop:DO  NewtonIter = 1, NewtonMaxit
                 END IF
             END IF
 
-            NewtonIncrementOld = MAX(NewtonIncrement,Roundoff) 
+            NewtonIncrementOld = MAX(NewtonIncrement,Roundoff)
             ! Update solution
             CALL WAXPY(N,-ONE,DZ1,1,Z1,1) ! Z1 <- Z1 - DZ1
             CALL WAXPY(N,-ONE,DZ2,1,Z2,1) ! Z2 <- Z2 - DZ2
             CALL WAXPY(N,-ONE,DZ3,1,Z3,1) ! Z3 <- Z3 - DZ3
-            
+
             ! Check error in Newton iterations
             NewtonDone = (NewtonRate*NewtonIncrement <= NewtonTol)
             IF (NewtonDone) EXIT NewtonLoop
@@ -601,9 +601,9 @@ NewtonLoop:DO  NewtonIter = 1, NewtonMaxit
 		PRINT*, 'Slow or no convergence in Newton Iteration: Max no. of', &
 		 	'Newton iterations reached'
 	    END IF
-            
+
       END DO NewtonLoop
-            
+
       IF (.NOT.NewtonDone) THEN
            !CALL RK_ErrorMsg(-12,T,H,IERR);
            H = Fac*H; Reject=.TRUE.; SkipJac = .TRUE.;  SkipLU = .FALSE.
@@ -617,11 +617,11 @@ NewtonLoop:DO  NewtonIter = 1, NewtonMaxit
 
 !~~~>  Starting values for Newton iterations
        Z4(1:N) = Z3(1:N)
-       
+
 !~~~>   Prepare the loop-independent part of the right-hand side
 !       G = H*rkBgam(0)*F0 + rkTheta(1)*Z1 + rkTheta(2)*Z2 + rkTheta(3)*Z3
        CALL Set2Zero(N, G)
-       IF (rkMethod/=L3A) CALL WAXPY(N,rkBgam(0)*H, F0,1,G,1) 
+       IF (rkMethod/=L3A) CALL WAXPY(N,rkBgam(0)*H, F0,1,G,1)
        CALL WAXPY(N,rkTheta(1),Z1,1,G,1)
        CALL WAXPY(N,rkTheta(2),Z2,1,G,1)
        CALL WAXPY(N,rkTheta(3),Z3,1,G,1)
@@ -629,34 +629,34 @@ NewtonLoop:DO  NewtonIter = 1, NewtonMaxit
        !~~~>  Initializations for Newton iteration
        NewtonDone = .FALSE.
        Fac = 0.5d0 ! Step reduction factor if too many iterations
-            
+
 SDNewtonLoop:DO NewtonIter = 1, NewtonMaxit
 
 !~~~>   Prepare the loop-dependent part of the right-hand side
 	    CALL WADD(N,Y,Z4,TMP)         ! TMP <- Y + Z4
-	    CALL FUN_CHEM(T+H,TMP,DZ4) 	  ! DZ4 <- Fun(Y+Z4)         
+	    CALL FUN_CHEM(T+H,TMP,DZ4) 	  ! DZ4 <- Fun(Y+Z4)
             ISTATUS(Nfun) = ISTATUS(Nfun) + 1
 !            DZ4(1:N) = (G(1:N)-Z4(1:N))*(rkGamma/H) + DZ4(1:N)
 	    CALL WAXPY (N, -ONE*rkGamma/H, Z4, 1, DZ4, 1)
             CALL WAXPY (N, rkGamma/H, G,1, DZ4,1)
 
 !~~~>   Solve the linear system
-#ifdef FULL_ALGEBRA  
+#ifdef FULL_ALGEBRA
             CALL DGETRS( 'N', N, 1, E1, N, IP1, DZ4, N, ISING )
 #else
             CALL KppSolve(E1, DZ4)
 #endif
-            
+
 !~~~>   Check convergence of Newton iterations
             NewtonIncrement = RK_ErrorNorm(N,SCAL,DZ4)
             IF ( NewtonIter == 1 ) THEN
                 ThetaSD      = ABS(ThetaMin)
-                NewtonRate = 2.0d0 
+                NewtonRate = 2.0d0
             ELSE
                 ThetaSD = NewtonIncrement/NewtonIncrementOld
                 IF (ThetaSD < 0.99d0) THEN
                     NewtonRate = ThetaSD/(ONE-ThetaSD)
-                    ! Predict error at the end of Newton process 
+                    ! Predict error at the end of Newton process
                     NewtonPredictedErr = NewtonIncrement &
                                *ThetaSD**(NewtonMaxit-NewtonIter)/(ONE-ThetaSD)
                     IF (NewtonPredictedErr >= NewtonTol) THEN
@@ -673,14 +673,14 @@ SDNewtonLoop:DO NewtonIter = 1, NewtonMaxit
             END IF
             NewtonIncrementOld = NewtonIncrement
             ! Update solution: Z4 <-- Z4 + DZ4
-            CALL WAXPY(N,ONE,DZ4,1,Z4,1) 
-            
+            CALL WAXPY(N,ONE,DZ4,1,Z4,1)
+
             ! Check error in Newton iterations
             NewtonDone = (NewtonRate*NewtonIncrement <= NewtonTol)
             IF (NewtonDone) EXIT SDNewtonLoop
-            
+
             END DO SDNewtonLoop
-            
+
             IF (.NOT.NewtonDone) THEN
                 H = Fac*H; Reject=.TRUE.; SkipJac = .TRUE.;  SkipLU = .FALSE.
                 CYCLE Tloop
@@ -702,13 +702,13 @@ SDNewtonLoop:DO NewtonIter = 1, NewtonMaxit
            CALL FUN_CHEM(T+H,TMP,DZ1)
  	   CALL WAXPY(N, H*rkBgam(4), DZ1, 1, DZ4, 1)
          ELSE
-!         DZ4(1:N) =  rkD(1)*Z1 + rkD(2)*Z2 + rkD(3)*Z3 - Z4    
+!         DZ4(1:N) =  rkD(1)*Z1 + rkD(2)*Z2 + rkD(3)*Z3 - Z4
   	   IF (rkD(1) /= ZERO)  CALL WAXPY(N, rkD(1), Z1, 1, DZ4, 1)
 	   IF (rkD(2) /= ZERO)  CALL WAXPY(N, rkD(2), Z2, 1, DZ4, 1)
 	   IF (rkD(3) /= ZERO)  CALL WAXPY(N, rkD(3), Z3, 1, DZ4, 1)
 	   CALL WAXPY(N, -ONE, Z4, 1, DZ4, 1)
          END IF
-         Err = RK_ErrorNorm(N,SCAL,DZ4)    
+         Err = RK_ErrorNorm(N,SCAL,DZ4)
       ELSE
          CALL  RK_ErrorEstimate(N,H,T,Y,F0, &
                E1,IP1,Z1,Z2,Z3,SCAL,Err,FirstStep,Reject)
@@ -721,7 +721,7 @@ SDNewtonLoop:DO NewtonIter = 1, NewtonMaxit
       Hnew = Fac*H
 
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!~~~> Accept/reject step 
+!~~~> Accept/reject step
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 accept:IF (Err < ONE) THEN !~~~> STEP IS ACCEPTED
          FirstStep=.FALSE.
@@ -738,7 +738,7 @@ accept:IF (Err < ONE) THEN !~~~> STEP IS ACCEPTED
             ErrOld=MAX(1.0d-2,Err)
          END IF
          Hold = H
-         T = T+H 
+         T = T+H
          ! Update solution: Y <- Y + sum(d_i Z_i)
          IF (rkD(1) /= ZERO)  CALL WAXPY(N,rkD(1),Z1,1,Y,1)
          IF (rkD(2) /= ZERO)  CALL WAXPY(N,rkD(2),Z2,1,Y,1)
@@ -772,14 +772,14 @@ accept:IF (Err < ONE) THEN !~~~> STEP IS ACCEPTED
          END IF
          Reject   = .TRUE.
          SkipJac  = .TRUE.	! Skip if rejected - Jac is independent of H
-         SkipLU   = .FALSE. 
+         SkipLU   = .FALSE.
          IF (ISTATUS(Nacc) >= 1) ISTATUS(Nrej) = ISTATUS(Nrej) + 1
       END IF accept
-      
+
     END DO Tloop
-    
+
     ! Successful exit
-    IERR = 1  
+    IERR = 1
 
  END SUBROUTINE RK_Integrator
 
@@ -832,7 +832,7 @@ accept:IF (Err < ONE) THEN !~~~> STEP IS ACCEPTED
       PRINT *, 'Unknown Error code: ', Code
    END SELECT
 
-   WRITE(6,FMT="(5X,'T=',E12.5,'  H=',E12.5)") T, H 
+   WRITE(6,FMT="(5X,'T=',E12.5,'  H=',E12.5)") T, H
 
  END SUBROUTINE RK_ErrorMsg
 
@@ -847,7 +847,7 @@ accept:IF (Err < ONE) THEN !~~~> STEP IS ACCEPTED
    KPP_REAL, INTENT(IN) :: AbsTol(*), RelTol(*), Y(N)
    KPP_REAL, INTENT(OUT) :: SCAL(N)
    INTEGER :: i
-   
+
    IF (ITOL==0) THEN
        DO i=1,N
           SCAL(i)= ONE/(AbsTol(1)+RelTol(1)*ABS(Y(i)))
@@ -857,7 +857,7 @@ accept:IF (Err < ONE) THEN !~~~> STEP IS ACCEPTED
           SCAL(i)=ONE/(AbsTol(i)+RelTol(i)*ABS(Y(i)))
        END DO
    END IF
-      
+
  END SUBROUTINE RK_ErrorScale
 
 
@@ -876,7 +876,7 @@ accept:IF (Err < ONE) THEN !~~~> STEP IS ACCEPTED
 !          W3(i) = Tr(3,1)*x1 + Tr(3,2)*x2 + Tr(3,3)*x3
 !      END DO
 !  END SUBROUTINE RK_Transform
- 
+
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   SUBROUTINE RK_Interpolate(action,N,H,Hold,Z1,Z2,Z3,CONT)
 !~~~>   Constructs or evaluates a quadratic polynomial
@@ -887,8 +887,8 @@ accept:IF (Err < ONE) THEN !~~~> STEP IS ACCEPTED
       KPP_REAL :: H,Hold,Z1(N),Z2(N),Z3(N),CONT(N,3)
       KPP_REAL :: r, x1, x2, x3, den
       CHARACTER(LEN=4) :: action
-       
-      SELECT CASE (action) 
+
+      SELECT CASE (action)
       CASE ('make')
          ! Construct the solution quadratic interpolant Q(c_i) = Z_i, i=1:3
          den = (rkC(3)-rkC(2))*(rkC(2)-rkC(1))*(rkC(1)-rkC(3))
@@ -913,7 +913,7 @@ accept:IF (Err < ONE) THEN !~~~> STEP IS ACCEPTED
             Z2(i) = CONT(i,1)+x2*(CONT(i,2)+x2*CONT(i,3))
             Z3(i) = CONT(i,1)+x3*(CONT(i,2)+x3*CONT(i,3))
          END DO
-       END SELECT   
+       END SELECT
   END SUBROUTINE RK_Interpolate
 
 
@@ -923,7 +923,7 @@ accept:IF (Err < ONE) THEN !~~~> STEP IS ACCEPTED
 !     R = Z - hA x F
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       IMPLICIT NONE
-      
+
       INTEGER :: N
       KPP_REAL :: T, H
       KPP_REAL, DIMENSION(N) :: Y,Z1,Z2,Z3,F0,F,R1,R2,R3,TMP
@@ -939,56 +939,56 @@ accept:IF (Err < ONE) THEN !~~~> STEP IS ACCEPTED
       END IF
 
       CALL WADD(N,Y,Z1,TMP)              ! TMP <- Y + Z1
-      CALL FUN_CHEM(T+rkC(1)*H,TMP,F)    ! F1 <- Fun(Y+Z1)         
+      CALL FUN_CHEM(T+rkC(1)*H,TMP,F)    ! F1 <- Fun(Y+Z1)
       CALL WAXPY(N,-H*rkA(1,1),F,1,R1,1) ! R1 <- R1 - h*A_11*F1
       CALL WAXPY(N,-H*rkA(2,1),F,1,R2,1) ! R2 <- R2 - h*A_21*F1
       CALL WAXPY(N,-H*rkA(3,1),F,1,R3,1) ! R3 <- R3 - h*A_31*F1
 
       CALL WADD(N,Y,Z2,TMP)              ! TMP <- Y + Z2
-      CALL FUN_CHEM(T+rkC(2)*H,TMP,F)    ! F2 <- Fun(Y+Z2)        
+      CALL FUN_CHEM(T+rkC(2)*H,TMP,F)    ! F2 <- Fun(Y+Z2)
       CALL WAXPY(N,-H*rkA(1,2),F,1,R1,1) ! R1 <- R1 - h*A_12*F2
       CALL WAXPY(N,-H*rkA(2,2),F,1,R2,1) ! R2 <- R2 - h*A_22*F2
       CALL WAXPY(N,-H*rkA(3,2),F,1,R3,1) ! R3 <- R3 - h*A_32*F2
 
       CALL WADD(N,Y,Z3,TMP)              ! TMP <- Y + Z3
-      CALL FUN_CHEM(T+rkC(3)*H,TMP,F)    ! F3 <- Fun(Y+Z3)     
+      CALL FUN_CHEM(T+rkC(3)*H,TMP,F)    ! F3 <- Fun(Y+Z3)
       CALL WAXPY(N,-H*rkA(1,3),F,1,R1,1) ! R1 <- R1 - h*A_13*F3
       CALL WAXPY(N,-H*rkA(2,3),F,1,R2,1) ! R2 <- R2 - h*A_23*F3
       CALL WAXPY(N,-H*rkA(3,3),F,1,R3,1) ! R3 <- R3 - h*A_33*F3
-            
+
   END SUBROUTINE RK_PrepareRHS
-  
+
 
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    SUBROUTINE RK_Decomp(N,H,FJAC,E1,IP1,E2,IP2,ISING)
    !~~~> Compute the matrices E1 and E2 and their decompositions
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       IMPLICIT NONE
-      
+
       INTEGER :: N, ISING
       KPP_REAL    :: H, Alpha, Beta, Gamma
-#ifdef FULL_ALGEBRA      
+#ifdef FULL_ALGEBRA
       KPP_REAL    :: FJAC(NVAR,NVAR),E1(NVAR,NVAR)
       COMPLEX(kind=dp) :: E2(N,N)
-#else      
+#else
       KPP_REAL    :: FJAC(LU_NONZERO),E1(LU_NONZERO)
       COMPLEX(kind=dp) :: E2(LU_NONZERO)
-#endif      
+#endif
       INTEGER :: IP1(N), IP2(N), i, j
-      
+
       Gamma = rkGamma/H
       Alpha = rkAlpha/H
       Beta  = rkBeta /H
 
-#ifdef FULL_ALGEBRA      
+#ifdef FULL_ALGEBRA
       DO j=1,N
          DO  i=1,N
             E1(i,j)=-FJAC(i,j)
          END DO
          E1(j,j)=E1(j,j)+Gamma
       END DO
-      CALL DGETRF(N,N,E1,N,IP1,ISING) 
-#else      
+      CALL DGETRF(N,N,E1,N,IP1,ISING)
+#else
       DO i=1,LU_NONZERO
          E1(i)=-FJAC(i)
       END DO
@@ -996,32 +996,32 @@ accept:IF (Err < ONE) THEN !~~~> STEP IS ACCEPTED
          j=LU_DIAG(i); E1(j)=E1(j)+Gamma
       END DO
       CALL KppDecomp(E1,ISING)
-#endif      
-      
+#endif
+
       IF (ISING /= 0) THEN
          ISTATUS(Ndec) = ISTATUS(Ndec) + 1
          RETURN
       END IF
-     
-#ifdef FULL_ALGEBRA      
+
+#ifdef FULL_ALGEBRA
       DO j=1,N
         DO i=1,N
           E2(i,j) = DCMPLX( -FJAC(i,j), ZERO )
         END DO
         E2(j,j) = E2(j,j) + CMPLX( Alpha, Beta )
       END DO
-      CALL ZGETRF(N,N,E2,N,IP2,ISING)     
-#else  
+      CALL ZGETRF(N,N,E2,N,IP2,ISING)
+#else
       DO i=1,LU_NONZERO
          E2(i) = DCMPLX( -FJAC(i), ZERO )
       END DO
       DO i=1,NVAR
          j=LU_DIAG(i); E2(j)=E2(j) + CMPLX( Alpha, Beta )
       END DO
-      CALL KppDecompCmplx(E2,ISING)    
-#endif      
+      CALL KppDecompCmplx(E2,ISING)
+#endif
       ISTATUS(Ndec) = ISTATUS(Ndec) + 1
-      
+
    END SUBROUTINE RK_Decomp
 
 
@@ -1030,18 +1030,18 @@ accept:IF (Err < ONE) THEN !~~~> STEP IS ACCEPTED
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       IMPLICIT NONE
       INTEGER :: N,IP1(NVAR),IP2(NVAR),ISING
-#ifdef FULL_ALGEBRA      
+#ifdef FULL_ALGEBRA
       KPP_REAL    :: E1(NVAR,NVAR)
       COMPLEX(kind=dp) :: E2(NVAR,NVAR)
-#else      
+#else
       KPP_REAL    :: E1(LU_NONZERO)
       COMPLEX(kind=dp) :: E2(LU_NONZERO)
-#endif      
+#endif
       KPP_REAL    :: R1(N),R2(N),R3(N)
       KPP_REAL    :: H, x1, x2, x3
       COMPLEX(kind=dp) :: BC(N)
       INTEGER :: i
-!      
+!
      ! Z <- h^{-1) T^{-1) A^{-1) x Z
       DO i=1,N
           x1 = R1(i)/H; x2 = R2(i)/H; x3 = R3(i)/H
@@ -1050,20 +1050,20 @@ accept:IF (Err < ONE) THEN !~~~> STEP IS ACCEPTED
           R3(i) = rkTinvAinv(3,1)*x1 + rkTinvAinv(3,2)*x2 + rkTinvAinv(3,3)*x3
       END DO
 
-#ifdef FULL_ALGEBRA      
-      CALL DGETRS ('N',N,1,E1,N,IP1,R1,N,0) 
-#else      
+#ifdef FULL_ALGEBRA
+      CALL DGETRS ('N',N,1,E1,N,IP1,R1,N,0)
+#else
       CALL KppSolve (E1,R1)
-#endif      
-!      
+#endif
+!
       DO i=1,N
         BC(i) = DCMPLX(R2(i),R3(i))
       END DO
-#ifdef FULL_ALGEBRA      
-      CALL ZGETRS ('N',N,1,E2,N,IP2,BC,N,0) 
-#else      
+#ifdef FULL_ALGEBRA
+      CALL ZGETRS ('N',N,1,E2,N,IP2,BC,N,0)
+#else
       CALL KppSolveCmplx (E2,BC)
-#endif      
+#endif
       DO i=1,N
         R2(i) = DBLE( BC(i) )
         R3(i) = AIMAG( BC(i) )
@@ -1088,13 +1088,13 @@ accept:IF (Err < ONE) THEN !~~~> STEP IS ACCEPTED
                FirstStep,Reject)
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       IMPLICIT NONE
-      
+
       INTEGER :: N
-#ifdef FULL_ALGEBRA      
+#ifdef FULL_ALGEBRA
       KPP_REAL :: E1(NVAR,NVAR)
-#else      
+#else
       KPP_REAL :: E1(LU_NONZERO)
-#endif      
+#endif
       KPP_REAL :: SCAL(N),Z1(N),Z2(N),Z3(N),F1(N),F2(N), &
                         F0(N),Y(N),TMP(N),T,H
       INTEGER :: IP1(N), i
@@ -1111,15 +1111,15 @@ accept:IF (Err < ONE) THEN !~~~> STEP IS ACCEPTED
       END DO
 
 
-#ifdef FULL_ALGEBRA      
-      CALL DGETRS ('N',N,1,E1,N,IP1,TMP,N,0) 
+#ifdef FULL_ALGEBRA
+      CALL DGETRS ('N',N,1,E1,N,IP1,TMP,N,0)
       IF ((rkMethod==R1A).OR.(rkMethod==GAU).OR.(rkMethod==L3A)) CALL DGETRS ('N',N,1,E1,N,IP1,TMP,N,0)
       IF (rkMethod==GAU) CALL DGETRS ('N',N,1,E1,N,IP1,TMP,N,0)
-#else      
+#else
       CALL KppSolve (E1, TMP)
       IF ((rkMethod==R1A).OR.(rkMethod==GAU).OR.(rkMethod==L3A)) CALL KppSolve (E1,TMP)
       IF (rkMethod==GAU) CALL KppSolve (E1,TMP)
-#endif      
+#endif
 
       Err = RK_ErrorNorm(N,SCAL,TMP)
 !
@@ -1128,20 +1128,20 @@ firej:IF (FirstStep.OR.Reject) THEN
           DO i=1,N
              TMP(i)=Y(i)+TMP(i)
           END DO
-          CALL FUN_CHEM(T,TMP,F1)    
+          CALL FUN_CHEM(T,TMP,F1)
           ISTATUS(Nfun) = ISTATUS(Nfun) + 1
           DO i=1,N
              TMP(i)=F1(i)+F2(i)
           END DO
 
-#ifdef FULL_ALGEBRA      
-          CALL DGETRS ('N',N,1,E1,N,IP1,TMP,N,0) 
-#else      
+#ifdef FULL_ALGEBRA
+          CALL DGETRS ('N',N,1,E1,N,IP1,TMP,N,0)
+#else
           CALL KppSolve (E1, TMP)
-#endif      
+#endif
           Err = RK_ErrorNorm(N,SCAL,TMP)
        END IF firej
- 
+
    END SUBROUTINE RK_ErrorEstimate
 
 
@@ -1149,7 +1149,7 @@ firej:IF (FirstStep.OR.Reject) THEN
    KPP_REAL FUNCTION RK_ErrorNorm(N,SCAL,DY)
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       IMPLICIT NONE
-      
+
       INTEGER :: N
       KPP_REAL :: SCAL(N),DY(N)
       INTEGER :: i
@@ -1159,14 +1159,14 @@ firej:IF (FirstStep.OR.Reject) THEN
           RK_ErrorNorm = RK_ErrorNorm + (DY(i)*SCAL(i))**2
         END DO
       RK_ErrorNorm = MAX( SQRT(RK_ErrorNorm/N), 1.0d-10 )
- 
+
    END FUNCTION RK_ErrorNorm
-  
+
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   SUBROUTINE Radau2A_Coefficients
 !    The coefficients of the 3-stage Radau-2A method
 !    (given to ~30 accurate digits)
-!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     
+!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       IMPLICIT NONE
 ! The coefficients of the Radau2A method
       KPP_REAL :: b0
@@ -1198,13 +1198,13 @@ firej:IF (FirstStep.OR.Reject) THEN
       rkC(1) = 1.550510257216821901802715925294109d-1
       rkC(2) = 6.449489742783178098197284074705891d-1
       rkC(3) = 1.0d0
-      
+
       ! New solution: H* Sum B_j*f(Z_j) = Sum D_j*Z_j
       rkD(1) = 0.0d0
       rkD(2) = 0.0d0
       rkD(3) = 1.0d0
 
-      ! Classical error estimator: 
+      ! Classical error estimator:
       ! H* Sum (B_j-Bhat_j)*f(Z_j) = H*E(0)*f(0) + Sum E_j*Z_j
       rkE(0) = 1.0d0*b0
       rkE(1) = -10.04880939982741556246032950764708d0*b0
@@ -1223,16 +1223,16 @@ firej:IF (FirstStep.OR.Reject) THEN
       rkTheta(2) = 2.070455145596436382729929151810376d0+1.382142733160748895793662840980413d0*b0
       rkTheta(3) = -.3333333333333333333333333333333333d0*b0-.3744441479783868387391430179970741d0
 
-      ! Local order of error estimator 
+      ! Local order of error estimator
       IF (b0==0.0d0) THEN
         rkELO  = 6.0d0
-      ELSE	
+      ELSE
         rkELO  = 4.0d0
-      END IF	
+      END IF
 
       !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      !~~~> Diagonalize the RK matrix:               
-      ! rkTinv * inv(rkA) * rkT =          
+      !~~~> Diagonalize the RK matrix:
+      ! rkTinv * inv(rkA) * rkT =
       !           |  rkGamma      0           0     |
       !           |      0      rkAlpha   -rkBeta   |
       !           |      0      rkBeta     rkAlpha  |
@@ -1284,15 +1284,15 @@ firej:IF (FirstStep.OR.Reject) THEN
 
   END SUBROUTINE Radau2A_Coefficients
 
-    
 
-    
+
+
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   SUBROUTINE Lobatto3C_Coefficients
 !    The coefficients of the 3-stage Lobatto-3C method
 !    (given to ~30 accurate digits)
 !    The parameter b0 can be chosen to tune the error estimator
-!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     
+!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       IMPLICIT NONE
       KPP_REAL :: b0
 
@@ -1324,18 +1324,18 @@ firej:IF (FirstStep.OR.Reject) THEN
       rkC(2) = 0.5d0
       rkC(3) = 1.0d0
 
-      ! Classical error estimator, embedded solution: 
+      ! Classical error estimator, embedded solution:
       rkBhat(0) = b0
       rkBhat(1) = .16666666666666666666666666666666667d0-b0
       rkBhat(2) = .66666666666666666666666666666666667d0
       rkBhat(3) = .16666666666666666666666666666666667d0
-      
+
       ! New solution: h Sum_j b_j f(Z_j) = sum d_j Z_j
       rkD(1) = 0.0d0
       rkD(2) = 0.0d0
       rkD(3) = 1.0d0
 
-      ! Classical error estimator: 
+      ! Classical error estimator:
       !   H* Sum (B_j-Bhat_j)*f(Z_j) = H*E(0)*f(0) + Sum E_j*Z_j
       rkE(0) =   .3808338772072650364017425226487022*b0
       rkE(1) = -1.142501631621795109205227567946107*b0
@@ -1354,16 +1354,16 @@ firej:IF (FirstStep.OR.Reject) THEN
       rkTheta(2) = -4.d0*b0+1.523335508829060145606970090594808d0
       rkTheta(3) = -.142501631621795109205227567946106d0+b0
 
-      ! Local order of error estimator 
+      ! Local order of error estimator
       IF (b0==0.0d0) THEN
         rkELO  = 5.0d0
-      ELSE	
+      ELSE
         rkELO  = 4.0d0
-      END IF	
+      END IF
 
       !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      !~~~> Diagonalize the RK matrix:               
-      ! rkTinv * inv(rkA) * rkT =          
+      !~~~> Diagonalize the RK matrix:
+      ! rkTinv * inv(rkA) * rkT =
       !           |  rkGamma      0           0     |
       !           |      0      rkAlpha   -rkBeta   |
       !           |      0      rkBeta     rkAlpha  |
@@ -1421,17 +1421,17 @@ firej:IF (FirstStep.OR.Reject) THEN
 !    (given to ~30 accurate digits)
 !    The parameter b3 can be chosen by the user
 !    to tune the error estimator
-!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     
+!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       IMPLICIT NONE
       KPP_REAL :: b0
 ! The coefficients of the Gauss method
 
 
       rkMethod = GAU
-      
+
 !      b0 = 4.0d0
       b0 = 0.1d0
-      
+
 ! The coefficients of the Gauss method
 
       rkA(1,1) =  .1388888888888888888888888888888889d0
@@ -1452,7 +1452,7 @@ firej:IF (FirstStep.OR.Reject) THEN
       rkC(2) = .5000000000000000000000000000000000d0
       rkC(3) = .8872983346207416885179265399782400d0
 
-      ! Classical error estimator, embedded solution: 
+      ! Classical error estimator, embedded solution:
       rkBhat(0) = b0
       rkBhat(1) =-1.4788305577012361475298775666303999d0*b0 &
                   +.27777777777777777777777777777777778d0
@@ -1466,7 +1466,7 @@ firej:IF (FirstStep.OR.Reject) THEN
       rkD(2) = -.1333333333333333333333333333333333d1
       rkD(3) = .1666666666666666666666666666666667d1
 
-      ! Classical error estimator: 
+      ! Classical error estimator:
       !   H* Sum (B_j-Bhat_j)*f(Z_j) = H*E(0)*f(0) + Sum E_j*Z_j
       rkE(0) = .2153144231161121782447335303806954d0*b0
       rkE(1) = -2.825278112319014084275808340593191d0*b0
@@ -1485,12 +1485,12 @@ firej:IF (FirstStep.OR.Reject) THEN
       rkTheta(2) = 1.824611539036311947589425112250199d0
       rkTheta(3) = .1856563166634371860478043996459493d0
 
-      ! ELO = local order of classical error estimator 
+      ! ELO = local order of classical error estimator
       rkELO = 4.0d0
 
       !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      !~~~> Diagonalize the RK matrix:               
-      ! rkTinv * inv(rkA) * rkT =          
+      !~~~> Diagonalize the RK matrix:
+      ! rkTinv * inv(rkA) * rkT =
       !           |  rkGamma      0           0     |
       !           |      0      rkAlpha   -rkBeta   |
       !           |      0      rkBeta     rkAlpha  |
@@ -1529,7 +1529,7 @@ firej:IF (FirstStep.OR.Reject) THEN
       rkTinvAinv(3,1) = -25.60678350282974256072419392007303d0
       rkTinvAinv(3,2) =   6.762434375611708328910623303779923d0
       rkTinvAinv(3,3) =   1.043979339483109825041215970036771d0
-      
+
       rkAinvT(1,1) = .3350999483034677402618981153470483d0
       rkAinvT(1,2) = -.5134173605009692329246186488441294d0
       rkAinvT(1,3) = .6745196507033116204327635673208923d-1
@@ -1539,7 +1539,7 @@ firej:IF (FirstStep.OR.Reject) THEN
       rkAinvT(3,1) = 4.644370709252171185822941421408064d0
       rkAinvT(3,2) = 3.677814645373914407088529289295970d0
       rkAinvT(3,3) = -3.508761919567443321903661209182446d0
-      
+
   END SUBROUTINE Gauss_Coefficients
 
 
@@ -1550,7 +1550,7 @@ firej:IF (FirstStep.OR.Reject) THEN
 !    (given to ~30 accurate digits)
 !    The parameter b3 can be chosen by the user
 !    to tune the error estimator
-!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     
+!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       IMPLICIT NONE
 !      KPP_REAL :: b0 = 0.3d0
       KPP_REAL :: b0 = 0.1d0
@@ -1577,7 +1577,7 @@ firej:IF (FirstStep.OR.Reject) THEN
       rkC(2) = .3550510257216821901802715925294109d0
       rkC(3) = .8449489742783178098197284074705891d0
 
-      ! Classical error estimator, embedded solution: 
+      ! Classical error estimator, embedded solution:
       rkBhat(0) = b0
       rkBhat(1) = .11111111111111111111111111111111111d0-b0
       rkBhat(2) = .51248582618842161383881344651960810d0
@@ -1588,7 +1588,7 @@ firej:IF (FirstStep.OR.Reject) THEN
       rkD(2) = -.8914115380582557157653087040196127d0
       rkD(3) = .1558078204724922382431975370686279d1
 
-      ! Classical error estimator: 
+      ! Classical error estimator:
       ! H* Sum (b_j-bhat_j) f(Z_j) = H*E(0)*F(0) + Sum E_j Z_j
       rkE(0) =   .2748888295956773677478286035994148d0*b0
       rkE(1) = -1.374444147978386838739143017997074d0*b0
@@ -1607,12 +1607,12 @@ firej:IF (FirstStep.OR.Reject) THEN
       rkTheta(2) = .9340045331532641409047527962010133d0
       rkTheta(3) = .4656990124352088397561234800640929d0
 
-      ! ELO = local order of classical error estimator 
+      ! ELO = local order of classical error estimator
       rkELO = 4.0d0
 
       !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      !~~~> Diagonalize the RK matrix:               
-      ! rkTinv * inv(rkA) * rkT =          
+      !~~~> Diagonalize the RK matrix:
+      ! rkTinv * inv(rkA) * rkT =
       !           |  rkGamma      0           0     |
       !           |      0      rkAlpha   -rkBeta   |
       !           |      0      rkBeta     rkAlpha  |
@@ -1669,7 +1669,7 @@ firej:IF (FirstStep.OR.Reject) THEN
   SUBROUTINE Lobatto3A_Coefficients
 !    The coefficients of the 4-stage Lobatto-3A method
 !    (given to ~30 accurate digits)
-!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     
+!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       IMPLICIT NONE
 
 ! The coefficients of the Lobatto-3A method
@@ -1692,7 +1692,7 @@ firej:IF (FirstStep.OR.Reject) THEN
       rkA(3,1) = .4166666666666666666666666666666667d0
       rkA(3,2) = .4166666666666666666666666666666667d0
       rkA(3,3) = .8333333333333333333333333333333333d-1
-      
+
       rkB(0) = .83333333333333333333333333333333333d-1
       rkB(1) = .4166666666666666666666666666666667d0
       rkB(2) = .4166666666666666666666666666666667d0
@@ -1708,14 +1708,14 @@ firej:IF (FirstStep.OR.Reject) THEN
       rkD(1) = 0.0d0
       rkD(2) = 0.0d0
       rkD(3) = 1.0d0
-      
-      ! Classical error estimator, embedded solution: 
+
+      ! Classical error estimator, embedded solution:
       rkBhat(0) = .90909090909090909090909090909090909d-1
       rkBhat(1) = .39972675774621371442114262372173276d0
       rkBhat(2) = .43360657558711961891219070961160058d0
       rkBhat(3) = .15151515151515151515151515151515152d-1
 
-      ! Classical error estimator: 
+      ! Classical error estimator:
       ! H* Sum (B_j-Bhat_j)*f(Z_j) = H*E(0)*f(0) + Sum E_j*Z_j
 
       rkE(0) =  .1957403846510110711315759367097231d-1
@@ -1723,22 +1723,22 @@ firej:IF (FirstStep.OR.Reject) THEN
       rkE(2) =  .1660586371214229125096727578826900d0
       rkE(3) = -.9787019232550553556578796835486154d-1
 
-      ! Sdirk error estimator: 
+      ! Sdirk error estimator:
       rkF(0) =  0.0d0
       rkF(1) = -.66535815876916686607437314126436349d0
       rkF(2) =  1.7419302743497277572980407931678409d0
       rkF(3) = -1.2918865386966730694684011822841728d0
-       
-      ! ELO = local order of classical error estimator 
+
+      ! ELO = local order of classical error estimator
       rkELO = 4.0d0
-      
-      ! Sdirk error estimator: 
+
+      ! Sdirk error estimator:
       rkBgam(0) =  .2950472755430528877214995073815946d-1
       rkBgam(1) =  .5370310883226113978352873633882769d0
       rkBgam(2) =  .2963022450107219354980459699450564d0
       rkBgam(3) = -.7815248400375080035021681445218837d-1
       rkBgam(4) =  .2153144231161121782447335303806956d0
-      
+
       ! H* Sum Bgam_j*f(Z_j) = H*Bgam(0)*f(0) + Sum Theta_j*Z_j
       rkTheta(0) = 0.0d0
       rkTheta(1) = -.6653581587691668660743731412643631d0
@@ -1747,8 +1747,8 @@ firej:IF (FirstStep.OR.Reject) THEN
 
 
       !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      !~~~> Diagonalize the RK matrix:               
-      ! rkTinv * inv(rkA) * rkT =          
+      !~~~> Diagonalize the RK matrix:
+      ! rkTinv * inv(rkA) * rkT =
       !           |  rkGamma      0           0     |
       !           |      0      rkAlpha   -rkBeta   |
       !           |      0      rkBeta     rkAlpha  |
@@ -1799,7 +1799,7 @@ firej:IF (FirstStep.OR.Reject) THEN
       rkAinvT(3,3) = -3.508761919567443321903661209182446d0
 
   END SUBROUTINE Lobatto3A_Coefficients
-  
+
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   END SUBROUTINE RungeKutta ! and all its internal procedures
 !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1824,9 +1824,9 @@ firej:IF (FirstStep.OR.Reject) THEN
     CALL Update_RCONST()
     CALL Update_PHOTO()
     TIME = Told
-    
+
     CALL Fun(V, FIX, RCONST, FCT)
-    
+
   END SUBROUTINE FUN_CHEM
 
 
@@ -1843,12 +1843,12 @@ firej:IF (FirstStep.OR.Reject) THEN
     IMPLICIT NONE
 
     KPP_REAL :: V(NVAR), T , Told
-#ifdef FULL_ALGEBRA    
+#ifdef FULL_ALGEBRA
     KPP_REAL :: JV(LU_NONZERO), JF(NVAR,NVAR)
-    INTEGER :: i, j 
+    INTEGER :: i, j
 #else
     KPP_REAL :: JF(LU_NONZERO)
-#endif   
+#endif
 
     Told = TIME
     TIME = T
@@ -1856,8 +1856,8 @@ firej:IF (FirstStep.OR.Reject) THEN
     CALL Update_RCONST()
     CALL Update_PHOTO()
     TIME = Told
-    
-#ifdef FULL_ALGEBRA    
+
+#ifdef FULL_ALGEBRA
     CALL Jac_SP(V, FIX, RCONST, JV)
     DO j=1,NVAR
       DO i=1,NVAR
@@ -1868,8 +1868,8 @@ firej:IF (FirstStep.OR.Reject) THEN
        JF(LU_IROW(i),LU_ICOL(i)) = JV(i)
     END DO
 #else
-    CALL Jac_SP(V, FIX, RCONST, JF) 
-#endif   
+    CALL Jac_SP(V, FIX, RCONST, JF)
+#endif
 
   END SUBROUTINE JAC_CHEM
 

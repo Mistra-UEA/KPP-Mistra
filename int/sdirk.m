@@ -2,14 +2,14 @@ function [T,Y,RCNTRL,ICNTRL,RSTATUS,ISTATUS]=...
     SdirkInt(Function,Tspan,Y0,Options,RCNTRL,ICNTRL)
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 %  SDIRK - Implementation of several SDIRK methods:
-%               * SDIRK4a                                                
-%               * SDIRK4b                                                
-%               * SDIRK3a                                                
-%               * SDIRK2b                                              
+%               * SDIRK4a
+%               * SDIRK4b
+%               * SDIRK3a
+%               * SDIRK2b
 %               * SDIRK2a
-%                                                                     
-%    Solves the system y'=F(t,y) using a SDIRK Method 
-%                                                                     
+%
+%    Solves the system y'=F(t,y) using a SDIRK Method
+%
 %
 %    For details on SDIRK methods and their implementation consult:
 %      E. Hairer and G. Wanner
@@ -17,9 +17,9 @@ function [T,Y,RCNTRL,ICNTRL,RSTATUS,ISTATUS]=...
 %      Springer series in computational mathematics, Springer-Verlag, 1996.
 %    The codes contained in the book inspired this implementation.
 %
-%    MATLAB implementation (C) Vishwas Rao (visrao@vt.edu).      
-%    Virginia Polytechnic Institute and State University             
-%    March, 2011    
+%    MATLAB implementation (C) Vishwas Rao (visrao@vt.edu).
+%    Virginia Polytechnic Institute and State University
+%    March, 2011
 %
 %    Based on the Fortran90 implementation (C) Adrian Sandu, August 2004
 %    and revised by Philipp Miehe and Adrian Sandu, May 2006.
@@ -28,15 +28,15 @@ function [T,Y,RCNTRL,ICNTRL,RSTATUS,ISTATUS]=...
 %
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 %  Input Arguments :
-%  The first four arguments are similar to the input arguments of 
+%  The first four arguments are similar to the input arguments of
 %  MATLAB's ODE solvers
 %      Function  - A function handle for the ODE function
 %      Tspan     - The time space to integrate
 %      Y0        - Initial value
-%      Options   - ODE solver options created by odeset():           
+%      Options   - ODE solver options created by odeset():
 %                  AbsTol, InitialStep, Jacobian, MaxStep, and RelTol
-%                  are considered.  Other options are ignored.       
-%                  'Jacobian' must be set.                           
+%                  are considered.  Other options are ignored.
+%                  'Jacobian' must be set.
 %      RCNTRL    - real value input parameters (explained below)
 %      ICNTRL    - integer input parameters (explained below)
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -57,7 +57,7 @@ function [T,Y,RCNTRL,ICNTRL,RSTATUS,ISTATUS]=...
 %    Note: For input parameters equal to zero the default values of the
 %       corresponding variables are used.
 %
-%    
+%
 %
 %    ICNTRL(1) = 0: AbsTol, RelTol are N-dimensional vectors
 %              = 1: AbsTol, RelTol are scalars
@@ -69,8 +69,8 @@ function [T,Y,RCNTRL,ICNTRL,RSTATUS,ISTATUS]=...
 %        = 3 :    Sdirk3a
 %        = 4 :    Sdirk4a
 %        = 5 :    Sdirk4b
-%        
-%        
+%
+%
 %
 %    ICNTRL(3)  -> maximum number of integration steps
 %        For ICNTRL(3)=0) the default value of 100000 is used
@@ -169,7 +169,7 @@ cputime-t
 function [T,Y,Ierr,ISTATUS,RSTATUS] = Sdirk_Integrate(N,Y0,TIN, TOUT,OdeFunction1,...
     OdeJacobian1,ATOL,RTOL,RCNTRL,ICNTRL,ISTATUS,RSTATUS)
 global ZERO ONE Nfun Njac Nstp Nacc Nrej Ndec Nsol Nsng Ntexit Nhexit Nhnew
-global Smax S2A S2B S3A S4A S4B 
+global Smax S2A S2B S3A S4A S4B
 global rkTheta rkAlpha
 ZERO = 0; ONE=1.0; Nfun = 1; Njac = 2; Nstp = 3; Nacc = 4; Nrej = 5;Ndec=6;
 Nsol = 7; Nsng = 8; Ntexit = 1; Nhexit = 2; Nhnew = 3; Smax = 5; S2A = 1;
@@ -201,11 +201,11 @@ return;
 function [T, Y, Ierr,RSTATUS,ISTATUS] = SDIRK(N,T1,T2,Y,AbsTol,RelTol,...
                         RCNTRL,ICNTRL,RSTATUS,ISTATUS,OdeFunction1,OdeJacobian1)
 
-global ZERO ONE 
+global ZERO ONE
 
 
 Max_no_steps = 0;Hmin = 0;Hmax = 0; Hstart = 0; Roundoff = eps; FacMin = 0;
-FacMax = 0; FacSafe = 0; FacRej = 0; 
+FacMax = 0; FacSafe = 0; FacRej = 0;
 if(ICNTRL(1)==0)
     ITOL = 1;
 else
@@ -214,7 +214,7 @@ end
 Ierr = 0;
 %~~~> Method Selection
 switch (ICNTRL(2))
-    
+
     case (0)
         Sdirk2a();
     case (1)
@@ -267,7 +267,7 @@ if(RCNTRL(1)==ZERO)
 end
 if (RCNTRL(1)>ZERO)
         Hmin = RCNTRL(1);
-end    
+end
 if(RCNTRL(1)<ZERO)
     disp(['User-Selected Hmin, RCNTRL(1)=',num2str(RCNTRL(1))]);
     SDIRK_ErrorMsg(-3,T1,ZERO,Ierr);
@@ -398,7 +398,7 @@ end
                             Hmax,Roundoff,AbsTol,RelTol,...
                             ITOL,Max_no_steps,StartNewton,NewtonTol,ThetaMin,...
                             FacSafe,FacMin,FacMax,FacRej,Qmin,Qmax,NewtonMaxit,ISTATUS,RSTATUS,Ierr,OdeFunction1,OdeJacobian1);
- 
+
 
 
 return;
@@ -437,7 +437,7 @@ while((T2-T)*Tdirection - Roundoff > ZERO)
         SDIRK_ErrorMsg(-6, T, H, Ierr);
         return;
     end;
-    
+
     if(T+0.1*H==T || abs(H)<=Roundoff)
         SDIRK_ErrorMsg(-7,T,H,Ierr);
         return;
@@ -453,9 +453,9 @@ while((T2-T)*Tdirection - Roundoff > ZERO)
                 for j=1:istage
                     Z(istage,:)=Z(istage,:)+rkAlpha(j,istage)*Z(j,:);
                 end
-                
+
             end
-                
+
 		end
 		NewtonDone = 0;
 		Fac = 0.5;
@@ -513,7 +513,7 @@ while((T2-T)*Tdirection - Roundoff > ZERO)
 	TMP = zeros(N,1);
     rr=rkE(1:rkS);
     TMP = (rr*Z)';
-	
+
 	[TMP,ISTATUS]=	SDIRK_Solve(H,N,E1L,E1U,TMP,ISTATUS);
 	Err = SDIRK_ErrorNorm (N,TMP,SCAL);
 	%/*~~~~> Computation of new step size Hnew */
@@ -598,20 +598,20 @@ Ierr = code;
 disp('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
 disp('\nForced exit from Sdirk due to the following error:\n');
 
-switch (code) 
+switch (code)
 
 case -1
 	disp('--> Improper value for maximal no of steps');
-	
+
 case -2
 	disp('--> Selected SDIRK method not implemented');
-	
+
 case -3
 	printf('--> Hmin/Hmax/Hstart must be positive');
-	
+
 case -4
 	printf('--> FacMin/FacMax/FacRej must be positive');
-	
+
 case -5
 	printf('-> Improper tolerance values');
 case -6
@@ -626,8 +626,8 @@ return
 
 
 function [E1L,E1U,ISTATUS,ISING]=PrepareMatrix(N,H,T,Y,FJAC,SkipJac, SkipLU,Reject,ISTATUS,OdeJacobian1)
-global ZERO Njac  Ndec  Nsng 
-global rkGamma 
+global ZERO Njac  Ndec  Nsng
+global rkGamma
 
 
 ConsecutiveSng = 0;
@@ -640,7 +640,7 @@ while (ISING ~= ZERO)
     end;
     E=eye(N);
     E=HGammaInv*E-FJAC;
-    
+
     [E1L,E1U] = lu(E);
     if(min(rank(E1L),rank(E1U))<N)
         ISING = 1;
@@ -651,7 +651,7 @@ while (ISING ~= ZERO)
     if(ISING ~= 0 )
         ISTATUS(Nsng)=ISTATUS(Nsng)+1;
         ConsecutiveSng=ConsecutiveSng+1;
-        
+
         if(ConsecutiveSng >= 6)
             return;
         end
@@ -665,8 +665,8 @@ return;
 
 
 function [RHS,ISTATUS] = SDIRK_Solve(H,N,E1L,E1U,RHS,ISTATUS)
-global  Nsol 
-global  rkGamma 
+global  Nsol
+global  rkGamma
 
 HGammaInv = 1/(H*rkGamma);
 RHS = HGammaInv*RHS;
@@ -680,7 +680,7 @@ return
 
 function Sdirk4a()
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
-global ZERO ONE 
+global ZERO ONE
 global  S4A  sdMethod rkS rkGamma rkA rkB rkELO rkBhat
 global rkC rkD rkE rkTheta rkAlpha
 sdMethod = S4A;
@@ -772,7 +772,7 @@ rkELO = 4.0;
 %/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Sdirk4b()
 %/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-global ZERO ONE 
+global ZERO ONE
 global  S4B sdMethod rkS rkGamma rkA rkB rkELO rkBhat
 global rkC rkD rkE rkTheta rkAlpha
 
@@ -864,7 +864,7 @@ rkAlpha(4,5) = 54.0;
 %/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Sdirk2a()
 %/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-global ZERO ONE 
+global ZERO ONE
 global  S2A  sdMethod rkS rkGamma rkA rkB rkELO rkBhat
 global rkC rkD rkE rkTheta rkAlpha
 
@@ -907,7 +907,7 @@ rkAlpha(1,2) = 3.414213562373095048801688724209698;
 %/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Sdirk2b()
 %/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-global ZERO ONE 
+global ZERO ONE
 global  S2B  sdMethod rkS rkGamma rkA rkB rkELO rkBhat
 global rkC rkD rkE rkTheta rkAlpha
 
@@ -950,7 +950,7 @@ rkAlpha(1,2) = 0.5857864376269049511983112757903019;
 %/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Sdirk3a()
 %/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-global ZERO ONE 
+global ZERO ONE
 global  S3A  sdMethod rkS rkGamma rkA rkB rkELO rkBhat
 global rkC rkD rkE rkTheta rkAlpha
 
@@ -1000,7 +1000,7 @@ rkAlpha(1,2) = 2.0;
 rkAlpha(1,3) = -12.92820323027550917410978536602349;
 rkAlpha(2,3) = 8.83012701892219323381861585376468;
 
-% /* end Sdirk3a */    
+% /* end Sdirk3a */
 
 
-      
+

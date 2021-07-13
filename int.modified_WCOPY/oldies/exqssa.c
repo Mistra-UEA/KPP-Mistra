@@ -13,11 +13,11 @@ int i;
   SUP  = 1e-14;
   IsReject = 0;
   ERR = .5;
-  
+
 /* -- BELOW THIS LIMIT USE TAYLOR INSTEAD OF EXP --- */
 
   while ( T < Tnext ) {
-   
+
     T = Told + STEP;
     if ( T > Tnext ) {
       STEP = Tnext - Told;
@@ -60,7 +60,7 @@ int i;
     ERR=0.;
     for( i = 0; i < NVAR; i++ ) {
       V1[i] = 2.*V2[i] - V1[i];
-      tmp = (V2[i] - V1[i]) / (ATOL[i] + RTOL[i]*V2[i]); 
+      tmp = (V2[i] - V1[i]) / (ATOL[i] + RTOL[i]*V2[i]);
       ERR = ERR + tmp*tmp;
     }
     ERR = sqrt(ERR/NVAR);
@@ -82,7 +82,7 @@ int i;
     } else {
       IsReject = 0;
       Told = T;
-      for( i = 0; i < NVAR; i++ ) 
+      for( i = 0; i < NVAR; i++ )
         VAR[i] = max( V1[i], 0.0 );
       TIME = Tnext;
     }

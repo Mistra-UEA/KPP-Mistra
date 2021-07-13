@@ -41,7 +41,7 @@
 #define MAX_INLINE 10000
 /* #define MAX_INLINE 4000 */
 /*  mz_rs_20050518- */
-          
+
 enum eq_state { LHS, RHS, RAT };
 enum sptypes { DUMMY_SPC, VAR_SPC, RAD_SPC, FIX_SPC };
 enum atomcheck { NO_CHECK, DO_CHECK, CANCEL_CHECK };
@@ -67,7 +67,7 @@ extern int nError;
 extern int nWarning;
 extern int crt_section;
 
-int Parser( char * filename );  
+int Parser( char * filename );
 void ScanError( char *fmt, ...  );
 void ParserError( char *fmt, ...  );
 void ScanWarning( char *fmt, ...  );
@@ -82,9 +82,9 @@ void SetAtomType( char *atname, int type );
 void AddAtom( char *atname, char *nr );
 void DeclareSpecies( int type, char* spname );
 void SetSpcType( int type, char *spname );
-void AssignInitialValue( char *spname , char *spval ); 
+void AssignInitialValue( char *spname , char *spval );
 void StoreEquationRate( char *rate, char *label );
-void CheckEquation(); 
+void CheckEquation();
 void ProcessTerm( int side, char *sign, char *coef, char *spname  );
 void AddLumpSpecies( char *spname );
 void CheckLump( char *spname );

@@ -3,12 +3,12 @@ function [T, Y, RCNTRL, ICNTRL, RSTAT, ISTAT] = ...
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 %  Implementation of Fully Implicit RK methods with the
 %  Coefficients:
-%               * Radau2A                                               
-%               * Lobatto3C                                             
-%               * Radau1A                                                
-%               * Gauss                                             
-%               * Lobatto3A                                              
-%                                                                     
+%               * Radau2A
+%               * Lobatto3C
+%               * Radau1A
+%               * Gauss
+%               * Lobatto3A
+%
 %    Solves the system y'=F(t,y) using a Fully Implicit RK method.
 %
 %    For details on Fully Implicit RK methods and their implementation consult:
@@ -17,9 +17,9 @@ function [T, Y, RCNTRL, ICNTRL, RSTAT, ISTAT] = ...
 %      Springer series in computational mathematics, Springer-Verlag, 1996.
 %    The codes contained in the book inspired this implementation.
 %
-%    MATLAB implementation (C) Vishwas Rao (visrao@vt.edu).      
-%    Virginia Polytechnic Institute and State University             
-%    March, 2011    
+%    MATLAB implementation (C) Vishwas Rao (visrao@vt.edu).
+%    Virginia Polytechnic Institute and State University
+%    March, 2011
 %
 %    Based on the Fortran90 implementation (C) Adrian Sandu, August 2004
 %    and revised by Philipp Miehe and Adrian Sandu, May 2006.
@@ -28,15 +28,15 @@ function [T, Y, RCNTRL, ICNTRL, RSTAT, ISTAT] = ...
 %
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 %  Input Arguments :
-%  The first four arguments are similar to the input arguments of 
+%  The first four arguments are similar to the input arguments of
 %  MATLAB's ODE solvers
 %      Function  - A function handle for the ODE function
 %      Tspan     - The time space to integrate
 %      Y0        - Initial value
-%      Options   - ODE solver options created by odeset():           
+%      Options   - ODE solver options created by odeset():
 %                  AbsTol, InitialStep, Jacobian, MaxStep, and RelTol
-%                  are considered.  Other options are ignored.       
-%                  'Jacobian' must be set.                           
+%                  are considered.  Other options are ignored.
+%                  'Jacobian' must be set.
 %      RCNTRL    - real value input parameters (explained below)
 %      ICNTRL    - integer input parameters (explained below)
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -57,7 +57,7 @@ function [T, Y, RCNTRL, ICNTRL, RSTAT, ISTAT] = ...
 %    Note: For input parameters equal to zero the default values of the
 %       corresponding variables are used.
 %
-%    
+%
 %    ICNTRL(1) = 0: AbsTol, RelTol are N-dimensional vectors
 %              = 1: AbsTol, RelTol are scalars
 %
@@ -68,8 +68,8 @@ function [T, Y, RCNTRL, ICNTRL, RSTAT, ISTAT] = ...
 %        = 3 :    Gauss
 %        = 4 :    Radau1A
 %        = 5 :    Lobatto3A
-%       
-%       
+%
+%
 %
 %    ICNTRL(4)  -> maximum number of integration steps
 %        For ICNTRL(4)=0) the default value of 100000 is used
@@ -209,7 +209,7 @@ switch(ICNTRL(2))
 	case{0,1}
 		Radau2A_Coefficients();
 	case(2)
-		Lobatto3C_Coefficients(); 
+		Lobatto3C_Coefficients();
 	case(3)
 		Gauss_Coefficients();
 	case(4)
@@ -224,7 +224,7 @@ end
 
 if (ICNTRL(3)==0)
 		Max_no_steps=200000;
-else 
+else
 		Max_no_steps=ICNTRL(3);
         if(Max_no_steps<0)
             disp(['User-selected max no. of steps is -ve and is ',num2str(ICNTRL(3))]);
@@ -272,7 +272,7 @@ end
 %FacMin-- Lower bound on step decrease factor
 if (RCNTRL(4) == 0)
 	FacMin = 0.2;
-else 
+else
    	FacMin = RCNTRL(4);
 end
 %FacMax--Upper bound on step increase factor
@@ -288,7 +288,7 @@ else
 	FacRej=RCNTRL(6);
 end
 
-%Facsafe:by which the new step is slightly smaller than the 
+%Facsafe:by which the new step is slightly smaller than the
 	%predicted value
 if RCNTRL(7)==0
 	FacSafe=0.9;
@@ -314,7 +314,7 @@ end
 
 if RCNTRL(9)==0
 	NewtonTol = 3.0e-02;
-else 
+else
 	NewtonTol = RCNTRL(9);
 	if NewtonTol<=Roundoff
 		disp(['RCNTRL(9)=',num2str(RCNTRL(9))]);
@@ -345,13 +345,13 @@ if ITOL==0
 		RK_ErrorMsg(-8, T, ZERO, Ierr);
 	end
 else
-	for i=1:N 
-        if (( AbsTol(i) <= 0) || (RelTol(i) <= 10.0*Roundoff) ) 
+	for i=1:N
+        if (( AbsTol(i) <= 0) || (RelTol(i) <= 10.0*Roundoff) )
             disp(['AbsTol(',num2str(i) ')= ',num2str(AbsTol(i))]);
 			disp(['RelTol(',num2str(i) ')=  ',RelTol(i)]);
 			RK_ErrorMsg(-8, T, ZERO, Ierr);
         end
-	end 
+	end
 end
 
 if(Ierr < 0)
@@ -434,9 +434,9 @@ while((T2-T)*Tdirection-Roundoff>ZERO)
 		evaluate=2;
 		[CONT, Z1, Z2, Z3]=RK_Interpolate(evaluate, N, H, Hold,Z1,Z2,Z3,CONT);
     end
-    
+
     %/*~~~> Initializations for Newton iteration */
-    
+
     NewtonDone = 0;
     Fac = 0.5;
     for NewtonIter=1:NewtonMaxit
@@ -469,7 +469,7 @@ while((T2-T)*Tdirection-Roundoff>ZERO)
             end
         end
         NewtonIncrementOld=max(NewtonIncrement,Roundoff);
-        Z1=Z1-R1; 
+        Z1=Z1-R1;
         Z2=Z2-R2;
         Z3=Z3-R3;
         NewtonDone = (NewtonRate*NewtonIncrement<=NewtonTol);
@@ -555,15 +555,15 @@ while((T2-T)*Tdirection-Roundoff>ZERO)
             if(rkF(2)~=ZERO)
                 R4=R4+Z1*rkF(1);
             end
-            
+
             if(rkF(3)~=ZERO)
                 R4=R4+Z2*rkF(2);
             end
-            
+
             if(rkF(4)~=ZERO)
                 R4=R4+Z3*rkF(3);
             end
-            
+
             TMP = Y+Z4;
             R1 = OdeFunction1(T+H,TMP);
             R4=R4+H*rkBgam(5)*R1;
@@ -590,7 +590,7 @@ while((T2-T)*Tdirection-Roundoff>ZERO)
     %/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     %/*~~~> Accept/reject step */
     %/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    
+
     %Accept
     if(Err < ONE)
         FirstStep =0;
@@ -638,10 +638,10 @@ while((T2-T)*Tdirection-Roundoff>ZERO)
 			if(SkipLU==0)
 				H=Hnew;
 			end;
-            
+
         end;
          SkipJac=0;
-		
+
         else
 			if((FirstStep==1) || (Reject==1))
 				H=FacRej*H;
@@ -691,7 +691,7 @@ end
 return
 
 function RK_ErrorMsg(Code, T, H, IERR)
-	
+
 	Code=IERR;
 	disp('Forced to exit from RungeKutta due to the following error:');
 	switch(Code)
@@ -744,7 +744,7 @@ ErrorNorm=max(sqrt(ErrorNorm/N),1.0e-10);
 
 function [CONT, Z1, Z2, Z3]=RK_Interpolate(action, N, H, Hold,Z1,Z2,Z3,CONT)
 	global rkC
-    
+
 
 	if(action==1) %Make
 		den=(rkC(3)-rkC(2))*(rkC(2)-rkC(1))*(rkC(1)-rkC(3));
@@ -764,16 +764,16 @@ function [CONT, Z1, Z2, Z3]=RK_Interpolate(action, N, H, Hold,Z1,Z2,Z3,CONT)
 	   		+ rkC(3)*(Z2(i)-Z1(i)) )/den;
 		end;
     end
-    
+
     if (action==2) %Eval
 		r=H/Hold;
 		x1=1+rkC(1)*r;
 		x2 = 1 + rkC(2)*r;
 		x3 = 1 + rkC(3)*r;
 		for i=1:N
-		
-			Z1(i) = CONT(i,1)+x1*(CONT(i,2)+x1*CONT(i,3));	
-			Z2(i) = CONT(i,1)+x2*(CONT(i,2)+x2*CONT(i,3));	
+
+			Z1(i) = CONT(i,1)+x1*(CONT(i,2)+x1*CONT(i,3));
+			Z2(i) = CONT(i,1)+x2*(CONT(i,2)+x2*CONT(i,3));
 			Z3(i) = CONT(i,1)+x3*(CONT(i,2)+x3*CONT(i,3));
 		end;
     end;
@@ -782,8 +782,8 @@ return;
 
 
 function [R1,R2,R3]=RK_PrepareRHS(N,T,H,Y,FO,Z1,Z2,Z3,OdeFunction1)
-	global rkMethod 
-	global rkA rkC 
+	global rkMethod
+	global rkA rkC
     global L3A
 	R1=Z1;
 	R2=Z2;
@@ -794,7 +794,7 @@ function [R1,R2,R3]=RK_PrepareRHS(N,T,H,Y,FO,Z1,Z2,Z3,OdeFunction1)
 		R3=R3-H*rkA(3,1)*FO;
 	end
 	TMP=Y+Z1;
-	F=OdeFunction1(T+rkC(1)*H,TMP);	
+	F=OdeFunction1(T+rkC(1)*H,TMP);
 	R1=R1-H*rkA(1,1)*F;
 	R2=R2-H*rkA(2,1)*F;
 	R3=R3-H*rkA(3,1)*F;
@@ -813,8 +813,8 @@ function [R1,R2,R3]=RK_PrepareRHS(N,T,H,Y,FO,Z1,Z2,Z3,OdeFunction1)
 return;
 
 function [E1L,E1U,E2L,E2U,ISING,ISTATUS]=RK_Decomp(N, H, FJAC,ISTATUS)
-	global Ndec 
-	global rkGamma rkAlpha rkBeta 
+	global Ndec
+	global rkGamma rkAlpha rkBeta
     ISING =0;
 	Gamma = rkGamma / H;
    	Alpha = rkAlpha / H;
@@ -823,19 +823,19 @@ function [E1L,E1U,E2L,E2U,ISING,ISTATUS]=RK_Decomp(N, H, FJAC,ISTATUS)
     E1=E1-FJAC;
 
 
-	
+
 	[E1L,E1U]=lu(E1);
     ISTATUS(Ndec)=ISTATUS(Ndec)+1;
 	if(det(E1L)==0 || det(E1U)==0)
 		ISING=1;
 	end;
-    
+
 	if(ISING ~= 0)
-		
+
 		return;
 	end;
     E2R=complex(Alpha,Beta)*eye(N)-FJAC;
-	
+
 	[E2L,E2U]=lu(E2R);
     ISTATUS(Ndec)=ISTATUS(Ndec)+1;
 	if(abs(det(E2L))==0 || abs(det(E2U))==0)
@@ -844,12 +844,12 @@ function [E1L,E1U,E2L,E2U,ISING,ISTATUS]=RK_Decomp(N, H, FJAC,ISTATUS)
 	if(ISING ~= 0)
 		return;
 	end;
-    
+
 return
 
 function [R1,R2,R3,ISTATUS]=RK_Solve(N,H,E1L,E1U,E2L,E2U,R1,R2,R3,ISTATUS)
-	global Nsol  
-	global rkT rkTinvAinv 
+	global Nsol
+	global rkT rkTinvAinv
 	for i=1:N
 		x1=R1(i)/H;
 		x2=R2(i)/H;
@@ -893,9 +893,9 @@ function Radau2A_Coefficients ()
 	global rkMethod SdirkError
 	global rkT rkTinv rkTinvAinv rkAinvT rkA rkB rkC rkD rkE
 	global rkBgam  rkTheta  rkGamma rkAlpha rkBeta rkELO
-	global R2A 
+	global R2A
 
-	
+
 	if(SdirkError==1)
 		b0=0.2e-01;
 	else
@@ -920,7 +920,7 @@ function Radau2A_Coefficients ()
 	rkC(2) = 6.449489742783178098197284074705891e-01;
 	rkC(3) = 1;
 
-	% New solution: H* Sum B_j*f(Z_j) = Sum D_j*Z_j 
+	% New solution: H* Sum B_j*f(Z_j) = Sum D_j*Z_j
 	rkD(1) =0;
 	rkD(2) =0;
 	rkD(3) =1;
@@ -1011,13 +1011,13 @@ function Radau2A_Coefficients ()
 return;
 
 function Lobatto3C_Coefficients()
-	
+
 	global rkMethod SdirkError
 	global rkT rkTinv rkTinvAinv rkAinvT rkA rkB rkC rkD rkE
 	global rkBgam rkBhat rkTheta rkGamma rkAlpha rkBeta rkELO
-	global L3C 
+	global L3C
 
-	
+
 
 	rkMethod=L3C;
 	if(SdirkError==1)
@@ -1135,15 +1135,15 @@ return;
 
 	% /* Lobatto3C_Coefficients */
 function Gauss_Coefficients()
-	
-	global rkMethod 
+
+	global rkMethod
 	global rkT rkTinv rkTinvAinv rkAinvT rkA rkB rkC rkD rkE
 	global rkBgam rkBhat rkTheta rkGamma rkAlpha rkBeta rkELO
-	global GAU 
+	global GAU
 
 
    rkMethod = GAU;
-   
+
    b0 = 0.1;
 
    %/* The coefficients of the Gauss method */
@@ -1262,12 +1262,12 @@ return;
 %	to tune the error estimator
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Radau1A_Coefficients()
-	global rkMethod 
+	global rkMethod
 	global rkT rkTinv rkTinvAinv rkAinvT rkA rkB rkC rkD rkE
 	global rkBgam rkBhat rkTheta rkGamma rkAlpha rkBeta rkELO
-	global  R1A 
+	global  R1A
 
-	global ZERO 
+	global ZERO
 
 
 %   /* The coefficients of the Radau1A method */
@@ -1383,8 +1383,8 @@ return;
 %	(given to ~30 accurate digits)
 %  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Lobatto3A_Coefficients()
-	
-	global rkMethod 
+
+	global rkMethod
 	global rkT rkTinv rkTinvAinv rkAinvT rkA rkB rkC rkD rkE
 	global rkBgam rkBhat rkTheta rkF rkGamma rkAlpha rkBeta rkELO
 	global L3A

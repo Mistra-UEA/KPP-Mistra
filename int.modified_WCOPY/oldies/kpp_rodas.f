@@ -1,6 +1,6 @@
       SUBROUTINE INTEGRATE( TIN, TOUT )
-         
-      IMPLICIT KPP_REAL (A-H,O-Z)	 
+
+      IMPLICIT KPP_REAL (A-H,O-Z)
       INCLUDE 'KPP_ROOT_params.h'
       INCLUDE 'KPP_ROOT_global.h'
 
@@ -9,14 +9,14 @@ C TIN - Start Time
 C TOUT - End Time
       KPP_REAL TOUT
       INTEGER i
-      
+
       PARAMETER (LWORK=2*NVAR*NVAR+14*NVAR+20,LIWORK=NVAR+20)
       KPP_REAL WORK(LWORK)
       INTEGER IWORK(LIWORK)
       EXTERNAL FUNC_CHEM,JAC_CHEM
 
 
-      ITOL=1     ! --- VECTOR TOLERANCES 
+      ITOL=1     ! --- VECTOR TOLERANCES
       IJAC=1     ! --- COMPUTE THE JACOBIAN ANALYTICALLY
       MLJAC=NVAR ! --- JACOBIAN IS A FULL MATRIX
       MUJAC=NVAR ! --- JACOBIAN IS A FULL MATRIX
@@ -55,17 +55,17 @@ C TOUT - End Time
 C ----------------------------------------------------------
 C     NUMERICAL SOLUTION OF A STIFF (OR DIFFERENTIAL ALGEBRAIC)
 C     SYSTEM OF FIRST 0RDER ORDINARY DIFFERENTIAL EQUATIONS  MY'=F(X,Y).
-C     THIS IS AN EMBEDDED ROSENBROCK METHOD OF ORDER (3)4  
+C     THIS IS AN EMBEDDED ROSENBROCK METHOD OF ORDER (3)4
 C     (WITH STEP SIZE CONTROL).
 C     C.F. SECTIONS IV.7  AND VI.3
 C
 C     AUTHORS: E. HAIRER AND G. WANNER
 C              UNIVERSITE DE GENEVE, DEPT. DE MATHEMATIQUES
-C              CH-1211 GENEVE 24, SWITZERLAND 
+C              CH-1211 GENEVE 24, SWITZERLAND
 C              E-MAIL:  HAIRER@DIVSUN.UNIGE.CH,  WANNER@DIVSUN.UNIGE.CH
-C --------------------------------------------------------- 
+C ---------------------------------------------------------
 C *** *** *** *** *** *** *** *** *** *** *** *** ***
-C          DECLARATIONS 
+C          DECLARATIONS
 C *** *** *** *** *** *** *** *** *** *** *** *** ***
       IMPLICIT KPP_REAL (A-H,O-Z)
       DIMENSION Y(N),AbsTol(*),RelTol(*),WORK(LWORK),IWORK(LIWORK)
@@ -73,7 +73,7 @@ C *** *** *** *** *** *** *** *** *** *** *** *** ***
       EXTERNAL FCN,JAC,DFX,MAS
       COMMON /STATISTICS/ NFCN,NACCPT,NREJCT,NSTEP,NJAC,NDEC,NSOL
 C *** *** *** *** *** *** ***
-C        SETTING THE PARAMETERS 
+C        SETTING THE PARAMETERS
 C *** *** *** *** *** *** ***
       ARRET=.FALSE.
       METH = 1
@@ -125,7 +125,7 @@ C --------- CHECK IF TOLERANCES ARE O.K.
              END IF
           END DO
       END IF
-      
+
       IF (ARRET) STOP
       NM1 = N
 C *** *** *** *** *** *** *** *** *** *** *** *** ***
@@ -216,11 +216,11 @@ C
      &  M1,M2,NM1,NFCN,NJAC,NSTEP,NACCPT,NREJCT,NDEC,NSOL)
 C ----------------------------------------------------------
 C     CORE INTEGRATOR FOR RODAS
-C     PARAMETERS SAME AS IN RODAS WITH WORKSPACE ADDED 
-C ---------------------------------------------------------- 
-C         DECLARATIONS 
-C ---------------------------------------------------------- 
-      IMPLICIT KPP_REAL (A-H,O-Z)	 
+C     PARAMETERS SAME AS IN RODAS WITH WORKSPACE ADDED
+C ----------------------------------------------------------
+C         DECLARATIONS
+C ----------------------------------------------------------
+      IMPLICIT KPP_REAL (A-H,O-Z)
       INCLUDE 'KPP_ROOT_params.h'
       INCLUDE 'KPP_ROOT_sparse.h'
       DIMENSION Y(N),YNEW(N),DY1(N),DY(N),AK1(N),
@@ -236,8 +236,8 @@ C ----------------------------------------------------------
       COMMON /CONROS/XOLD,HOUT,NN
 C *** *** *** *** *** *** ***
 C  INITIALISATIONS
-C *** *** *** *** *** *** *** 
-      NN=N 
+C *** *** *** *** *** *** ***
+      NN=N
       NN2=2*N
       NN3=3*N
       LRC=4*N
@@ -253,8 +253,8 @@ C --- INITIAL PREPARATIONS
       POSNEG=SIGN(1.D0,XEND-X)
       HMAXN=DMIN1(DABS(HMAX),DABS(XEND-X))
       IF (DABS(H).LE.10.D0*UROUND) H=1.0D-6
-      H=DMIN1(DABS(H),HMAXN) 
-      H=SIGN(H,POSNEG) 
+      H=DMIN1(DABS(H),HMAXN)
+      H=SIGN(H,POSNEG)
       HACC = H
       ERRACC = 1.0d0
       REJECT=.FALSE.
@@ -270,11 +270,11 @@ C --- INITIAL PREPARATIONS
 C -------- PREPARE BAND-WIDTHS --------
       MBDIAG=MUMAS+1
 
-C --- BASIC INTEGRATION STEP 
+C --- BASIC INTEGRATION STEP
       LAST = .FALSE.
-      DO WHILE (.NOT.LAST) 
+      DO WHILE (.NOT.LAST)
       IF (.NOT. REJECT) THEN
-      IF (NSTEP.GT.NMAX) CALL FAIL_EXIT(3,X,IDID,H,NMAX) 
+      IF (NSTEP.GT.NMAX) CALL FAIL_EXIT(3,X,IDID,H,NMAX)
       IF ( 0.1D0*DABS(H) .LE. DABS(X)*UROUND )
      *       CALL FAIL_EXIT(2,X,IDID,H,NMAX)
       HOPT=H
@@ -317,7 +317,7 @@ C *** *** *** *** *** *** ***
           REJECT=.TRUE.
           LAST=.FALSE.
           ONE = .FALSE.
-        END IF 
+        END IF
       END DO
 
       NDEC=NDEC+1
@@ -356,7 +356,7 @@ C --- THE STAGES
       CALL SLVROD(N,FJAC,LDJAC,MLJAC,MUJAC,FMAS,LDMAS,MLMAS,MUMAS,
      &    M1,M2,NM1,FAC,E,LDE,IP,DY,AK2,FX,YNEW,HD2,IJOB,.TRUE.)
       DO I=1,N
-         YNEW(I)=Y(I)+A31*AK1(I)+A32*AK2(I) 
+         YNEW(I)=Y(I)+A31*AK1(I)+A32*AK2(I)
       END DO
       CALL FCN(N,X+C3*H,YNEW,DY)
       DO I=1,N
@@ -369,7 +369,7 @@ C --- THE STAGES
       END DO
       CALL FCN(N,X+C4*H,YNEW,DY)
       DO I=1,N
-         YNEW(I)=HC41*AK1(I)+HC42*AK2(I)+HC43*AK3(I) 
+         YNEW(I)=HC41*AK1(I)+HC42*AK2(I)+HC43*AK3(I)
       END DO
       CALL SLVROD(N,FJAC,LDJAC,MLJAC,MUJAC,FMAS,LDMAS,MLMAS,MUMAS,
      &    M1,M2,NM1,FAC,E,LDE,IP,DY,AK4,FX,YNEW,HD4,IJOB,.TRUE.)
@@ -378,30 +378,30 @@ C --- THE STAGES
       END DO
       CALL FCN(N,X+H,YNEW,DY)
       DO I=1,N
-         AK6(I)=HC52*AK2(I)+HC54*AK4(I)+HC51*AK1(I)+HC53*AK3(I) 
+         AK6(I)=HC52*AK2(I)+HC54*AK4(I)+HC51*AK1(I)+HC53*AK3(I)
       END DO
       CALL SLVROD(N,FJAC,LDJAC,MLJAC,MUJAC,FMAS,LDMAS,MLMAS,MUMAS,
      &    M1,M2,NM1,FAC,E,LDE,IP,DY,AK5,FX,AK6,0.D0,IJOB,.TRUE.)
 C ------------ EMBEDDED SOLUTION ---------------
       DO I=1,N
-         YNEW(I)=YNEW(I)+AK5(I)  
+         YNEW(I)=YNEW(I)+AK5(I)
       END DO
       CALL FCN(N,X+H,YNEW,DY)
       DO I=1,N
          AK5(I)=HC61*AK1(I)+HC62*AK2(I)+HC65*AK5(I)
-     &              +HC64*AK4(I)+HC63*AK3(I) 
+     &              +HC64*AK4(I)+HC63*AK3(I)
       END DO
       CALL SLVROD(N,FJAC,LDJAC,MLJAC,MUJAC,FMAS,LDMAS,MLMAS,MUMAS,
      &    M1,M2,NM1,FAC,E,LDE,IP,DY,AK6,FX,AK5,0.D0,IJOB,.TRUE.)
 C ------------ NEW SOLUTION ---------------
       DO  I=1,N
-         YNEW(I)=YNEW(I)+AK6(I)  
+         YNEW(I)=YNEW(I)+AK6(I)
       END DO
       NSOL=NSOL+6
-      NFCN=NFCN+5 
+      NFCN=NFCN+5
 
 C *** *** *** *** *** *** ***
-C  ERROR ESTIMATION  
+C  ERROR ESTIMATION
 C *** *** *** *** *** *** ***
       NSTEP=NSTEP+1
 C ------------ COMPUTE ERROR ESTIMATION ----------------
@@ -416,18 +416,18 @@ C ------------ COMPUTE ERROR ESTIMATION ----------------
 c2           ERR = DMAX1(ERR, AK6(I)/SK)
       END DO
       ERR=DSQRT(ERR/N)
-      
+
 C --- COMPUTATION OF HNEW
 C --- WE REQUIRE .2<=HNEW/H<=6.
       FAC=DMAX1(FAC2,DMIN1(FAC1,(ERR)**0.25D0/SAFE))
-      HNEW=DMAX1(H/FAC, STEPMIN)  
+      HNEW=DMAX1(H/FAC, STEPMIN)
 
 C *** *** *** *** *** *** ***
 C  IS THE ERROR SMALL ENOUGH ?
 C *** *** *** *** *** *** ***
 
       IF ( (ERR.LE.1.D0).or.(H.LE.STEPMIN) ) THEN
-C --- STEP IS ACCEPTED  
+C --- STEP IS ACCEPTED
          NACCPT=NACCPT+1
          IF (PRED) THEN
 C       --- PREDICTIVE CONTROLLER OF GUSTAFSSON
@@ -440,17 +440,17 @@ C       --- PREDICTIVE CONTROLLER OF GUSTAFSSON
             HACC=H
             ERRACC=DMAX1(1.0D-2,ERR)
          END IF
-         DO I=1,N 
+         DO I=1,N
             Y(I)=YNEW(I)
          END DO
-         XOLD=X 
+         XOLD=X
          X=X+H
          IF (DABS(HNEW).GT.HMAXN) HNEW=POSNEG*HMAXN
-         IF (REJECT) HNEW=POSNEG*DMIN1(DABS(HNEW),DABS(H)) 
+         IF (REJECT) HNEW=POSNEG*DMIN1(DABS(HNEW),DABS(H))
          REJECT=.FALSE.
          H=HNEW
       ELSE
-C --- STEP IS REJECTED  
+C --- STEP IS REJECTED
          REJECT=.TRUE.
          LAST=.FALSE.
          H=HNEW
@@ -458,35 +458,35 @@ C --- STEP IS REJECTED
       END IF
       END DO
       RETURN
-      END 
+      END
 C
       SUBROUTINE FAIL_EXIT(NERR,X,IDID,H,NMAX)
       INTEGER NERR, NMAX
       KPP_REAL X, H
       GO TO (1,2,3,4) NERR
  1    CONTINUE
-      WRITE(6,979)X   
+      WRITE(6,979)X
       WRITE(6,*) ' MATRIX IS REPEATEDLY SINGULAR, IER=',IER
       IDID=-4
       STOP
  2    CONTINUE
-      WRITE(6,979)X   
+      WRITE(6,979)X
       WRITE(6,*) ' STEP SIZE TOO SMALL, H=',H
       IDID=-3
       STOP
  3    CONTINUE
-      WRITE(6,979)X   
-      WRITE(6,*) ' MORE THAN NMAX =',NMAX,'STEPS ARE NEEDED' 
+      WRITE(6,979)X
+      WRITE(6,*) ' MORE THAN NMAX =',NMAX,'STEPS ARE NEEDED'
       IDID=-2
       STOP
 C --- EXIT CAUSED BY solout
  4    CONTINUE
       WRITE(6,979)X
- 979  FORMAT(' EXIT OF RODAS AT X=',E18.4) 
+ 979  FORMAT(' EXIT OF RODAS AT X=',E18.4)
       IDID=2
       RETURN
       END
-      
+
       SUBROUTINE ROCOE(METH,A21,A31,A32,A41,A42,A43,A51,A52,A53,A54,
      &  C21,C31,C32,C41,C42,C43,C51,C52,C53,C54,C61,
      &  C62,C63,C64,C65,GAMMA,C2,C3,C4,D1,D2,D3,D4,
@@ -495,11 +495,11 @@ C --- EXIT CAUSED BY solout
 
       if (METH.ne.1) print *, 'WRONG CHOICE OF METHOD'
         C2=0.386D0
-        C3=0.21D0 
+        C3=0.21D0
         C4=0.63D0
         BET2P=0.0317D0
         BET3P=0.0635D0
-        BET4P=0.3438D0 
+        BET4P=0.3438D0
        D1= 0.2500000000000000D+00
        D2=-0.1043000000000000D+00
        D3= 0.1035000000000000D+00
@@ -529,7 +529,7 @@ C --- EXIT CAUSED BY solout
        C63=-0.3152159432874371D+02
        C64= 0.1631930543123136D+02
        C65=-0.6058818238834054D+01
-       GAMMA= 0.2500000000000000D+00  
+       GAMMA= 0.2500000000000000D+00
 
        D21= 0.1012623508344586D+02
        D22=-0.7487995877610167D+01
@@ -546,12 +546,12 @@ C --- EXIT CAUSED BY solout
 C
 
 C ******************************************
-C     VERSION OF SEPTEMBER 18, 1995      
+C     VERSION OF SEPTEMBER 18, 1995
 C ******************************************
 C
       SUBROUTINE DECOMR(N,FJAC,LDJAC,FMAS,LDMAS,MLMAS,MUMAS,
      &            M1,M2,NM1,FAC1,E1,LDE1,IP1,IER,IJOB,CALHES,IPHES)
-      IMPLICIT KPP_REAL (A-H,O-Z)	 
+      IMPLICIT KPP_REAL (A-H,O-Z)
       INCLUDE 'KPP_ROOT_params.h'
       INCLUDE 'KPP_ROOT_sparse.h'
       DIMENSION FJAC(LU_NONZERO),FMAS(LDMAS,NM1),E1(LU_NONZERO),
@@ -581,7 +581,7 @@ C
 C
       SUBROUTINE SLVROD(N,FJAC,LDJAC,MLJAC,MUJAC,FMAS,LDMAS,MLMAS,MUMAS,
      &          M1,M2,NM1,FAC1,E,LDE,IP,DY,AK,FX,YNEW,HD,IJOB,STAGE1)
-      IMPLICIT KPP_REAL (A-H,O-Z)	 
+      IMPLICIT KPP_REAL (A-H,O-Z)
       INCLUDE 'KPP_ROOT_params.h'
       INCLUDE 'KPP_ROOT_sparse.h'
       DIMENSION FJAC(LU_NONZERO),FMAS(LDMAS,NM1),E(LU_NONZERO),
@@ -614,7 +614,7 @@ C
 C
 C ***********************************************************
 
- 
+
       SUBROUTINE FUNC_CHEM(N, T, Y, P)
       INCLUDE 'KPP_ROOT_params.h'
       INCLUDE 'KPP_ROOT_global.h'
@@ -630,7 +630,7 @@ C ***********************************************************
       RETURN
       END
 
- 
+
       SUBROUTINE JAC_CHEM(N, T, Y, J)
       INCLUDE 'KPP_ROOT_params.h'
       INCLUDE 'KPP_ROOT_global.h'
@@ -644,4 +644,4 @@ C ***********************************************************
       CALL Jac_SP( Y,  FIX, RCONST, J )
       TIME = Told
       RETURN
-      END                                                                                                                 
+      END

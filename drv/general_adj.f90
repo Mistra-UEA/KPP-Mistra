@@ -20,30 +20,30 @@ PROGRAM KPP_ROOT_ADJ_Driver
 !~~>  Control (in) and status (out) arguments for the integration
       KPP_REAL, DIMENSION(20) :: RCNTRL, RSTATUS
       INTEGER,       DIMENSION(20) :: ICNTRL, ISTATUS
-  
+
       STEPMIN = 0.0d0
       STEPMAX = 0.0d0
 
-!~~~> Tolerances for calculating concentrations       
+!~~~> Tolerances for calculating concentrations
       DO i=1,NVAR
         RTOL(i) = 1.0d-4
         ATOL(i) = 1.0d-3
       END DO
-      
-!~~~> Tolerances for calculating adjoints 
+
+!~~~> Tolerances for calculating adjoints
 !     are used for controlling adjoint truncation error
-!     and for solving the linear adjoint equations by iterations  
+!     and for solving the linear adjoint equations by iterations
 !     Note: Adjoints typically span many orders of magnitude
-!           and a careful tuning of ATOL_adj may be necessary     
+!           and a careful tuning of ATOL_adj may be necessary
       DO j=1,NADJ
         DO i=1,NVAR
           RTOL_adj(i,j) = 1.0d-4
           ATOL_adj(i,j) = 1.0d-10
         END DO
       END DO
-     
+
       CALL Initialize()
-      
+
 !~~~>  The adjoint values at the final time
       Y_adj(1:NVAR,1:NADJ) = 0.0d0
       DO j=1,NADJ
@@ -52,7 +52,7 @@ PROGRAM KPP_ROOT_ADJ_Driver
 
 !~~~> Default control options
       ICNTRL(1:20) = 0
-      RCNTRL(1:20) = 0.0d0       
+      RCNTRL(1:20) = 0.0d0
 
 !~~~> Begin time loop
 
@@ -92,7 +92,7 @@ PROGRAM KPP_ROOT_ADJ_Driver
       WRITE(6,*) ' were written in the file KPP_ROOT_ADJ_results.m'
       WRITE(6,*) '**************************************************'
       DO j=1,NADJ
-        WRITE(20,993) ( Y_adj(i,j), i=1,NVAR )          
+        WRITE(20,993) ( Y_adj(i,j), i=1,NVAR )
       END DO
 
       WRITE(6,995) TRIM(SPC_NAMES(ind_1)),TRIM(SPC_NAMES(ind_1)), &
@@ -105,15 +105,15 @@ PROGRAM KPP_ROOT_ADJ_Driver
                    Y_adj(ind_2,1)
 
       CALL CloseSaveData()
-      
+
  991  FORMAT(F6.1,'%. T=',E10.3,3X,20(A,'=',E10.4,';',1X))
  993  FORMAT(1000(E24.16,2X))
  995  FORMAT('ADJ: d[',A,'](tf)/d[',A,'](t0)=',E14.7)
- 
+
       !~~~> The entire matrix of sensitivities
-      WRITE(6,996) ( 'd ',TRIM(SPC_NAMES(i)), i=1,NVAR ) 
+      WRITE(6,996) ( 'd ',TRIM(SPC_NAMES(i)), i=1,NVAR )
       DO j=1,NADJ
-        WRITE(6,997) TRIM(SPC_NAMES(j)),( Y_adj(j,i), i=1,NVAR )          
+        WRITE(6,997) TRIM(SPC_NAMES(j)),( Y_adj(j,i), i=1,NVAR )
       END DO
  996  FORMAT(12X,100('  ',A2,A6,4X))
  997  FORMAT('d/d',A6,' = ',100(E12.5,2X))

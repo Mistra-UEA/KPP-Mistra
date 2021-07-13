@@ -72,7 +72,7 @@ void KppSolveCmplxR(KPP_REAL JVSR[], KPP_REAL JVSI[], KPP_REAL XR[], KPP_REAL XI
 	   XI[i] = XI[i] - (JVSR[j]*XI[LU_ICOL[j]] + JVSI[j]*XR[LU_ICOL[j]]);
 	}
    }
-   
+
    for ( i = NVAR-1; i >= 0; i-- ) {
 	sumr = XR[i];
 	sumi = XI[i];
@@ -81,7 +81,7 @@ void KppSolveCmplxR(KPP_REAL JVSR[], KPP_REAL JVSI[], KPP_REAL XR[], KPP_REAL XI
 	   sumi = sumi - (JVSR[j]*XI[LU_ICOL[j]] + JVSI[j]*XR[LU_ICOL[j]]);
 	}
 	den = JVSR[LU_DIAG[i]]*JVSR[LU_DIAG[i]] + JVSI[LU_DIAG[i]]*JVSI[LU_DIAG[i]];
-  	XR[i] = (sumr*JVSR[LU_DIAG[i]] + sumi*JVSI[LU_DIAG[i]])/den; 
+  	XR[i] = (sumr*JVSR[LU_DIAG[i]] + sumi*JVSI[LU_DIAG[i]])/den;
   	XI[i] = (sumi*JVSR[LU_DIAG[i]] - sumr*JVSI[LU_DIAG[i]])/den;
    }
 }

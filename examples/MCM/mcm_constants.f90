@@ -69,9 +69,9 @@ MODULE constants
   REAL(dp) kmt18
 
   REAL(dp) kch3o2, k298ch3o2
-  
+
   REAL(dp) kp_rooh, kp_ho2, kp_n2o5, kp_no3, kp_all
-  
+
   INTEGER k
 
 CONTAINS
@@ -87,7 +87,7 @@ CONTAINS
     integer i,n,jl
     INTEGER LK
 
- 
+
     ! ************************************************************************
     ! define generic reaction rates.
     ! ************************************************************************
@@ -132,7 +132,7 @@ CONTAINS
     ! kdec   : ro                 = products
     ! mcm protocol v3.2
     !kdec      = 1.00d+06
-    
+
     kalkoxy=6.00d-14*EXP(-550.0/temp)*o2
     kalkpxy=1.50d-14*EXP(-200.0/temp)*o2
 
@@ -341,10 +341,10 @@ CONTAINS
     !kroprim  = 2.50d-14*EXP(-300.0/temp)
     !krosec   = 2.50d-14*EXP(-300.0/temp)
 
-  
+
   END SUBROUTINE mcm_constants
 
   !***************************************************************************
 
-      
+
 END MODULE constants
