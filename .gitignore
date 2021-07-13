@@ -1,0 +1,7 @@
+# Compiled Object files
+*.o
+
+# Specific kpp files
+src/lex.yy.c
+src/y.tab.c
+src/y.tab.h
