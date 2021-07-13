@@ -232,7 +232,7 @@
 !~~~>   The maximum number of steps admitted
       IF (IPAR(3).EQ.0) THEN
          Max_no_steps = 100000
-      ELSEIF (Max_no_steps.GT.0) THEN
+      ELSEIF (IPAR(3).GT.0) THEN
          Max_no_steps=IPAR(3)
       ELSE
          WRITE(6,*)'User-selected max no. of steps: IPAR(3)=',IPAR(3)
@@ -246,7 +246,7 @@
       ELSEIF ( (IPAR(4).GE.1).AND.(IPAR(4).LE.5) ) THEN
          Method = IPAR(4)
       ELSE
-         WRITE (6,*) 'User-selected Rosenbrock method: IPAR(4)=', Method
+         WRITE (6,*) 'User-selected Rosenbrock method: IPAR(4)=',IPAR(4)
          CALL ros_ErrorMsg(-2,Tstart,ZERO,IERR)
 	 RETURN
       END IF
