@@ -10,7 +10,7 @@
 
 
 !--------------------------------------------------------------
-      SUBROUTINE  WCOPY(N,X,incX,Y,incY)
+      SUBROUTINE WCOPY(N,X,incX,Y,incY)
 !--------------------------------------------------------------
 !     copies a vector, x, to a vector, y:  y <- x
 !     only for incX=incY=1
@@ -45,6 +45,7 @@
       RETURN
       END
 
+! End of WCOPY
 
 !--------------------------------------------------------------
       SUBROUTINE WAXPY(N,Alpha,X,incX,Y,incY)
@@ -81,7 +82,7 @@
       RETURN
       END
 
-
+! End of WAXPY
 
 !--------------------------------------------------------------
       SUBROUTINE WSCAL(N,Alpha,X,incX)
@@ -148,6 +149,8 @@
       RETURN
       END
 
+! End of WSCAL
+
 !--------------------------------------------------------------
       KPP_REAL FUNCTION WLAMCH( C )
 !--------------------------------------------------------------
@@ -191,6 +194,8 @@
       RETURN
       END
 
+! End of WLAMCH
+
 !--------------------------------------------------------------
       SUBROUTINE SET2ZERO(N,Y)
 !--------------------------------------------------------------
@@ -224,6 +229,7 @@
 
       END SUBROUTINE SET2ZERO
 
+! End of SET2ZERO
 
 !--------------------------------------------------------------
       KPP_REAL FUNCTION WDOT (N, DX, incX, DY, incY)
@@ -286,6 +292,7 @@
 
       END FUNCTION WDOT
 
+! End of WDOT
 
 !--------------------------------------------------------------
       SUBROUTINE WADD(N,X,Y,Z)
@@ -316,4 +323,6 @@
       END DO
 
       END SUBROUTINE WADD
+
+! End of WADD
 !--------------------------------------------------------------
