@@ -113,7 +113,7 @@ void F90_WriteAssign( char *ls, char *rs )
 int start;
 int linelg;
 int i, j;
-int ifound, jfound;
+int jfound;
 char c;
 int first;
 int crtident;
@@ -128,7 +128,7 @@ int number_of_lines = 1, MAX_NO_OF_LINES = 250;
 /*  Operator Mapping: 0xaa = '*' | 0xab = '+' | 0xac = ','
                       0xad = '-' | 0xae ='.' | 0xaf = '/' */
 /* char op_mult=0xaa, op_plus=0xab, op_minus=0xad, op_dot=0xae, op_div=0xaf; */
-char op_mult='*', op_plus='+', op_minus='-', op_dot='.', op_div='/';
+char op_plus='+', op_minus='-';
 
   crtident = 2 + ident * 2;
   bprintf("%*s%s = ", crtident, "", ls);
@@ -137,7 +137,7 @@ char op_mult='*', op_plus='+', op_minus='-', op_dot='.', op_div='/';
 
   first = 1;
   while( strlen(rs) > linelg ) {
-    ifound = 0; jfound = 0;
+    jfound = 0;
     if ( number_of_lines >= MAX_NO_OF_LINES ) {
      /* If a new line needs to be started.
           Note: the approach below will create erroneous code if the +/- is within a subexpression, e.g. for
@@ -150,7 +150,7 @@ char op_mult='*', op_plus='+', op_minus='-', op_dot='.', op_div='/';
     if ( ( number_of_lines < MAX_NO_OF_LINES )||( !jfound ) ) {
      for( i=linelg; i>10; i-- ) /* split row here if operator or comma */
        if ( ( rs[i] & 0x80 )||( rs[i]==',' ) ) {
-        ifound = 1; break;
+        break;
 	}
      if( i <= 10 ) {
        printf("\n Warning: double-check continuation lines for:\n   %s = %s\n",ls,rs);
@@ -283,9 +283,8 @@ char maxj[20];
 /*************************************************************************************************/
 char * F90_DeclareData( int v, void * values, int n)
 {
-int i, j;
+int i;
 int nlines;
-int split;
 static char buf[120];
 VARIABLE *var;
 int * ival;
@@ -295,7 +294,7 @@ char *baseType;
 char maxi[20];
 char maxj[20];
 int maxCols = MAX_COLS;
-char dsbuf[200];
+/*char dsbuf[200];*/
 
  int i_from, i_to;
  int isplit;
@@ -311,7 +310,6 @@ char dsbuf[200];
   cval = (char **) values;
 
   nlines = 1;
-  split = 0;
   var -> maxi = max( n, 1 );
 
   baseType = F90_types[ var->baseType ];
@@ -509,7 +507,6 @@ char dummy_val[100];           /* used just to avoid strange behaviour of
 void F90_WriteVecData( VARIABLE * var, int min, int max, int split )
 {
 char buf[80];
-char *p;
 
   if( split )
     sprintf( buf, "%6sdata( %s(i), i = %d, %d ) / &\n%5s",
@@ -526,7 +523,7 @@ char *p;
 /*************************************************************************************************/
 void F90_DeclareDataOld( int v, int * values, int n )
 {
-int i, j;
+int i;
 int nlines, min, max;
 int split;
 VARIABLE *var;
@@ -597,7 +594,6 @@ char dsbuf[55];
 /*************************************************************************************************/
 void F90_InitDeclare( int v, int n, void * values )
 {
-int i;
 VARIABLE * var;
 
   var = varTable[ v ];
@@ -636,10 +632,8 @@ int narg;
 void F90_FunctionPrototipe( int f, ... )
 {
 char * name;
-int narg;
 
   name = varTable[ f ]->name;
-  narg = varTable[ f ]->maxi;
 
   bprintf("      EXTERNAL %s\n", name );
 
@@ -651,13 +645,9 @@ void F90_FunctionBegin( int f, ... )
 {
 Va_list args;
 int i;
-int v;
 int vars[20];
-char * name;
 int narg;
-FILE *oldf;
 
-  name = varTable[ f ]->name;
   narg = varTable[ f ]->maxi;
 
   Va_start( args, f );

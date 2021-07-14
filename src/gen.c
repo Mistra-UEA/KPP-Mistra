@@ -304,20 +304,6 @@ int i,j;
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 void GenerateGData()
 {
-int  i,j,k;
-int  *crow;
-int  *diag;
-int  nElm;
-int  *lookat;
-int  *moni;
-char *snames[MAX_SPECIES];
-int  *trans;
-char *strans[MAX_SPECIES];
-char *smass[MAX_ATOMS];
-char *EQN_NAMES[MAX_EQN];
-char *EQN_TAGS[MAX_EQN];
-char *bufeqn, *p;
-int dim;
 
   if ( (useLang != C_LANG)&&(useLang != MATLAB_LANG) ) return;
 
@@ -366,15 +352,14 @@ int dim;
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 void GenerateMonitorData()
 {
-int  i,j,k;
+int  i;
 int  *crow;
 int  *diag;
-int  nElm;
 int  *lookat;
 int  *moni;
 char *snames[MAX_SPECIES];
 int  *trans;
-char *strans[MAX_SPECIES];
+/*char *strans[MAX_SPECIES];*/ /*jjb 12072017 defined but unused*/
 char *smass[MAX_ATOMS];
 char *seqn[MAX_EQN];
 char *bufeqn, *p;
@@ -437,7 +422,7 @@ int dim;
   for (i = 0; i < SpcNr; i++)
     if ( SpeciesTable[Code[i]].trans ) {
       trans[ntrans] = Index(i);
-      strans[ntrans] = SpeciesTable[Code[i]].name;
+      /*strans[ntrans] = SpeciesTable[Code[i]].name;*/ /*jjb 12072017 defined but unused*/
       ntrans++;
     }
 
@@ -507,7 +492,6 @@ int* irow;
 int* icol;
 int* crow;
 int* diag;
-int nElm;
 int dim;
 
   if( !useJacSparse ) return;
@@ -721,7 +705,7 @@ int F_VAR, FSPLIT_VAR;
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 void GenerateStochastic()
 {
-int i, j, k, l, m, n, jnr;
+int i, j, k, m, n, jnr;
 int used;
 int F_VAR;
 
@@ -846,8 +830,6 @@ int F_VAR;
 void GenerateReactantProd()
 {
 int i, j, k;
-int used;
-int l, m;
 int F_STOIC;
 
   if( VarNr == 0 ) return;
@@ -886,7 +868,6 @@ int F_STOIC;
 void GenerateJacReactantProd()
 {
 int i, j, k, l, m, JVRP_NZ, newrow;
-int used;
 int F_STOIC;
 
 /* jjb_01072016 start */
@@ -1138,8 +1119,7 @@ void GenerateHessian()
 /* Unlike Hess, this function deffers the sparse Data structure generation */
 {
 int i, j, k;
-int used;
-int l, m, i1, i2, nElm;
+int m, i1, i2, nElm;
 int F_Hess, F_Hess_VEC, F_HessTR_VEC;
 int *coeff_j, *coeff_i1, *coeff_i2;
 int Djv_isElm;
@@ -1798,7 +1778,9 @@ int dim;
 
   useLangOld = useLang;
   useLang = C_LANG;
-  nElm = NonZero( LU, 0, VarNr, irow, icol, crow, diag );
+  nElm = NonZero( LU, 0, VarNr, irow, icol, crow, diag ); /*jjb 01102017 nElm is not used but */
+                                    /*   icol, crow and diag are defined when calling NonZero */
+
   useLang = useLangOld;
 
   UseFile( linalgFile );
@@ -1869,7 +1851,8 @@ int dim;
 
   useLangOld = useLang;
   useLang = C_LANG;
-  nElm = NonZero( LU, 0, VarNr, irow, icol, crow, diag );
+  nElm = NonZero( LU, 0, VarNr, irow, icol, crow, diag ); /*jjb 01102017 nElm is not used but */
+                                    /*   icol, crow and diag are defined when calling NonZero */
   useLang = useLangOld;
 
   UseFile( linalgFile );
@@ -2164,9 +2147,7 @@ void GenerateParamHeader()
 {
 int spc;
 int i;
-char name[20];
-int offs;
-int mxyz;
+char name[25]; /* jjb: should be MAX_SPNAME + 5 (5 is the length of "indf_")*/
 
 int j,dummy_species;
 
@@ -2254,11 +2235,6 @@ int j,dummy_species;
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 void GenerateGlobalHeader()
 {
-int spc;
-int i;
-char name[20];
-int offs;
-int mxyz;
 
   UseFile( global_dataFile );
 
@@ -2420,7 +2396,7 @@ char s[40];
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-int EqnString( int eq, char * buf )
+void EqnString( int eq, char * buf )
 {
 static int lhs = 0;
 static int rhs = 0;
@@ -2443,7 +2419,7 @@ char lhsbuf[MAX_EQNLEN], rhsbuf[MAX_EQNLEN];
   EqnStr( eq, rhsbuf, Stoich_Right);
 
   sprintf(buf, "%*s --> %-*s", lhs, lhsbuf, rhs, rhsbuf);
-  return strlen(buf);
+  /*return strlen(buf);*/
 }
 
 
@@ -2638,7 +2614,7 @@ int INITVAL;
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 void GenerateShuffle_user2kpp()
 {
-int i,k,l;
+int i,k;
 int Shuffle_user2kpp;
 
   UseFile( utilFile );
@@ -2646,7 +2622,7 @@ int Shuffle_user2kpp;
   Shuffle_user2kpp    = DefFnc( "Shuffle_user2kpp", 2, "function to copy concentrations from USER to KPP");
   FunctionBegin( Shuffle_user2kpp, V_USER, V );
 
-  k = 0;l = 0;
+  k = 0;
   for( i = 1; i < SpcNr; i++) {
     if( ReverseCode[i] < 0 ) {
       if( SpeciesTable[i].type == VAR_SPC ) k++;
@@ -2673,7 +2649,7 @@ int Shuffle_user2kpp;
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 void GenerateShuffle_kpp2user()
 {
-int i,k,l;
+int i,k;
 int Shuffle_kpp2user;
 
   UseFile( utilFile );
@@ -2681,7 +2657,7 @@ int Shuffle_kpp2user;
   Shuffle_kpp2user    = DefFnc( "Shuffle_kpp2user", 2, "function to restore concentrations from KPP to USER");
   FunctionBegin( Shuffle_kpp2user, V, V_USER );
 
-  k = 0; l = 0;
+  k = 0;
   for( i = 0; i < SpcNr; i++) {
     if( ReverseCode[i] < 0 ) {
       if( SpeciesTable[i].type == VAR_SPC ) k++;
@@ -2819,7 +2795,7 @@ char buf[100], suffix[5];
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 void GenerateMatlabTemplates()
 {
-char buf[200], suffix[5];
+char buf[200];
 
   if (useLang != MATLAB_LANG) return;
 
@@ -3108,7 +3084,7 @@ case 't':
   break;
 
 default:
-  printf("\n Unrecognized option '%s' in GenerateF90Modules\n", where);
+  printf("\n Unrecognized option '%c' in GenerateF90Modules\n", where);
   break;
 }
 }
@@ -3117,7 +3093,7 @@ default:
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 void Generate()
 {
-int i, j;
+int i;
 int n;
 char suffix[5];
 

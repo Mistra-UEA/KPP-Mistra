@@ -32,6 +32,7 @@
 
 #include "gdata.h"
 #include "code.h"
+#include "scan.h"
 #include <unistd.h>
 #include <string.h>
 
@@ -190,7 +191,7 @@ char *p;
   p = outBuf;
   while( *p )
     *p++ &= ~0x80;
-  fprintf( currentFile, outBuf );
+  fprintf( currentFile, "%s", outBuf );
   outBuffer = outBuf;
   *outBuffer = 0;
 }
@@ -202,7 +203,7 @@ char *p;
   p = buf;
   while( *p )
     *p++ &= ~0x80;
-  fprintf( currentFile, buf );
+  fprintf( currentFile, "%s", buf );
 }
 
 void WriteDelim()
@@ -359,9 +360,6 @@ Va_list args;
 NODE *n;
 ELEMENT *elm;
 VARIABLE *var;
-int i, j;
-float val;
-char *expr;
 
   var = varTable[ v ];
   n   = (NODE*)    malloc( sizeof(NODE) );
@@ -767,11 +765,9 @@ NODE *n;
 void CommentFncBegin( int f, int *vars )
 {
 VARIABLE *var;
-char * name;
 int narg;
 int i;
 
-  name = varTable[ f ]->name;
   narg = varTable[ f ]->maxi;
   var = varTable[ f ];
 
@@ -793,10 +789,8 @@ void CommentFunctionBegin( int f, ... )
 Va_list args;
 int i;
 int vars[20];
-char * name;
 int narg;
 
-  name = varTable[ f ]->name;
   narg = varTable[ f ]->maxi;
 
   Va_start( args, f );

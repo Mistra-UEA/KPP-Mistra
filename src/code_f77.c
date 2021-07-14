@@ -114,12 +114,8 @@ char c;
 int first;
 int crtident;
 int number_of_lines = 1, MAX_NO_OF_LINES = 250;
-int ifound, jfound;
-
-/*  Operator Mapping: 0xaa = '*' | 0xab = '+' | 0xac = ','
-                      0xad = '-' | 0xae ='.' | 0xaf = '/' */
-/* char op_mult=0xaa, op_plus=0xab, op_minus=0xad, op_dot=0xae, op_div=0xaf; */
-char op_mult='*', op_plus='+', op_minus='-', op_dot='.', op_div='/';
+int jfound;
+char op_plus='+', op_minus='-';
 
   crtident = 6 + ident * 2;
   bprintf("%*s%s = ", crtident, "", ls);
@@ -128,7 +124,7 @@ char op_mult='*', op_plus='+', op_minus='-', op_dot='.', op_div='/';
 
   first = 1;
   while( strlen(rs) > linelg ) {
-    ifound = 0; jfound = 0;
+    jfound = 0;
     if ( number_of_lines >= MAX_NO_OF_LINES ) {/* if a new line needs to be started */
      for( j=linelg; j>5; j-- ) /* split row here if +, -, or comma */
        if ( ( rs[j] == op_plus )||( rs[j] == op_minus )||( rs[j]==',' ) ) {
@@ -138,7 +134,7 @@ char op_mult='*', op_plus='+', op_minus='-', op_dot='.', op_div='/';
     if ( ( number_of_lines < MAX_NO_OF_LINES )||( !jfound ) ) {
      for( i=linelg; i>10; i-- ) /* split row here if operator or comma */
        if ( ( rs[i] & 0x80 )||( rs[i]==',' ) ) {
-        ifound = 1; break;
+        break;
 	}
      if( i <= 10 ) {
       printf("\n Warning: possible error in continuation lines for %s = ...",ls);
@@ -329,7 +325,6 @@ char dummy_val[100];           /* used just to avoid strange behaviour of
 void WriteVecData( VARIABLE * var, int min, int max, int split )
 {
 char buf[80];
-char *p;
 
   if( split )
     sprintf( buf, "%6sDATA( %s(i), i = %d, %d ) /\n%5s*",
@@ -460,7 +455,6 @@ char dsbuf[63];
 /*************************************************************************************************/
 void F77_InitDeclare( int v, int n, void * values )
 {
-int i;
 VARIABLE * var;
 
   var = varTable[ v ];
@@ -499,10 +493,8 @@ int narg;
 void F77_FunctionPrototipe( int f, ... )
 {
 char * name;
-int narg;
 
   name = varTable[ f ]->name;
-  narg = varTable[ f ]->maxi;
 
   bprintf("      EXTERNAL %s\n", name );
 
@@ -514,13 +506,9 @@ void F77_FunctionBegin( int f, ... )
 {
 Va_list args;
 int i;
-int v;
 int vars[20];
-char * name;
 int narg;
-FILE *oldf;
 
-  name = varTable[ f ]->name;
   narg = varTable[ f ]->maxi;
 
   Va_start( args, f );
